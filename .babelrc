@@ -1,0 +1,25 @@
+{
+  "presets": [
+    [
+      "@babel/preset-env",
+      {
+        "modules": false,
+        "targets": {
+          "browsers": ["> 1%", "last 2 versions", "not ie <= 8"]
+        },
+        "useBuiltIns": "usage",
+        "exclude": ["es6.promise"]
+      }
+    ],
+    "@babel/preset-stage-2"
+  ],
+  "plugins": [
+    "transform-vue-jsx",
+    [
+      "@babel/plugin-transform-runtime",
+      {
+        "polyfill": false
+      }
+    ]
+  ]
+}

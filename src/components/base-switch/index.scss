@@ -1,0 +1,19 @@
+.base-switch {
+  .el-switch__label {
+    display: none;
+    position: absolute;
+    z-index: 1;
+    &.is-active {
+      display: inline-block;
+    }
+    >span {
+      color: #fff;
+    }
+  }
+  .el-switch__label--left {
+    right: 0;
+  }
+  .el-switch__label--right {
+    left: 0;
+  }
+}

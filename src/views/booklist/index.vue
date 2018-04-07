@@ -1,0 +1,200 @@
+<template>
+  <div>
+    <el-form
+      inline
+      label-suffix="：">
+      <el-form-item label="排序">
+        <el-select v-for="select in filters"
+          :key="select.prop"
+          v-model="select.value">
+          <el-option v-for="option in select.options"
+            :key="option.value"
+            :label="option.name"
+            :value="option.value"></el-option>
+        </el-select>
+      </el-form-item>
+      <el-form-item>
+        <el-button
+          icon="el-icon-plus"
+          type="primary"
+          @click="add">添加</el-button>
+      </el-form-item>
+    </el-form>
+    <base-table
+      :list="list"
+      :cols="cols"
+      :loading="loading"
+      :total="total" ></base-table>
+    <dialog-booklist :data="current" ref="dialog"></dialog-booklist>
+  </div>
+</template>
+
+<script>
+import page from '@/mixins/page'
+import { getBooklist } from '@/api/booklist'
+import DialogBooklist from './dialog-booklist'
+
+export default {
+  name: 'booklist',
+  mixins: [page],
+  components: { DialogBooklist },
+  data () {
+    const orderOptions = [
+      { name: '更新日期', value: 'updated_time' },
+      { name: 'ID', value: 'id' },
+      { name: '收藏', value: 'follow_count' }
+    ]
+    const sortOptions = [
+      { name: '降序', value: '-' },
+      { name: '升序', value: '' }
+    ]
+    const filters = [
+      { prop: 'order', options: orderOptions },
+      { prop: 'sort', options: sortOptions }
+    ]
+    const vm = this
+    filters.forEach(obj => {
+      Object.defineProperty(obj, 'value', {
+        configurable: true,
+        enumerable: true,
+        get () {
+          const value = vm.$route.query[this.prop]
+          return this.options.some(v => v.value === value)
+            ? value
+            : this.options[0].value
+        },
+        set (val) {
+          vm.$router.push({
+            query: { ...vm.$route.query, [this.prop]: val }
+          })
+        }
+      })
+    })
+    return {
+      filters,
+      list: [],
+      total: 0,
+      loading: false,
+      current: null,
+      cols: [
+        {
+          label: '书单ID',
+          prop: 'id',
+          width: 80
+        },
+        {
+          label: '标题',
+          type: 'favorite',
+          component: 'WorkTitle'
+        },
+        {
+          label: '作者',
+          prop: 'author_name'
+        },
+        {
+          label: '简介',
+          prop: 'intro'
+        },
+        {
+          label: '创建/更新时间',
+          component: 'WorkTime',
+          width: 160
+        },
+        {
+          label: '信息',
+          width: 60,
+          render: (h, row) => {
+            const directives = [
+              { name: 'popover', arg: 'popover-info' }
+            ]
+            return (
+              <div>
+                <el-popover
+                  ref="popover-info"
+                  placement="left"
+                  trigger="hover">
+                  <dl>
+                    <dt>点击</dt>
+                    <dd>{row.views}</dd>
+                    <dt>收藏</dt>
+                    <dd>{row.follow_count}</dd>
+                    <dt>轻石</dt>
+                    <dd>{row.coin}</dd>
+                    <dt>重石</dt>
+                    <dd>{row.gold}</dd>
+                    <dt>信仰</dt>
+                    <dd>{row.belief}</dd>
+                    <dt>战力</dt>
+                    <dd>{row.combat}</dd>
+                  </dl>
+                </el-popover>
+                <el-button type="text" {...{directives}}>数据</el-button>
+              </div>
+            )
+          }
+        },
+        {
+          label: '查看',
+          width: 100,
+          render: (h, row) => {
+            return <router-link to={`/booklist/${row.id}`}>作品({row.work_count})</router-link>
+          }
+        },
+        {
+          label: '操作',
+          width: 270,
+          render: (h, row) => {
+            return (
+              <div>
+                <el-button plain onClick={this.modify.bind(this, row)}>修改</el-button>
+                <el-button plain type="primary">批量添加</el-button>
+                <el-button plain type="danger">删除</el-button>
+              </div>
+            )
+          }
+        }
+      ]
+    }
+  },
+  watch: {
+    '$route': {
+      immediate: true,
+      handler: 'getList'
+    }
+  },
+  computed: {
+    query () {
+      const result = {}
+      this.filters.forEach(obj => {
+        result[obj.prop] = obj.value
+      })
+      return result
+    }
+  },
+  methods: {
+    getList () {
+      this.loading = true
+      const query = this.query
+      const params = {
+        offset: this.offset,
+        limit: this.limit,
+        order: query.sort + query.order
+      }
+      return getBooklist(params).then(data => {
+        this.list = data.results
+        this.total = data.count
+      }).finally(() => {
+        this.loading = false
+      })
+    },
+    add () {
+      this.current = null
+      this.$refs.dialog.visible = true
+    },
+    modify (data) {
+      this.current = data
+      this.$refs.dialog.visible = true
+    }
+  }
+}
+</script>

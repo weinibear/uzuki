@@ -1,0 +1,39 @@
+html {
+  box-sizing: border-box;
+}
+
+*,
+*:before,
+*:after {
+  box-sizing: inherit;
+}
+
+html, body, #app {
+  height: 100%;
+}
+
+dt, dd {
+  display: inline;
+}
+dt {
+  &::after {
+    content: "：";
+  }
+}
+dd {
+  margin: 0;
+  font-weight: bold;
+  &::after {
+    content: "\000A";
+    white-space: pre;
+  }
+}
+
+
+.clearfix {
+  &::after {
+    content: '';
+    display: block;
+    clear: both;
+  }
+}

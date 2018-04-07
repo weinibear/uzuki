@@ -1,0 +1,30 @@
+@import '~@/style/var.scss';
+
+/* 改变 icon 字体路径变量，必需 */
+$--font-path: '~element-ui/lib/theme-chalk/fonts';
+
+@import '~element-ui/packages/theme-chalk/src/reset';
+@import "~element-ui/packages/theme-chalk/src/index";
+
+/* 修复bug */
+.el-button.is-loading {
+  .el-icon-loading {
+    vertical-align: bottom;
+  }
+}
+
+.el-tag {
+  margin-right: 8px;
+  &:last-of-type {
+    margin-right: 0;
+  }
+}
+
+.el-form--inline {
+  .el-form-item {
+    margin-bottom: 0;
+  }
+  .el-input {
+    width: 150px;
+  }
+}
