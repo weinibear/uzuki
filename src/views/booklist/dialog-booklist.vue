@@ -61,8 +61,10 @@ export default {
     visible (val) {
       if (val) {
         if (this.data) {
-          Object.keys(this.form).forEach(key => {
-            this.form[key] = this.data[key]
+          this.$nextTick().then(() => {
+            Object.keys(this.form).forEach(key => {
+              this.form[key] = this.data[key]
+            })
           })
         }
       } else {

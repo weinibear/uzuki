@@ -18,10 +18,11 @@ import SvgIcon from '@/components/svg-icon'
 import BaseTable from '@/components/base-table'
 import BaseSwitch from '@/components/base-switch/index.js'
 import ImgCropper from '@/components/img-cropper'
+import BtnSort from '@/components/btn-sort'
 
 Vue.use(Element, { size: 'small' })
 
-const components = [SvgIcon, BaseTable, ImgCropper, BaseSwitch]
+const components = [SvgIcon, BaseTable, ImgCropper, BaseSwitch, BtnSort]
 
 components.forEach(component => {
   Vue.component(component.name, component)

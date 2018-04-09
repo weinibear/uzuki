@@ -33,11 +33,19 @@ export default {
         if (from && from.path === to.path) {
           return
         }
+        console.log(to, from)
         this.$nextTick().then(() => {
           if (!this.breadcrumbCustom) {
-            const levelList = to.matched
-              .filter(item => (item.meta && item.meta.title) || item.name)
-              .map(item => ({ to: item.path, name: (item.meta && item.meta.title) || item.name }))
+            const levelList = []
+            const from = to.meta.from
+            if (from) {
+              if (typeof from === 'string') {
+                levelList.push({ to: { name: from }, name: from })
+              } else {
+                levelList.push(from)
+              }
+            }
+            levelList.push({ to: '', name: to.name })
             this.setBreadcrumb(levelList)
           }
           this.changeBreadcrumbCustom(false)

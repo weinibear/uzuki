@@ -3,34 +3,48 @@
     <el-button
       icon="el-icon-plus"
       type="primary"
-      @click="add">添加</el-button>
+      @click="add">批量添加</el-button>
+    <btn-sort
+      @success="getList"
+      :sortable.sync="sortable"
+      :list.sync="list"
+      :save-order="saveOrder"
+      :before-sort="beforeSort"/>
     <base-table
       :list="list"
       :cols="cols"
+      :sortable="sortable"
       :loading="loading"
       :total="total" ></base-table>
+    <dialog-add-works ref="dialog" @success="getList"></dialog-add-works>
   </div>
 </template>
 
 <script>
-import { getWorks, delWork } from '@/api/booklist'
+import { getWorks, delWork, changeWork } from '@/api/booklist'
 import page from '@/mixins/page'
+import DialogAddWorks from './dialog-add-works'
 
 export default {
   mixins: [page],
+  components: { DialogAddWorks },
   data () {
     return {
       list: [],
       total: 0,
       loading: false,
       current: null,
+      sortable: false,
+      btnSortLoading: false,
       cols: [
         {
           label: '作品ID',
-          prop: 'work_id'
+          prop: 'work_id',
+          width: 100
         },
         {
           label: '类型',
+          width: 120,
           render: (h, row) => {
             const workType = row.work_type
             const type = workType === 1 ? 'success' : 'info'
@@ -40,7 +54,8 @@ export default {
         },
         {
           label: '序号',
-          prop: 'order'
+          prop: 'order',
+          width: 80
         },
         {
           label: '标题',
@@ -77,28 +92,55 @@ export default {
     }
   },
   methods: {
-    getList () {
+    beforeSort () {
+      if (this.total > this.list.length) {
+        return this.getList(true)
+      }
+    },
+    saveOrder ({ id, order }) {
+      return changeWork(id, { order })
+    },
+    getList (all) {
       this.loading = true
       const id = this.$route.params.id
       const params = {
         offset: this.offset,
         limit: this.limit
       }
+      if (all === true) {
+        params.offset = 0
+        params.limit = 999
+      }
       return getWorks(id, params).then(data => {
         this.list = data.results
-        console.log(this.list)
         this.total = data.count
       }).finally(() => {
         this.loading = false
       })
     },
     add () {
-      this.current = null
       this.$refs.dialog.visible = true
     },
     modify (data) {
-      this.current = data
-      this.$refs.dialog.visible = true
+      this.$prompt('修改推荐词', '提示', {
+        inputType: 'textarea',
+        inputValue: data.recommend,
+        beforeClose: (action, instance, done) => {
+          if (action === 'confirm') {
+            instance.confirmButtonLoading = true
+            console.log(instance, instance.value)
+            return changeWork(data.id, { recommend: instance.inputValue }).finally(() => {
+              instance.confirmButtonLoading = false
+            }).then(() => {
+              done()
+              this.$message.success('删除成功')
+              this.getList()
+            })
+          } else {
+            done()
+          }
+        }
+      })
     },
     del (data) {
       this.$confirm('确认删除么?', {

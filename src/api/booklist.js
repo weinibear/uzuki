@@ -25,7 +25,7 @@ export function editBooklist (id, data) {
 }
 
 // 批量添加作品到书单
-export function importBooklist (id, data) {
+export function addWorks (id, data) {
   return request.post(`/favorite/${id}/add/`, data)
 }
 
@@ -41,11 +41,11 @@ export function delWork (id) {
   return request.post(`/favorite/item/${id}/delete/`)
 }
 
-// 修改书单作品
-
-export function changeWork ({ id, recommend, order }) {
-  return request.post(`/favorite/item/${id}/change/`, {
-    recommend,
-    order
-  })
+/**
+ * 修改书单作品
+ * @param {*} id
+ * @param {*} data { recommend, order }
+ */
+export function changeWork (id, data) {
+  return request.post(`/favorite/item/${id}/change/`, data)
 }

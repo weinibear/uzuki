@@ -8,32 +8,19 @@
       ref="form"
       label-width="80px">
       <el-form-item
-        label="作品ID"
-        prop="works_id"
-        :rules="{ required: true, message: 'id不能为空' }">
-        <el-input v-model="form.works_id"></el-input>
+        label="类名"
+        prop="name"
+        :rules="{ required: true, message: '名字不能为空' }">
+        <el-input v-model="form.name"></el-input>
       </el-form-item>
-      <el-form-item label="状态">
-        <el-select
-          v-model="form.status"
-          style="width: 100%">
-          <el-option
-            v-for="(label, index) in status"
-            :key="index"
-            :label="label"
-            :value="index"></el-option>
-        </el-select>
+      <el-form-item label="排序"
+        prop="order">
+        <el-input v-model.number="form.order"></el-input>
       </el-form-item>
-      <el-form-item label="类型">
-        <el-select
-          v-model="form.area_id"
-          style="width: 100%">
-          <el-option
-            v-for="(label, index) in areas"
-            :key="index"
-            :label="label"
-            :value="index"></el-option>
-        </el-select>
+      <el-form-item
+        label="封面"
+        prop="cover">
+        <img-cropper :src.sync="form.cover" :ratio="1"></img-cropper>
       </el-form-item>
     </el-form>
     <div slot="footer">
@@ -47,8 +34,13 @@
 </template>
 
 <script>
-import { editRecompoints, addRecompoints } from '@/api/recompoints'
-import { status, areas } from './options'
+import { changeCategory, addCategory } from '@/api/category'
+
+const form = {
+  name: '',
+  order: 0,
+  cover: ''
+}
 
 export default {
   props: {
@@ -56,15 +48,9 @@ export default {
   },
   data () {
     return {
-      status,
-      areas,
       visible: false,
       btnLoading: false,
-      form: {
-        area_id: 0,
-        works_id: '',
-        status: 0
-      }
+      form: { ...form }
     }
   },
   computed: {
@@ -72,7 +58,7 @@ export default {
       return this.data && this.data.id
     },
     title () {
-      return this.id ? '修改推荐' : '添加推荐'
+      return this.id ? '修改分类' : '添加分类'
     }
   },
   watch: {
@@ -102,8 +88,8 @@ export default {
       this.btnLoading = true
       Promise.resolve(
         this.data
-          ? editRecompoints(this.id, this.form)
-          : addRecompoints(this.form)
+          ? changeCategory(this.id, this.form)
+          : addCategory(this.form)
       ).finally(() => {
         this.btnLoading = false
       }).then(() => {

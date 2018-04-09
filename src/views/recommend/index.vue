@@ -20,20 +20,12 @@
           icon="el-icon-plus"
           type="primary"
           @click="add">添加</el-button>
-        <el-button
-          v-if="!sortable"
-          type="success"
-          @click="startSort"
-          icon="el-icon-d-caret">开始排序</el-button>
-        <template v-else>
-          <el-button
-            @click="saveSort"
-            :loading="btnSortLoading"
-            type="primary">更新排序</el-button>
-          <el-button
-            :disabled="btnSortLoading"
-            @click="cancelSort">取消排序</el-button>
-        </template>
+        <btn-sort
+          @success="getList"
+          :sortable.sync="sortable"
+          :list.sync="list"
+          :save-order="saveOrder"
+          :before-sort="beforeSort"/>
       </el-form-item>
     </el-form>
     <base-table
@@ -43,7 +35,9 @@
       row-key="id"
       :loading="loading"
       :total="total" ></base-table>
-    <dialog-form ref="dialog" :data="current"></dialog-form>
+    <dialog-form ref="dialog"
+      :data="current"
+      @success="getList"></dialog-form>
   </div>
 </template>
 
@@ -90,7 +84,6 @@ export default {
       loading: false,
       current: null,
       sortable: false,
-      btnSortLoading: false,
       cols: [
         {
           label: '封面',
@@ -179,41 +172,10 @@ export default {
     }
   },
   methods: {
-    startSort () {
-      Promise.resolve(
-        this.total > this.list.length
-          ? this.getList(true)
-          : true
-      ).then(() => {
-        this.listCache = this.list.slice(0)
-        this.sortable = true
-      })
-    },
-    cancelSort () {
-      this.list = this.listCache
-      this.listCache = []
-      this.sortable = false
-    },
-    saveSort () {
-      const min = Math.min.apply(null, this.list.map(v => v.order))
-      const rp = this.list.map((v, i) => {
-        return {
-          id: v.id,
-          oldOrder: v.order,
-          order: i + min
-        }
-      }).filter(v => v.oldOrder !== v.order)
-        .map(this.saveOrder)
-      this.btnSortLoading = true
-      Promise.all(rp)
-        .finally(() => {
-          this.btnSortLoading = false
-        })
-        .then(() => {
-          this.$message.success('更新成功')
-          this.sortable = false
-          this.getList()
-        })
+    beforeSort () {
+      if (this.total > this.list.length) {
+        return this.getList(true)
+      }
     },
     saveOrder ({ id, order }) {
       return editRecom(id, { order })

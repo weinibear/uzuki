@@ -2,7 +2,7 @@
   <div class="base-table"
     v-loading="loading">
     <el-pagination
-      v-show="total > pageSize"
+      v-show="total > pageSize && !sortable"
       class="top-pagination"
       small
       layout="prev, pager, next"
@@ -44,7 +44,7 @@
     </el-table>
     <el-pagination
       class="bottom-pagination"
-      v-show="total > pageSize"
+      v-show="total > pageSize && !sortable"
       layout="prev, pager, next, total, jumper"
       background
       :total="total"

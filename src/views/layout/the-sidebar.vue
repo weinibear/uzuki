@@ -10,10 +10,10 @@
       :collapse="isCollapse"
       :default-active="actived"
       router>
-      <template v-for="item in navRoutes">
+      <template v-for="item in navs">
         <el-submenu
-          v-if="item.children && item.children[0].path !== ''"
-          :index="item.path"
+          v-if="item.static && item.children.length"
+          :index="item.path || item.name"
           :key="item.path">
           <template slot="title">
             <svg-icon
@@ -47,12 +47,12 @@
 
 <script>
 import difference from 'lodash/difference'
-import { navRoutes } from '@/router'
+import { navs } from '@/router'
 
 export default {
   data () {
     return {
-      navRoutes
+      navs
     }
   },
   computed: {
@@ -60,7 +60,7 @@ export default {
       const urlPart = this.$route.path.split('/')
       let maxDifference = 999
       let path = ''
-      this.navRoutes.forEach(item => {
+      this.navs.forEach(item => {
         if (item.children) {
           item.children.forEach(subItem => {
             const d = difference(urlPart, subItem.path.split('/')).length

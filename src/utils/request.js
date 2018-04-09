@@ -20,15 +20,14 @@ request.interceptors.response.use(function (res) {
   const data = res.data
   if (data.hasOwnProperty('code') && data.code !== 0 && data.code !== 200) {
     Message({
-      message: String(data.msg || data.code),
+      message: String(data.msg || data.data || data.code),
       type: 'error'
     })
     return Promise.reject(data)
   }
   return data
 }, function (err) {
-  console.log(err, err.response)
-  const msg = err.response && (err.response.status + ' ' + err.response.statusText)
+  const msg = (err.response && (err.response.status + ' ' + err.response.statusText)) || err.message
   Message({
     message: msg,
     type: 'error'

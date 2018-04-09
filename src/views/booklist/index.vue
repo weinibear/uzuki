@@ -25,14 +25,15 @@
       :cols="cols"
       :loading="loading"
       :total="total" ></base-table>
-    <dialog-booklist :data="current" ref="dialog"></dialog-booklist>
+    <dialog-booklist :data="current" ref="dialog" @success="getList"></dialog-booklist>
   </div>
 </template>
 
 <script>
 import page from '@/mixins/page'
-import { getBooklist } from '@/api/booklist'
+import { getBooklist, delBooklist } from '@/api/booklist'
 import DialogBooklist from './dialog-booklist'
+import { mapMutations } from 'vuex'
 
 export default {
   name: 'booklist',
@@ -134,21 +135,15 @@ export default {
           }
         },
         {
-          label: '查看',
-          width: 100,
-          render: (h, row) => {
-            return <router-link to={`/booklist/${row.id}`}>作品({row.work_count})</router-link>
-          }
-        },
-        {
           label: '操作',
-          width: 270,
+          width: 350,
           render: (h, row) => {
             return (
               <div>
+                <el-button plain type="success" onClick={this.linkWorks.bind(this, row)}>查看作品({row.work_count})</el-button>
                 <el-button plain onClick={this.modify.bind(this, row)}>修改</el-button>
                 <el-button plain type="primary">批量添加</el-button>
-                <el-button plain type="danger">删除</el-button>
+                <el-button plain type="danger" onClick={this.del.bind(this, row)}>删除</el-button>
               </div>
             )
           }
@@ -172,6 +167,7 @@ export default {
     }
   },
   methods: {
+    ...mapMutations('app', ['setBreadcrumb']),
     getList () {
       this.loading = true
       const query = this.query
@@ -194,6 +190,31 @@ export default {
     modify (data) {
       this.current = data
       this.$refs.dialog.visible = true
+    },
+    del (data) {
+      this.$confirm('确认删除么?', {
+        beforeClose: (action, instance, done) => {
+          if (action === 'confirm') {
+            instance.confirmButtonLoading = true
+            return delBooklist(data.id).finally(() => {
+              instance.confirmButtonLoading = false
+            }).then(() => {
+              done()
+              this.$message.success('删除成功')
+              this.getList()
+            })
+          } else {
+            done()
+          }
+        }
+      })
+    },
+    linkWorks (data) {
+      this.setBreadcrumb([
+        { to: this.$route.fullPath, name: this.$route.name },
+        { to: '', name: data.title }
+      ])
+      this.$router.push({ name: '书单作品', params: { id: data.id } })
     }
   }
 }
