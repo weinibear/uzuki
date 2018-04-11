@@ -30,14 +30,14 @@
 </template>
 
 <script>
-import page from '@/mixins/page'
+import table from '@/mixins/table'
 import { getBooklist, delBooklist } from '@/api/booklist'
 import DialogBooklist from './dialog-booklist'
 import { mapMutations } from 'vuex'
 
 export default {
   name: 'booklist',
-  mixins: [page],
+  mixins: [table],
   components: { DialogBooklist },
   data () {
     const orderOptions = [
@@ -73,9 +73,6 @@ export default {
     })
     return {
       filters,
-      list: [],
-      total: 0,
-      loading: false,
       current: null,
       cols: [
         {
@@ -151,12 +148,6 @@ export default {
       ]
     }
   },
-  watch: {
-    '$route': {
-      immediate: true,
-      handler: 'getList'
-    }
-  },
   computed: {
     query () {
       const result = {}
@@ -168,19 +159,16 @@ export default {
   },
   methods: {
     ...mapMutations('app', ['setBreadcrumb']),
-    getList () {
-      this.loading = true
+    getData ({ offset, limit }) {
       const query = this.query
       const params = {
-        offset: this.offset,
-        limit: this.limit,
+        offset,
+        limit,
         order: query.sort + query.order
       }
       return getBooklist(params).then(data => {
         this.list = data.results
         this.total = data.count
-      }).finally(() => {
-        this.loading = false
       })
     },
     add () {
@@ -191,23 +179,8 @@ export default {
       this.current = data
       this.$refs.dialog.visible = true
     },
-    del (data) {
-      this.$confirm('确认删除么?', {
-        beforeClose: (action, instance, done) => {
-          if (action === 'confirm') {
-            instance.confirmButtonLoading = true
-            return delBooklist(data.id).finally(() => {
-              instance.confirmButtonLoading = false
-            }).then(() => {
-              done()
-              this.$message.success('删除成功')
-              this.getList()
-            })
-          } else {
-            done()
-          }
-        }
-      })
+    delData (data) {
+      return delBooklist(data.id)
     },
     linkWorks (data) {
       this.setBreadcrumb([

@@ -23,19 +23,16 @@
 
 <script>
 import { delCategory, changeCategory } from '@/api/category'
-import page from '@/mixins/page'
+import table from '@/mixins/table'
 import { mapActions } from 'vuex'
 import DialogCategory from './dialog-category'
 
 export default {
   name: 'category',
-  mixins: [page],
+  mixins: [table],
   components: { DialogCategory },
   data () {
     return {
-      list: [],
-      total: 0,
-      loading: false,
       current: null,
       sortable: false,
       cols: [
@@ -65,22 +62,13 @@ export default {
       ]
     }
   },
-  watch: {
-    '$route': {
-      immediate: true,
-      handler: 'getList'
-    }
-  },
   methods: {
     ...mapActions('category', ['getCategoryList']),
     saveOrder ({ id, order }) {
       return changeCategory(id, { order })
     },
-    getList () {
-      this.loading = true
-      this.getCategoryList().finally(() => {
-        this.loading = false
-      }).then(list => {
+    getData () {
+      return this.getCategoryList().then(list => {
         this.list = list.slice(0)
       })
     },
@@ -92,23 +80,8 @@ export default {
       this.current = data
       this.$refs.dialog.visible = true
     },
-    del (data) {
-      this.$confirm('确认删除么?', {
-        beforeClose: (action, instance, done) => {
-          if (action === 'confirm') {
-            instance.confirmButtonLoading = true
-            return delCategory(data.id).finally(() => {
-              instance.confirmButtonLoading = false
-            }).then(() => {
-              done()
-              this.$message.success('删除成功')
-              this.getList()
-            })
-          } else {
-            done()
-          }
-        }
-      })
+    delData (data) {
+      return delCategory(data.id)
     }
   }
 }

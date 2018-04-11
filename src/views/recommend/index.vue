@@ -42,7 +42,7 @@
 </template>
 
 <script>
-import page from '@/mixins/page'
+import table from '@/mixins/table'
 import { getRecomList, delRecom, editRecom } from '@/api/recommend'
 import { recomType, recomChannel, recomWorkType } from './options'
 import DialogForm from './dialog-recommend.vue'
@@ -51,7 +51,7 @@ const recomWorkTypes = [{ value: undefined, name: '全部' }].concat(recomWorkTy
 
 export default {
   name: 'recommend',
-  mixins: [page],
+  mixins: [table],
   components: { DialogForm },
   data () {
     const filters = [
@@ -79,9 +79,6 @@ export default {
     })
     return {
       filters,
-      list: [],
-      total: 0,
-      loading: false,
       current: null,
       sortable: false,
       cols: [
@@ -156,12 +153,6 @@ export default {
       ]
     }
   },
-  watch: {
-    '$route': {
-      immediate: true,
-      handler: 'getList'
-    }
-  },
   computed: {
     query () {
       const result = {}
@@ -180,11 +171,10 @@ export default {
     saveOrder ({ id, order }) {
       return editRecom(id, { order })
     },
-    getList (all) {
-      this.loading = true
+    getData ({ offset, limit }, all) {
       const params = {
-        offset: this.offset,
-        limit: this.limit,
+        offset,
+        limit,
         ...this.query
       }
       if (all === true) {
@@ -194,8 +184,6 @@ export default {
       return getRecomList(params).then(data => {
         this.list = data.results
         this.total = data.count
-      }).finally(() => {
-        this.loading = false
       })
     },
     add () {
@@ -214,23 +202,8 @@ export default {
       this.current = data
       this.$refs.dialog.visible = true
     },
-    del (data) {
-      this.$confirm('确认删除么?', {
-        beforeClose: (action, instance, done) => {
-          if (action === 'confirm') {
-            instance.confirmButtonLoading = true
-            return delRecom(data.id).finally(() => {
-              instance.confirmButtonLoading = false
-            }).then(() => {
-              done()
-              this.$message.success('删除成功')
-              this.getList()
-            })
-          } else {
-            done()
-          }
-        }
-      })
+    delData (data) {
+      return delRecom(data.id)
     }
   }
 }

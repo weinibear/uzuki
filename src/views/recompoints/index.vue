@@ -18,19 +18,16 @@
 
 <script>
 import { getRecommendList, delRecompoints } from '@/api/recompoints'
-import page from '@/mixins/page'
+import table from '@/mixins/table'
 import { status, areas } from './options'
 import DialogForm from './dialog-recompoints'
 
 export default {
   name: 'recompoints',
-  mixins: [page],
+  mixins: [table],
   components: { DialogForm },
   data () {
     return {
-      list: [],
-      total: 0,
-      loading: false,
       current: null,
       cols: [
         {
@@ -65,20 +62,11 @@ export default {
       ]
     }
   },
-  watch: {
-    '$route': {
-      immediate: true,
-      handler: 'getList'
-    }
-  },
   methods: {
-    getList () {
-      this.loading = true
-      return getRecommendList(this.offset, this.limit).then(data => {
+    getData ({ offset, limit }) {
+      return getRecommendList(offset, limit).then(data => {
         this.list = data.results
         this.total = data.count
-      }).finally(() => {
-        this.loading = false
       })
     },
     add () {
@@ -89,23 +77,8 @@ export default {
       this.current = data
       this.$refs.dialog.visible = true
     },
-    del (data) {
-      this.$confirm('确认删除么?', {
-        beforeClose: (action, instance, done) => {
-          if (action === 'confirm') {
-            instance.confirmButtonLoading = true
-            return delRecompoints(data.id).finally(() => {
-              instance.confirmButtonLoading = false
-            }).then(() => {
-              done()
-              this.$message.success('删除成功')
-              this.getList()
-            })
-          } else {
-            done()
-          }
-        }
-      })
+    delData (data) {
+      return delRecompoints(data.id)
     }
   }
 }

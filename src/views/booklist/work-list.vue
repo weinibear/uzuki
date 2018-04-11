@@ -22,17 +22,14 @@
 
 <script>
 import { getWorks, delWork, changeWork } from '@/api/booklist'
-import page from '@/mixins/page'
+import table from '@/mixins/table'
 import DialogAddWorks from './dialog-add-works'
 
 export default {
-  mixins: [page],
+  mixins: [table],
   components: { DialogAddWorks },
   data () {
     return {
-      list: [],
-      total: 0,
-      loading: false,
       current: null,
       sortable: false,
       cols: [
@@ -84,12 +81,6 @@ export default {
       ]
     }
   },
-  watch: {
-    '$route': {
-      immediate: true,
-      handler: 'getList'
-    }
-  },
   methods: {
     beforeSort () {
       if (this.total > this.list.length) {
@@ -99,12 +90,11 @@ export default {
     saveOrder ({ id, order }) {
       return changeWork(id, { order })
     },
-    getList (all) {
-      this.loading = true
+    getData ({ offset, limit }, all) {
       const id = this.$route.params.id
       const params = {
-        offset: this.offset,
-        limit: this.limit
+        offset,
+        limit
       }
       if (all === true) {
         params.offset = 0
@@ -113,8 +103,6 @@ export default {
       return getWorks(id, params).then(data => {
         this.list = data.results
         this.total = data.count
-      }).finally(() => {
-        this.loading = false
       })
     },
     add () {
@@ -141,23 +129,8 @@ export default {
         }
       })
     },
-    del (data) {
-      this.$confirm('确认删除么?', {
-        beforeClose: (action, instance, done) => {
-          if (action === 'confirm') {
-            instance.confirmButtonLoading = true
-            return delWork(data.id).finally(() => {
-              instance.confirmButtonLoading = false
-            }).then(() => {
-              done()
-              this.$message.success('删除成功')
-              this.getList()
-            })
-          } else {
-            done()
-          }
-        }
-      })
+    delData (data) {
+      return delWork(data.id)
     }
   }
 }

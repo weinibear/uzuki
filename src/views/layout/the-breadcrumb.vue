@@ -33,7 +33,6 @@ export default {
         if (from && from.path === to.path) {
           return
         }
-        console.log(to, from)
         this.$nextTick().then(() => {
           if (!this.breadcrumbCustom) {
             const levelList = []

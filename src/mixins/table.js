@@ -21,14 +21,14 @@ export default {
     }
   },
   methods: {
-    getList () {
+    getList (...args) {
       this.loading = true
       const params = {
         offset: this.offset,
         limit: this.limit
       }
       if (typeof this.getData === 'function') {
-        return this.getData(params).finally(() => {
+        return this.getData(params, ...args).finally(() => {
           this.loading = false
         })
       }
