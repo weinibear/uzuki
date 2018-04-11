@@ -32,7 +32,7 @@ export default {
           this.loading = false
         })
       }
-      console.warn('minix table需要this.gataData方法', this)
+      console.warn('minix table需要this.getData方法', this)
       return Promise.resolve()
     },
     del (data) {
