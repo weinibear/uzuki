@@ -14,20 +14,17 @@ import './icons'
 import * as filters from './filter'
 import Element from 'element-ui'
 
-import SvgIcon from '@/components/svg-icon'
-import BaseTable from '@/components/base-table'
-import BaseSwitch from '@/components/base-switch/index.js'
-import ImgCropper from '@/components/img-cropper'
-import BtnSort from '@/components/btn-sort'
-import UploadPreview from '@/components/upload-preview'
-
 Vue.use(Element, { size: 'small' })
 
-const components = [SvgIcon, BaseTable, ImgCropper, BaseSwitch, BtnSort, UploadPreview]
+function importComponents (r) {
+  r.keys().forEach(path => {
+    const value = r(path).default
+    const key = value.name || path.replace(/^.*\/|\.(js|vue)$/g, '')
+    Vue.component(key, value)
+  })
+}
 
-components.forEach(component => {
-  Vue.component(component.name, component)
-})
+importComponents(require.context('./components', true, /\.(js|vue)$/))
 
 Object.keys(filters).forEach(key => {
   Vue.filter(key, filters[key])

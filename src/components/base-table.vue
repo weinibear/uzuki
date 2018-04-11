@@ -57,16 +57,6 @@
 <script>
 import Sortable from 'sortablejs'
 
-const components = {}
-
-function importAll (r) {
-  r.keys().forEach(key => {
-    components[key.replace(/^\.\/|\.(js|vue)$/g, '')] = r(key).default
-  })
-}
-
-importAll(require.context('./table-columns', false, /\.(js|vue)$/))
-
 const BaseTableCell = {
   name: 'BaseTableCell',
   functional: true,
@@ -80,8 +70,7 @@ const BaseTableCell = {
 export default {
   name: 'BaseTable',
   components: {
-    BaseTableCell,
-    ...components
+    BaseTableCell
   },
   props: {
     list: {
