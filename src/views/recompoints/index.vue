@@ -6,6 +6,7 @@
       @click="add">添加</el-button>
     <base-table
       :list="list"
+      :page-size.sync="limit"
       :cols="cols"
       :loading="loading"
       :total="total" ></base-table>

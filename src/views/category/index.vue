@@ -11,6 +11,7 @@
       :save-order="saveOrder"/>
     <base-table
       :list="list"
+      :page-size.sync="limit"
       :cols="cols"
       :sortable="sortable"
       :loading="loading"

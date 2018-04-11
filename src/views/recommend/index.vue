@@ -30,6 +30,7 @@
     </el-form>
     <base-table
       :list="list"
+      :page-size.sync="limit"
       :cols="cols"
       :sortable="sortable"
       row-key="id"

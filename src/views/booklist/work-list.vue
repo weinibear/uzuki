@@ -12,6 +12,7 @@
       :before-sort="beforeSort"/>
     <base-table
       :list="list"
+      :page-size.sync="limit"
       :cols="cols"
       :sortable="sortable"
       :loading="loading"
