@@ -13,13 +13,11 @@ function parseTags (list) {
   return results
 }
 
-function getMaterialTags () {
+export function getMaterialTags () {
   return request.get('/mediatag/tagall/')
     .then(parseTags)
 }
 
-function getBadgetag () {
+export function getBadgetag () {
   return request.get('/badgetag/')
 }
-
-export { getMaterialTags, getBadgetag }
