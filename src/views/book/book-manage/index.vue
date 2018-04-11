@@ -28,11 +28,11 @@ export default {
         },
         {
           label: '标题',
-          component: 'WorkTitle'
+          component: 'col-title'
         },
         {
           label: '封面',
-          component: 'WorkCover'
+          component: 'col-cover'
         },
         {
           label: '作者',

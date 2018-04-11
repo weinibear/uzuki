@@ -87,7 +87,7 @@ export default {
       cols: [
         {
           label: '封面',
-          component: 'WorkCover',
+          component: 'col-cover',
           width: '200px'
         },
         {
@@ -105,7 +105,7 @@ export default {
                 <dt>ID</dt>
                 <dd>{row.work.id}</dd>
                 <dt>作品</dt>
-                <dd><work-title row={row}/></dd>
+                <dd><col-title row={row}/></dd>
                 <dt>链接</dt>
                 <dd>{row.href ? href : '无'}</dd>
               </dl>

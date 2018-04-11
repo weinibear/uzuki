@@ -41,7 +41,7 @@ export default {
       cols: [
         {
           label: '封面',
-          component: 'work-cover'
+          component: 'col-cover'
         },
         {
           label: '类名',

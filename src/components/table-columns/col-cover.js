@@ -2,19 +2,24 @@
 export default {
   functional: true,
   render (h, ctx) {
-    let cover = ctx.props.row.cover
-    if (!/^https?:/.test(cover)) {
+    const prop = ctx.props.col.prop || 'cover'
+    const index = ctx.props.index
+    let cover = ctx.props.row[prop]
+    if (/^(https?:)?\/\/[^/]*/.test(cover)) {
+      cover = cover.replace(/^https?:/, '')
+    } else {
       cover = `//image.iqing.com${cover}`
     }
     const smallCover = `${cover}?imageView2/2/h/120`
     const bigCover = `${cover}?imageView2/2/h/500`
+    const ref = 'cover' + index
     const directives = [
-      { name: 'popover', arg: 'popover' }
+      { name: 'popover', arg: ref }
     ]
     return (
       <div>
         <el-popover
-          ref="popover"
+          ref={ref}
           placement="right"
           trigger="hover">
           <img src={bigCover} alt=""/>

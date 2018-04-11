@@ -35,7 +35,6 @@ export default {
       loading: false,
       current: null,
       sortable: false,
-      btnSortLoading: false,
       cols: [
         {
           label: '作品ID',
@@ -60,7 +59,7 @@ export default {
         {
           label: '标题',
           render: (h, row) => {
-            return <work-title row={row} type={row.work_type === 1 ? 'book' : 'game'}></work-title>
+            return <col-title row={row} type={row.work_type === 1 ? 'book' : 'game'}></col-title>
           }
         },
         {

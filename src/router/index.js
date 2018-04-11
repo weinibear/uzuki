@@ -50,20 +50,48 @@ const navRoutes = [
     name: '分类管理',
     icon: 'category',
     component: _import('category/index')
+  },
+  {
+    name: '演绘管理',
+    static: true,
+    icon: 'github',
+    children: [
+      {
+        path: '/yanhui/material',
+        name: '演绘素材',
+        component: _import('yanhui/material')
+      },
+      {
+        path: '/yanhui/material/type/:type/parent/:parent',
+        name: '演绘子素材',
+        component: _import('yanhui/material/material-parts'),
+        hidden: true,
+        meta: {
+          from: '演绘素材'
+        }
+      }
+    ]
   }
 ]
 
-const navs = navRoutes.filter(route => !route.hidden)
+let navs = JSON.parse(JSON.stringify(navRoutes))
+navs = navs.filter(v => !v.hidden).map(value => {
+  if (value.children) {
+    value.children = value.children.filter(v => !v.hidden)
+  }
+  return value
+})
 
 const routes = [
   {
     path: '/',
     component: Layout,
+    redirect: '/recompoints',
     children: navRoutes.reduce((prev, curr) => {
       return prev.concat(curr.static ? curr.children : curr)
     }, [])
   },
-  { path: '*', redirect: '/recompoints', hidden: true }
+  { path: '*', redirect: '/recompoints' }
 ]
 
 const router = new Router({

@@ -56,9 +56,16 @@
 
 <script>
 import Sortable from 'sortablejs'
-import WorkTitle from './table-columns/work-title'
-import WorkCover from './table-columns/work-cover'
-import WorkTime from './table-columns/work-time'
+
+const components = {}
+
+function importAll (r) {
+  r.keys().forEach(key => {
+    components[key.replace(/^\.\/|\.(js|vue)$/g, '')] = r(key).default
+  })
+}
+
+importAll(require.context('./table-columns', false, /\.(js|vue)$/))
 
 const BaseTableCell = {
   name: 'BaseTableCell',
@@ -74,9 +81,7 @@ export default {
   name: 'BaseTable',
   components: {
     BaseTableCell,
-    WorkTitle,
-    WorkCover,
-    WorkTime
+    ...components
   },
   props: {
     list: {

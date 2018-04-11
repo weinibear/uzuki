@@ -86,7 +86,7 @@ export default {
         {
           label: '标题',
           type: 'favorite',
-          component: 'WorkTitle'
+          component: 'col-title'
         },
         {
           label: '作者',
@@ -98,7 +98,7 @@ export default {
         },
         {
           label: '创建/更新时间',
-          component: 'WorkTime',
+          component: 'col-time',
           width: 160
         },
         {

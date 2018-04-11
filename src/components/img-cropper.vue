@@ -6,7 +6,7 @@
       class="img-wrapper"
       for="ipt-img-cropper"
       :style="{width: labelWidth + 'px', height: labelHeight + 'px'}">
-      <img class="placeholder-img" v-if="imgSrc" :src="imgSrc">
+      <img v-if="imgSrc" :src="imgSrc">
       <svg-icon v-else icon="plus"></svg-icon>
     </label>
     <input @change="change" type="file" id="ipt-img-cropper">
@@ -178,9 +178,6 @@ export default {
     border-color: mix(#fff, $--color-primary, 30%);
     color: mix(#fff, $--color-primary, 30%);
   }
-}
-.placeholder-img {
-  background-size: cover;
 }
 #ipt-img-cropper {
   position: absolute;

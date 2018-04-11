@@ -14,9 +14,7 @@
         <el-input v-model="form.works_id"></el-input>
       </el-form-item>
       <el-form-item label="状态">
-        <el-select
-          v-model="form.status"
-          style="width: 100%">
+        <el-select v-model="form.status">
           <el-option
             v-for="(label, index) in status"
             :key="index"
@@ -25,9 +23,7 @@
         </el-select>
       </el-form-item>
       <el-form-item label="类型">
-        <el-select
-          v-model="form.area_id"
-          style="width: 100%">
+        <el-select v-model="form.area_id">
           <el-option
             v-for="(label, index) in areas"
             :key="index"
