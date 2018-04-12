@@ -1,31 +1,28 @@
 <template>
-  <div>
+  <main-content
+    :cols="cols"
+    :get-data="getData">
     <el-button
+      slot="header"
       icon="el-icon-plus"
       type="primary"
       @click="add">添加</el-button>
-    <base-table
-      :list="list"
-      :page-size.sync="limit"
-      :cols="cols"
-      :loading="loading"
-      :total="total" ></base-table>
     <dialog-form
       ref="dialog"
       @success="getList"
       :data="current"></dialog-form>
-  </div>
+  </main-content>
 </template>
 
 <script>
 import { getRecommendList, delRecompoints } from '@/api/recompoints'
-import table from '@/mixins/table'
+import del from '@/mixins/del'
 import { status, areas } from './options'
 import DialogForm from './dialog-recompoints'
 
 export default {
   name: 'recompoints',
-  mixins: [table],
+  mixins: [del],
   components: { DialogForm },
   data () {
     return {
@@ -64,11 +61,11 @@ export default {
     }
   },
   methods: {
+    getList () {
+      this.$emit('refresh')
+    },
     getData ({ offset, limit }) {
-      return getRecommendList(offset, limit).then(data => {
-        this.list = data.results
-        this.total = data.count
-      })
+      return getRecommendList(offset, limit)
     },
     add () {
       this.current = null

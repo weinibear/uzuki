@@ -1,38 +1,29 @@
 <template>
-  <div>
+  <main-content
+    :cols="cols"
+    :get-data="getData"
+    sortable
+    :save-order="saveOrder">
     <el-button
+      slot="header"
       icon="el-icon-plus"
       type="primary"
       @click="add">批量添加</el-button>
-    <btn-sort
-      @success="getList"
-      :sortable.sync="sortable"
-      :list.sync="list"
-      :save-order="saveOrder"
-      :before-sort="beforeSort"/>
-    <base-table
-      :list="list"
-      :page-size.sync="limit"
-      :cols="cols"
-      :sortable="sortable"
-      :loading="loading"
-      :total="total" ></base-table>
     <dialog-add-works ref="dialog" @success="getList"></dialog-add-works>
-  </div>
+  </main-content>
 </template>
 
 <script>
 import { getWorks, delWork, changeWork } from '@/api/booklist'
-import table from '@/mixins/table'
 import DialogAddWorks from './dialog-add-works'
+import delMixin from '@/mixins/del'
 
 export default {
-  mixins: [table],
   components: { DialogAddWorks },
+  mixins: [delMixin],
   data () {
     return {
       current: null,
-      sortable: false,
       cols: [
         {
           label: '作品ID',
@@ -83,28 +74,19 @@ export default {
     }
   },
   methods: {
-    beforeSort () {
-      if (this.total > this.list.length) {
-        return this.getList(true)
-      }
+    getList () {
+      this.$emit('refresh')
     },
     saveOrder ({ id, order }) {
       return changeWork(id, { order })
     },
-    getData ({ offset, limit }, all) {
+    getData ({ offset, limit }) {
       const id = this.$route.params.id
       const params = {
         offset,
         limit
       }
-      if (all === true) {
-        params.offset = 0
-        params.limit = 999
-      }
-      return getWorks(id, params).then(data => {
-        this.list = data.results
-        this.total = data.count
-      })
+      return getWorks(id, params)
     },
     add () {
       this.$refs.dialog.visible = true
@@ -116,7 +98,6 @@ export default {
         beforeClose: (action, instance, done) => {
           if (action === 'confirm') {
             instance.confirmButtonLoading = true
-            console.log(instance, instance.value)
             return changeWork(data.id, { recommend: instance.inputValue }).finally(() => {
               instance.confirmButtonLoading = false
             }).then(() => {

@@ -1,26 +1,23 @@
 <template>
-  <div>
+  <main-content
+    :cols="cols"
+    :get-data="getData">
     <el-button
+      slot="header"
       icon="el-icon-plus"
       type="primary"
       @click="add">添加</el-button>
-    <base-table
-      :list="list"
-      :page-size.sync="limit"
-      :cols="cols"
-      :loading="loading"
-      :total="total" ></base-table>
     <dialog-material-part ref="dialog" @success="getList"></dialog-material-part>
-  </div>
+  </main-content>
 </template>
 
 <script>
 import { getMaterialPart, delMaterialPart } from '@/api/yanhui/material'
-import table from '@/mixins/table'
+import del from '@/mixins/del'
 import DialogMaterialPart from './dialog-material-part'
 
 export default {
-  mixins: [table],
+  mixins: [del],
   components: { DialogMaterialPart },
   data () {
     return {
@@ -53,14 +50,14 @@ export default {
     }
   },
   methods: {
+    getList () {
+      this.$emit('refresh')
+    },
     getData ({ offset, limit }) {
       const type = +this.$route.params.type
       const parent = this.$route.params.parent
       const params = { offset, limit, type, parent }
-      return getMaterialPart(params).then(data => {
-        this.list = data.results
-        this.total = data.count
-      })
+      return getMaterialPart(params)
     },
     add () {
       this.$refs.dialog.visible = true

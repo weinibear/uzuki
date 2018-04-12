@@ -1,7 +1,13 @@
 <template>
-  <div>
+  <main-content
+    :cols="cols"
+    :get-data="getData"
+    row-key="id"
+    sortable
+    :save-order="saveOrder">
     <el-form
       inline
+      slot="header"
       label-suffix="：">
       <el-form-item
         v-for="filter in filters"
@@ -20,30 +26,16 @@
           icon="el-icon-plus"
           type="primary"
           @click="add">添加</el-button>
-        <btn-sort
-          @success="getList"
-          :sortable.sync="sortable"
-          :list.sync="list"
-          :save-order="saveOrder"
-          :before-sort="beforeSort"/>
       </el-form-item>
     </el-form>
-    <base-table
-      :list="list"
-      :page-size.sync="limit"
-      :cols="cols"
-      :sortable="sortable"
-      row-key="id"
-      :loading="loading"
-      :total="total" ></base-table>
     <dialog-form ref="dialog"
       :data="current"
       @success="getList"></dialog-form>
-  </div>
+  </main-content>
 </template>
 
 <script>
-import table from '@/mixins/table'
+import del from '@/mixins/del'
 import { getRecomList, delRecom, editRecom } from '@/api/recommend'
 import { recomType, recomChannel, recomWorkType } from './options'
 import DialogForm from './dialog-recommend.vue'
@@ -52,7 +44,7 @@ const recomWorkTypes = [{ value: undefined, name: '全部' }].concat(recomWorkTy
 
 export default {
   name: 'recommend',
-  mixins: [table],
+  mixins: [del],
   components: { DialogForm },
   data () {
     const filters = [
@@ -81,7 +73,6 @@ export default {
     return {
       filters,
       current: null,
-      sortable: false,
       cols: [
         {
           label: '封面',
@@ -164,28 +155,19 @@ export default {
     }
   },
   methods: {
-    beforeSort () {
-      if (this.total > this.list.length) {
-        return this.getList(true)
-      }
+    getList () {
+      this.$emit('refresh')
     },
     saveOrder ({ id, order }) {
       return editRecom(id, { order })
     },
-    getData ({ offset, limit }, all) {
+    getData ({ offset, limit }) {
       const params = {
         offset,
         limit,
         ...this.query
       }
-      if (all === true) {
-        params.offset = 0
-        params.limit = 999
-      }
-      return getRecomList(params).then(data => {
-        this.list = data.results
-        this.total = data.count
-      })
+      return getRecomList(params)
     },
     add () {
       const query = this.query

@@ -1,6 +1,9 @@
 <template>
-  <div>
+  <main-content
+    :cols="cols"
+    :get-data="getData">
     <el-form
+      slot="header"
       inline
       label-suffix="：">
       <el-form-item>
@@ -18,26 +21,20 @@
           @click="add">添加素材</el-button>
       </el-form-item>
     </el-form>
-    <base-table
-      :list="list"
-      :page-size.sync="limit"
-      :cols="cols"
-      :loading="loading"
-      :total="total" ></base-table>
     <dialog-material ref="dialog" :data="current" @success="getList"></dialog-material>
-  </div>
+  </main-content>
 </template>
 
 <script>
 import { getMaterialList, delMaterial } from '@/api/yanhui/material'
-import table from '@/mixins/table'
+import del from '@/mixins/del'
 import { useTypes, picTypes } from './options'
 import DialogMaterial from './dialog-material'
 import { mapMutations } from 'vuex'
 
 export default {
   name: 'material',
-  mixins: [table],
+  mixins: [del],
   components: { DialogMaterial },
   data () {
     return {
@@ -127,6 +124,9 @@ export default {
   },
   methods: {
     ...mapMutations('app', ['setBreadcrumb']),
+    getList () {
+      this.$emit('refresh')
+    },
     getData ({ offset, limit }) {
       const item = useTypes[this.usetype]
       const params = {
@@ -134,10 +134,7 @@ export default {
         limit,
         usetype: item.value
       }
-      return getMaterialList(params, item.type).then(data => {
-        this.list = data.results
-        this.total = data.count
-      })
+      return getMaterialList(params, item.type)
     },
     add () {
       this.current = {

@@ -1,6 +1,7 @@
 <template>
-  <div>
+  <main-content :cols="cols" :get-data="getData">
     <el-form
+      slot="header"
       inline
       label-suffix="：">
       <el-form-item label="排序">
@@ -20,25 +21,19 @@
           @click="add">添加</el-button>
       </el-form-item>
     </el-form>
-    <base-table
-      :list="list"
-      :page-size.sync="limit"
-      :cols="cols"
-      :loading="loading"
-      :total="total" ></base-table>
     <dialog-booklist :data="current" ref="dialog" @success="getList"></dialog-booklist>
-  </div>
+  </main-content>
 </template>
 
 <script>
-import table from '@/mixins/table'
+import delMixin from '@/mixins/del'
 import { getBooklist, delBooklist } from '@/api/booklist'
 import DialogBooklist from './dialog-booklist'
 import { mapMutations } from 'vuex'
 
 export default {
   name: 'booklist',
-  mixins: [table],
+  mixins: [delMixin],
   components: { DialogBooklist },
   data () {
     const orderOptions = [
@@ -140,7 +135,7 @@ export default {
               <div>
                 <el-button plain type="success" onClick={this.linkWorks.bind(this, row)}>查看作品({row.work_count})</el-button>
                 <el-button plain onClick={this.modify.bind(this, row)}>修改</el-button>
-                <el-button plain type="primary">批量添加</el-button>
+                <el-button plain type="primary" onClick={this.test}>批量添加</el-button>
                 <el-button plain type="danger" onClick={this.del.bind(this, row)}>删除</el-button>
               </div>
             )
@@ -160,6 +155,11 @@ export default {
   },
   methods: {
     ...mapMutations('app', ['setBreadcrumb']),
+    getList () {
+      this.$emit('refresh')
+    },
+    test () {
+    },
     getData ({ offset, limit }) {
       const query = this.query
       const params = {
@@ -167,10 +167,7 @@ export default {
         limit,
         order: query.sort + query.order
       }
-      return getBooklist(params).then(data => {
-        this.list = data.results
-        this.total = data.count
-      })
+      return getBooklist(params)
     },
     add () {
       this.current = null

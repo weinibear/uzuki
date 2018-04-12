@@ -1,41 +1,35 @@
 <template>
-  <div>
+  <main-content
+    :cols="cols"
+    :get-data="getData"
+    :save-order="saveOrder"
+    sortable
+    row-key="id"
+    :page-size="999">
     <el-button
+      slot="header"
       icon="el-icon-plus"
       type="primary"
       @click="add">添加</el-button>
-    <btn-sort
-      @success="getList"
-      :sortable.sync="sortable"
-      :list.sync="list"
-      :save-order="saveOrder"/>
-    <base-table
-      :list="list"
-      :page-size.sync="limit"
-      :cols="cols"
-      :sortable="sortable"
-      :loading="loading"
-      :total="total" ></base-table>
     <dialog-category ref="dialog"
       @success="getList"
       :data="current"></dialog-category>
-  </div>
+  </main-content>
 </template>
 
 <script>
 import { delCategory, changeCategory } from '@/api/category'
-import table from '@/mixins/table'
+import del from '@/mixins/del'
 import { mapActions } from 'vuex'
 import DialogCategory from './dialog-category'
 
 export default {
   name: 'category',
-  mixins: [table],
+  mixins: [del],
   components: { DialogCategory },
   data () {
     return {
       current: null,
-      sortable: false,
       cols: [
         {
           label: '封面',
@@ -70,8 +64,12 @@ export default {
     },
     getData () {
       return this.getCategoryList().then(list => {
-        this.list = list.slice(0)
+        const results = list.slice(0)
+        return { results, count: results.length }
       })
+    },
+    getList () {
+      this.$emit('refresh')
     },
     add () {
       this.current = null
