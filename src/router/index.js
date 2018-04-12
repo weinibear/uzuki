@@ -6,11 +6,17 @@ import Layout from '@/views/layout'
 
 Vue.use(Router)
 
-const _import = function (file) {
-  return function () {
-    return import('@/views/' + file)
-  }
+// const importAsync = function (file) {
+//   return function () {
+//     return import('@/views/' + file)
+//   }
+// }
+
+const importSync = function (file) {
+  return require('@/views/' + file).default
 }
+
+const _import = importSync
 
 const navRoutes = [
   {
