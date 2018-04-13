@@ -1,5 +1,9 @@
 // Promise
 import './utils/promise'
+// style
+import 'normalize.css'
+import 'element-ui/lib/theme-chalk/reset.css'
+import '@/style/index.scss'
 
 import Vue from 'vue'
 
@@ -7,13 +11,7 @@ import router from './router'
 import store from './store'
 
 import * as filters from './filter'
-import Element from 'element-ui'
-
-// style
-import 'normalize.css/normalize.css'
-import 'element-ui/lib/theme-chalk/reset.css'
-import 'element-ui/lib/theme-chalk/index.css'
-import '@/style/index.scss'
+import Element from './element-ui'
 
 import './icons'
 
