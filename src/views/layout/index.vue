@@ -11,7 +11,9 @@
         </div>
         <the-breadcrumb />
       </header>
-      <router-view class="app-main" />
+      <div class="app-main-wrapper">
+        <router-view class="app-main" />
+      </div>
     </section>
   </div>
 </template>
@@ -69,11 +71,15 @@ export default {
     transform: rotate(90deg);
   }
 }
-.app-main {
+.app-main-wrapper {
   flex: 1;
   overflow: auto;
   padding: 20px;
   color: #606266;
+  // min-width: 1000px;
+}
+.app-main {
+  min-width: 1000px;
 }
 .menu-right {
   float: right;

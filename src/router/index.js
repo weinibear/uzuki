@@ -30,7 +30,6 @@ const navRoutes = [
     name: '书单作品',
     hidden: true,
     meta: {
-      from: '书单管理',
       breadcrumb: [
         { name: '书单管理', to: '/booklist' }
       ]
@@ -76,7 +75,6 @@ const navRoutes = [
         component: _import('yanhui/material/material-parts'),
         hidden: true,
         meta: {
-          from: '演绘素材',
           breadcrumb: [
             { name: '演绘素材', to: { name: '演绘素材' } }
           ]
