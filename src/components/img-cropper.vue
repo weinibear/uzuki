@@ -30,6 +30,7 @@
 import Cropper from 'cropperjs'
 import 'cropperjs/dist/cropper.css'
 import { uploadImg } from '@/api/upload'
+import '@/utils/canvas-to-blob'
 
 export default {
   name: 'ImgCropper',
