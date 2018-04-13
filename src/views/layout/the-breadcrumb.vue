@@ -9,6 +9,7 @@
         <span v-if='index === breadcrumb.length - 1'>{{item.name}}</span>
         <router-link
           class="app-breadcrumb-link"
+          @click.native="link(index)"
           v-else
           :to="item.to">{{item.name}}</router-link>
       </el-breadcrumb-item>
@@ -24,27 +25,27 @@ export default {
     ...mapState('app', ['breadcrumb', 'breadcrumbCustom'])
   },
   methods: {
-    ...mapMutations('app', ['setBreadcrumb', 'changeBreadcrumbCustom'])
+    ...mapMutations('app', ['setBreadcrumb', 'changeBreadcrumbCustom', 'setCurrentPath']),
+    link (index) {
+      const breadcrumb = this.breadcrumb.slice(0, index + 1)
+      this.setBreadcrumb(breadcrumb)
+    }
   },
   watch: {
     '$route': {
       immediate: true,
       handler (to, from) {
+        this.setCurrentPath(to.fullPath)
         if (from && from.path === to.path) {
           return
         }
         this.$nextTick().then(() => {
           if (!this.breadcrumbCustom) {
-            const levelList = []
-            const from = to.meta.from
-            if (from) {
-              if (typeof from === 'string') {
-                levelList.push({ to: { name: from }, name: from })
-              } else {
-                levelList.push(from)
-              }
+            let levelList = []
+            if (to.meta.breadcrumb) {
+              levelList = [...to.meta.breadcrumb]
             }
-            levelList.push({ to: '', name: to.name })
+            levelList.push({ to: to.fullPath, name: to.name })
             this.setBreadcrumb(levelList)
           }
           this.changeBreadcrumbCustom(false)

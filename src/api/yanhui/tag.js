@@ -21,3 +21,23 @@ export function getMaterialTags () {
 export function getBadgetag () {
   return request.get('/badgetag/')
 }
+
+/**
+ * 获取标签列表
+ * @param {*} params { groupid, usetype, offset, limit, typeid }
+ */
+export function getMaterialTagList (params) {
+  return request.get('/mediatag/taglist/', { params })
+}
+
+/**
+ * 添加标签
+ * @param {*} data { groupid, usetype, name, order, typeid }
+ */
+export function addTag (data) {
+  return request.post('/mediatag/add/', data)
+}
+
+export function modifyTag (id, data) {
+  return request.post(`/mediatag/${id}/modify/`, data)
+}

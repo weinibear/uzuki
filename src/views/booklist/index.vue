@@ -154,7 +154,7 @@ export default {
     }
   },
   methods: {
-    ...mapMutations('app', ['setBreadcrumb']),
+    ...mapMutations('app', ['pushBreadcrumb']),
     getList () {
       this.$emit('refresh')
     },
@@ -181,10 +181,7 @@ export default {
       return delBooklist(data.id)
     },
     linkWorks (data) {
-      this.setBreadcrumb([
-        { to: this.$route.fullPath, name: this.$route.name },
-        { to: '', name: data.title }
-      ])
+      this.pushBreadcrumb({ to: '', name: data.title })
       this.$router.push({ name: '书单作品', params: { id: data.id } })
     }
   }

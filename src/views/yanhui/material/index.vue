@@ -7,18 +7,18 @@
       inline
       label-suffix="：">
       <el-form-item>
+        <el-button
+          icon="el-icon-plus"
+          type="primary"
+          @click="add">添加素材</el-button>
+      </el-form-item>
+      <el-form-item>
         <el-radio-group v-model="usetype" size="small">
           <el-radio-button
             v-for="(item, key) in useTypes"
             :label="key"
             :key="key">{{item.name}}</el-radio-button>
         </el-radio-group>
-      </el-form-item>
-      <el-form-item>
-        <el-button
-          icon="el-icon-plus"
-          type="primary"
-          @click="add">添加素材</el-button>
       </el-form-item>
     </el-form>
     <dialog-material ref="dialog" :data="current" @success="getList"></dialog-material>
@@ -28,7 +28,7 @@
 <script>
 import { getMaterialList, delMaterial } from '@/api/yanhui/material'
 import del from '@/mixins/del'
-import { useTypes, picTypes } from './options'
+import { useTypes, picTypes } from '../options'
 import DialogMaterial from './dialog-material'
 import { mapMutations } from 'vuex'
 
@@ -123,7 +123,7 @@ export default {
     }
   },
   methods: {
-    ...mapMutations('app', ['setBreadcrumb']),
+    ...mapMutations('app', ['pushBreadcrumb']),
     getList () {
       this.$emit('refresh')
     },
@@ -158,10 +158,7 @@ export default {
       return delMaterial(data.id, type)
     },
     linkPart (row) {
-      this.setBreadcrumb([
-        { to: this.$route.fullPath, name: this.$route.name },
-        { to: '', name: row.title }
-      ])
+      this.pushBreadcrumb({ to: '', name: row.title })
       this.$router.push({
         name: '演绘子素材',
         params: {

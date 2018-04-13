@@ -30,7 +30,10 @@ const navRoutes = [
     name: '书单作品',
     hidden: true,
     meta: {
-      from: '书单管理'
+      from: '书单管理',
+      breadcrumb: [
+        { name: '书单管理', to: '/booklist' }
+      ]
     },
     component: _import('booklist/work-list')
   },
@@ -64,7 +67,7 @@ const navRoutes = [
     children: [
       {
         path: '/yanhui/material',
-        name: '演绘素材',
+        name: '素材管理',
         component: _import('yanhui/material')
       },
       {
@@ -73,8 +76,16 @@ const navRoutes = [
         component: _import('yanhui/material/material-parts'),
         hidden: true,
         meta: {
-          from: '演绘素材'
+          from: '演绘素材',
+          breadcrumb: [
+            { name: '演绘素材', to: { name: '演绘素材' } }
+          ]
         }
+      },
+      {
+        path: '/yanhui/tag/:typeid?',
+        name: '素材分类',
+        component: _import('yanhui/material-category')
       }
     ]
   }

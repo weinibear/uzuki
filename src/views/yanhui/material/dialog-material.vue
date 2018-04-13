@@ -86,7 +86,7 @@
 </template>
 
 <script>
-import { useTypes, picTypes } from './options'
+import { useTypes, picTypes } from '../options'
 import { getMaterialTags, getBadgetag } from '@/api/yanhui/tag'
 import { uploadMaterial, editMaterial } from '@/api/yanhui/material'
 
