@@ -29,7 +29,7 @@
 <script>
 import { getMaterialTagList } from '@/api/yanhui/tag'
 import { mapMutations } from 'vuex'
-import { useTypes } from '../options'
+import { useTypes } from '../material/options'
 import DialogCategory from './dialog-category'
 
 const categoryMap = {}

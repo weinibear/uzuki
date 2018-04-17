@@ -55,7 +55,7 @@
 
 <script>
 import { addTag, modifyTag } from '@/api/yanhui/tag'
-import { useTypes } from '../options'
+import { useTypes } from '../material/options'
 
 export default {
   props: ['data'],

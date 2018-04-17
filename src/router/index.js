@@ -65,6 +65,11 @@ const navRoutes = [
     icon: 'github',
     children: [
       {
+        path: '/yanhui/list',
+        name: '演绘管理',
+        component: _import('yanhui/game')
+      },
+      {
         path: '/yanhui/material',
         name: '素材管理',
         component: _import('yanhui/material')
@@ -89,10 +94,17 @@ const navRoutes = [
   }
 ]
 
+const handlePath = function (nav) {
+  if (nav.path) {
+    nav.path = nav.path.replace(/\/:[^\/]+/g, '')
+  }
+  return nav
+}
+
 let navs = JSON.parse(JSON.stringify(navRoutes))
-navs = navs.filter(v => !v.hidden).map(value => {
+navs = navs.filter(v => !v.hidden).map(handlePath).map(value => {
   if (value.children) {
-    value.children = value.children.filter(v => !v.hidden)
+    value.children = value.children.filter(v => !v.hidden).map(handlePath)
   }
   return value
 })

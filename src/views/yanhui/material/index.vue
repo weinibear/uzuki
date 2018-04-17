@@ -28,7 +28,7 @@
 <script>
 import { getMaterialList, delMaterial } from '@/api/yanhui/material'
 import del from '@/mixins/del'
-import { useTypes, picTypes } from '../options'
+import { useTypes, picTypes } from './options'
 import DialogMaterial from './dialog-material'
 import { mapMutations } from 'vuex'
 

@@ -2,7 +2,6 @@
 import './utils/promise'
 // style
 import 'normalize.css'
-import 'element-ui/lib/theme-chalk/reset.css'
 import '@/style/index.scss'
 
 import Vue from 'vue'

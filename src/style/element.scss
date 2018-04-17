@@ -17,11 +17,13 @@
   width: 100%;
 }
 
-.el-form--inline {
+.el-form.el-form--inline {
   .el-form-item {
     margin-bottom: 0;
   }
-  .el-input, .el-select {
-    width: 150px;
+  .el-form-item__content {
+    > .el-input, .el-select {
+      width: 150px;
+    }
   }
 }

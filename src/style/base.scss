@@ -1,3 +1,5 @@
+@import './var.scss';
+
 html {
   box-sizing: border-box;
 }
@@ -8,23 +10,46 @@ html {
   box-sizing: inherit;
 }
 
-html, body, #app {
+html,
+body,
+#app {
   height: 100%;
 }
 
-dt, dd {
+body {
+  font-family: "Helvetica Neue",Helvetica,"PingFang SC","Hiragino Sans GB","Microsoft YaHei","微软雅黑",Arial,sans-serif;
+  font-weight: 400;
+  font-size: 14px;
+}
+
+a {
+  color: $--color-primary;
+  text-decoration: none;
+
+  &:hover,
+  &:focus {
+    color: mix(#fff, $--color-primary, 20%);
+  }
+
+  &:active {
+    color: mix(#000, $--color-primary, 10%);
+  }
+}
+
+dt,
+dd {
   display: inline;
 }
 dt {
   &::after {
-    content: "：";
+    content: '：';
   }
 }
 dd {
   margin: 0;
   font-weight: bold;
   &::after {
-    content: "\000A";
+    content: '\000A';
     white-space: pre;
   }
 }
