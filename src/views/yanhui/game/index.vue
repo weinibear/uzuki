@@ -82,9 +82,7 @@ export default {
           label: 'ID',
           prop: 'id',
           width: 80,
-          render: (h, row) => <router-link
-            nativeOnClick={this.link.bind(this, row)}
-            to={{ name: '演绘章节', params: { gid: row.id } }}>{row.id}</router-link>
+          render: (h, row) => <el-button type="text" onClick={this.link.bind(this, row)}>{row.id}</el-button>
         },
         {
           label: '封面',
@@ -281,6 +279,7 @@ export default {
     },
     link (data) {
       this.pushBreadcrumb({ to: '', name: data.title })
+      this.$router.push({ name: '演绘章节', params: { gid: data.id } })
     }
   }
 }

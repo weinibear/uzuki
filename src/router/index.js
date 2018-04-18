@@ -30,9 +30,7 @@ const navRoutes = [
     name: '书单作品',
     hidden: true,
     meta: {
-      breadcrumb: [
-        { name: '书单管理', to: '/booklist' }
-      ]
+      breadcrumb: { name: '书单管理', to: '/booklist' }
     },
     component: _import('booklist/work-list')
   },
@@ -70,14 +68,20 @@ const navRoutes = [
         component: _import('yanhui/game')
       },
       {
-        path: '/yanhui/:gid/chapters',
+        path: '/yanhui/review',
+        name: '演绘审核',
+        component: _import('yanhui/review')
+      },
+      {
+        path: '/yanhui/:type?/:gid/chapters',
         name: '演绘章节',
         component: _import('yanhui/game/chapter-list'),
         hidden: true,
         meta: {
-          breadcrumb: [
-            { name: '演绘列表', to: { name: '演绘列表' } }
-          ]
+          breadcrumb (to) {
+            const name = to.params.type === 'review' ? '演绘审核' : '演绘列表'
+            return { name, to: { name } }
+          }
         }
       },
       {

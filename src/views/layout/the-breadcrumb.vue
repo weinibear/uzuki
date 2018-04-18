@@ -43,7 +43,11 @@ export default {
           if (!this.breadcrumbCustom) {
             let levelList = []
             if (to.meta.breadcrumb) {
-              levelList = [...to.meta.breadcrumb]
+              if (typeof to.meta.breadcrumb === 'function') {
+                levelList = [].concat(to.meta.breadcrumb(to))
+              } else {
+                levelList = [].concat(to.meta.breadcrumb)
+              }
             }
             levelList.push({ to: to.fullPath, name: to.name })
             this.setBreadcrumb(levelList)

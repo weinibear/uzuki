@@ -33,6 +33,11 @@ export const editDiscount = (id, discount) => {
   return request.post(`/ngame/${id}/change_discount/`, { discount })
 }
 
+/**
+ * 下架游戏
+ * @param {*} id
+ * @param {*} remark
+ */
 export const withdrawGame = (id, remark = '') => {
   return request.post(`/ngame/${id}/del_game/`, { remark })
 }
@@ -61,10 +66,42 @@ export function editChapter (id, data) {
 }
 
 /**
- * 下架
+ * 下架章节
  * @param {*} cid
  * @param {*} remark
  */
 export function withdrawChapter (cid, remark = '') {
   return request.post(`/nchapter/${cid}/del_chapter/`, { remark })
+}
+
+/**
+ * 审核通过
+ * @param {*} id
+ */
+export function approvalChapter (id) {
+  return request.post(`/nchapter_draft/${id}/approval/`, { action: 'accept' })
+}
+
+/**
+ * 审核退回
+ * @param {*} id
+ */
+export function disapprovalChapter (id) {
+  return request.post(`/nchapter_draft/${id}/approval/`, { action: 'reject' })
+}
+
+/**
+ * 获取游戏内容
+ * @param {*} cid
+ */
+export function getChapterContent (cid) {
+  return request.get(`/nchapter/${cid}/content/`)
+}
+
+/**
+ * 获取草稿内容
+ * @param {*} cid
+ */
+export function getChapterDraftContent (cid) {
+  return request.get(`/nchapter_draft/${cid}/content/`)
 }

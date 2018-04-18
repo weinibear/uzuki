@@ -5,19 +5,30 @@
     <dialog-chapter ref="dialog"
       @success="getList"
       :data="current"></dialog-chapter>
+    <dialog-preview ref="dialogPreview"
+      :id="currentCid"
+      :draft="needApproval"></dialog-preview>
   </main-content>
 </template>
 
 <script>
-import { getChapterList, withdrawChapter } from '@/api/yanhui/game'
+import {
+  getChapterList,
+  getChapterDraftList,
+  withdrawChapter,
+  approvalChapter,
+  disapprovalChapter
+} from '@/api/yanhui/game'
 import { chapterStatusOptions } from './options'
 import DialogChapter from './dialog-chapter'
+import DialogPreview from './dialog-preview'
 
 export default {
-  components: { DialogChapter },
+  components: { DialogChapter, DialogPreview },
   data () {
     return {
       current: null,
+      currentCid: '',
       cols: [
         {
           label: '章节ID',
@@ -54,16 +65,32 @@ export default {
           label: '操作',
           width: 300,
           render: (h, row) => {
-            return (
-              <div>
-                <el-button type="info" plain>预览</el-button>
-                <el-button plain onClick={this.modify.bind(this, row)}>修改</el-button>
-                <el-button type="danger" plain onClick={this.withdraw.bind(this, row)}>下架</el-button>
-              </div>
-            )
+            const view = ['info', this.view, '预览']
+            const withdraw = ['danger', this.withdraw, '下架']
+            const modify = ['primary', this.modify, '修改']
+            const disapproval = ['danger', this.disapproval, '退回']
+            const approval = ['success', this.approval, '通过']
+            let children = this.needApproval ? [view, approval, disapproval] : [view, modify, withdraw]
+            children = children.map(child => {
+              return h('el-button', {
+                props: {
+                  type: child[0],
+                  plain: true
+                },
+                on: {
+                  click: child[1].bind(this, row)
+                }
+              }, child[2])
+            })
+            return h('div', children)
           }
         }
       ]
+    }
+  },
+  computed: {
+    needApproval () {
+      return this.$route.params.type === 'review'
     }
   },
   methods: {
@@ -75,6 +102,10 @@ export default {
       const params = {
         offset,
         limit
+      }
+      if (this.needApproval) {
+        params.chapter_need_approval = 1
+        return getChapterDraftList(gid, params)
       }
       return getChapterList(gid, params)
     },
@@ -102,6 +133,41 @@ export default {
     },
     add () {
       this.$refs.dialog.visible = true
+    },
+    review (data, approval = true) {
+      let title = '确定要通过吗?'
+      let method = approvalChapter
+      if (!approval) {
+        title = '确定要退回吗?'
+        method = disapprovalChapter
+      }
+      this.$confirm(title, '提示', {
+        type: 'warning',
+        beforeClose: (action, instance, done) => {
+          if (action === 'confirm') {
+            instance.confirmButtonLoading = true
+            return method(data.id).finally(() => {
+              instance.confirmButtonLoading = false
+            }).then(() => {
+              done()
+              this.$message.success('success')
+              this.getList()
+            })
+          } else {
+            done()
+          }
+        }
+      })
+    },
+    approval (data) {
+      this.review(data, true)
+    },
+    disapproval (data) {
+      this.review(data, false)
+    },
+    view (data) {
+      this.currentCid = data.id
+      this.$refs.dialogPreview.visible = true
     }
   }
 }
