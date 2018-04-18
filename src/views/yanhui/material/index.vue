@@ -44,7 +44,7 @@ export default {
         {
           label: '名称',
           prop: 'title',
-          width: 200,
+          width: 150,
           render: (h, row) => {
             return row.pic_type
               ? <el-button

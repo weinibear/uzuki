@@ -6,18 +6,7 @@
     <el-form
       :model="form"
       ref="form"
-      label-width="80px">
-      <el-form-item
-        label="类型"
-        prop="type">
-        <el-select v-model="form.type" placeholder="请选择活动区域">
-          <el-option
-            v-for="(item, index) in types"
-            :key="index"
-            :value="index"
-            :label="item"></el-option>
-        </el-select>
-      </el-form-item>
+      label-width="100px">
       <el-form-item
         label="名称"
         prop="name"
@@ -26,11 +15,20 @@
       </el-form-item>
       <el-form-item
         label='上传图片'
-        :rules="{ required: true, message: '文件不能为空' }"
-        prop="file">
+        :rules="{ required: true, message: '图片不能为空' }"
+        prop="picture">
         <upload-preview
           ref="preview"
-          @upload="form.file = arguments[0]"></upload-preview>
+          @upload="form.picture = arguments[0]"></upload-preview>
+      </el-form-item>
+      <el-form-item
+        label="上传JSON"
+        prop="json"
+        :rules="{ required: true, message: 'JSON不能为空' }">
+        <upload-preview
+          ref="previewJSON"
+          type="image"
+          @upload="form.json = arguments[0]"></upload-preview>
       </el-form-item>
     </el-form>
     <div class="dialog-footer" slot="footer">
@@ -49,33 +47,35 @@ export default {
       visible: false,
       btnLoading: false,
       form: {
-        type: 0,
         name: '',
-        file: ''
+        picture: '',
+        json: ''
       }
     }
   },
   computed: {
     picType () {
       return parseInt(this.$route.params.type, 10)
-    },
-    types () {
-      const typesMap = {
-        1: ['身体', '表情', '其他'],
-        2: ['身体层', '表情层', '配件层']
-      }
-      return typesMap[this.picType]
     }
   },
   watch: {
     visible (val) {
       if (!val) {
         this.$refs.preview.reset()
+        this.$refs.previewJSON.reset()
         this.$refs.form.resetFields()
       }
     }
   },
   methods: {
+    uploadJSON (e) {
+      const files = e.target.files
+      if (!files || files.length === 0) {
+        return
+      }
+      const file = files[0]
+      this.form.json = file
+    },
     save () {
       this.$refs.form.validate((valid) => {
         if (valid) {

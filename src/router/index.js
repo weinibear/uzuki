@@ -92,7 +92,7 @@ const navRoutes = [
         hidden: true,
         meta: {
           breadcrumb: [
-            { name: '演绘素材', to: { name: '演绘素材' } }
+            { name: '素材管理', to: { name: '素材管理' } }
           ]
         }
       },

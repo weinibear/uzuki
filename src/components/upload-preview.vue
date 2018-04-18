@@ -4,11 +4,12 @@
     @dragover="dragover"
     @drop="drop">
     <template v-if="src">
-      <img v-if="innerType === 'image'" :src="src" @load="revoke">
-      <audio v-if="innerType === 'audio' || innerType === 'sound'"
+      <img v-if="innerType === 'image'" :src="src">
+      <audio v-if="innerType === 'audio'"
         :src="src"
         controls
         autoplay></audio>
+      <span v-if="innerType === 'json'">{{src}}</span>
     </template>
     <span v-else>将文件拖到此处或点击上传</span>
     <input @change="change" type="file" class="ipt-uploader">
@@ -16,6 +17,7 @@
 </template>
 
 <script>
+
 export default {
   name: 'upload-preview',
   props: {
@@ -23,24 +25,27 @@ export default {
       default: ''
     },
     type: {
-      default: 'image'
+      default: 'image',
+      validator: function (value) {
+        const arr = ['image', 'sound', 'audio', 'json']
+        return arr.indexOf !== -1
+      }
     }
   },
   data () {
     return {
-      src: this.url,
-      innerType: this.type
+      src: this.url
+    }
+  },
+  computed: {
+    innerType () {
+      return this.type === 'sound' ? 'audio' : this.type
     }
   },
   watch: {
     url (val) {
-      this.revoke()
       this.src = val
-      this.innerType = this.type
     }
-  },
-  beforeDestroy () {
-    this.reset()
   },
   methods: {
     dragover (e) {
@@ -48,36 +53,47 @@ export default {
     },
     drop (e) {
       e.preventDefault()
-      this.handleFiles(e.dataTransfer.files)
+      this.read(e.dataTransfer.files)
     },
     change (e) {
       const files = e.target.files
-      this.handleFiles(files)
+      this.read(files).finally(() => {
+        e.target.value = ''
+      })
     },
-    revoke () {
-      window.URL.revokeObjectURL(this.src)
-    },
-    handleFiles (files) {
-      if (!files || files.length === 0) {
-        return
-      }
-      const file = files[0]
-      const imageType = /^image\//
-      const audioType = /^audio\//
-      if (imageType.test(file.type)) {
-        this.innerType = 'image'
-      } else if (audioType.test(file.type)) {
-        this.innerType = 'sound'
-      } else {
-        console.log('上传的文件类型: ', file.type)
-        return this.$message.warn('无法识别上传文件类型')
-      }
-      this.src = window.URL.createObjectURL(file)
-      this.$emit('upload', file)
+    read (files) {
+      return new Promise((resolve, reject) => {
+        if (!files || files.length === 0) {
+          resolve()
+          return
+        }
+        const file = files[0]
+        const typeMap = {
+          image: /^image\//,
+          audio: /^audio\//,
+          json: /\/json/
+        }
+        if (typeMap[this.innerType].test(file.type)) {
+          const reader = new FileReader()
+          reader.onload = () => {
+            this.src = reader.result
+            resolve()
+          }
+          reader.onerror = reject
+          reader.onabort = reject
+          reader.readAsDataURL(file)
+          this.$emit('upload', file)
+        } else {
+          const err = new Error()
+          err.message = `${file.type}格式, 请选择${this.innerType}格式文件`
+          reject(err)
+        }
+      }).catch(err => {
+        this.$message.error(err && err.message ? err.message : err)
+      })
     },
     reset () {
       if (this.src) {
-        this.revoke()
         this.src = ''
       }
     }

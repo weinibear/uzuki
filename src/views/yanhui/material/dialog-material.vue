@@ -17,7 +17,7 @@
             <upload-preview
               ref="preview"
               :url="url"
-              :source-type="sourceType"
+              :type="sourceType"
               @upload="form.file = arguments[0]"></upload-preview>
           </el-form-item>
         </el-col>

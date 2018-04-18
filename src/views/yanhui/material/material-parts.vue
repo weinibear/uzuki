@@ -8,6 +8,7 @@
       type="primary"
       @click="add">添加</el-button>
     <dialog-material-part ref="dialog" @success="getList"></dialog-material-part>
+    <dialog-material-bones ref="dialog3" @success="getList"></dialog-material-bones>
   </main-content>
 </template>
 
@@ -15,10 +16,11 @@
 import { getMaterialPart, delMaterialPart } from '@/api/yanhui/material'
 import del from '@/mixins/del'
 import DialogMaterialPart from './dialog-material-part'
+import DialogMaterialBones from './dialog-material-bones'
 
 export default {
   mixins: [del],
-  components: { DialogMaterialPart },
+  components: { DialogMaterialPart, DialogMaterialBones },
   data () {
     return {
       current: null,
@@ -56,11 +58,16 @@ export default {
     getData ({ offset, limit }) {
       const type = +this.$route.params.type
       const parent = this.$route.params.parent
-      const params = { offset, limit, type, parent }
-      return getMaterialPart(params)
+      const params = { offset, limit, parent }
+      return getMaterialPart(params, type)
     },
     add () {
-      this.$refs.dialog.visible = true
+      const type = +this.$route.params.type
+      if (type === 3) {
+        this.$refs.dialog3.visible = true
+      } else {
+        this.$refs.dialog.visible = true
+      }
     },
     delData (data) {
       return delMaterialPart(data.id)

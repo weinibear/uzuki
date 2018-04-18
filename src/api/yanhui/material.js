@@ -32,8 +32,11 @@ const getPartUrl = function (type) {
  * 获取子素材
  * @param {*} params { limit, offset, type, parent }
  */
-export function getMaterialPart (params) {
-  const url = getPartUrl(params.type)
+export function getMaterialPart (params, type) {
+  let url = '/child_file/child/'
+  if (type !== 3) {
+    url = getPartUrl(type)
+  }
   return request.get(url, { params })
 }
 
@@ -43,6 +46,9 @@ export function delMaterialPart (id, type) {
 }
 
 export function uploadMaterialPart (fd, type) {
-  const url = getPartUrl(type)
+  let url = '/child_file/'
+  if (type !== 3) {
+    url = getPartUrl(type)
+  }
   return request.post(`${url}upload/`, fd)
 }
