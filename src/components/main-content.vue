@@ -18,9 +18,6 @@
             @click="cancelSort">取消排序</el-button>
         </template>
       </div>
-    </div>
-    <div class="base-table"
-      v-loading="loading">
       <el-pagination
         v-show="total > limit && !sortInstance"
         class="top-pagination"
@@ -30,48 +27,50 @@
         :page-size="limit"
         :current-page.sync="currentPage">
       </el-pagination>
-      <el-table
-        ref="table"
-        :data="list"
-        :row-key="rowKey"
-        :row-class-name="sortInstance ? 'sortable' : ''"
-        border>
-        <template v-for="(col, index) in cols">
-          <slot v-if="col.slot"
-            :name="col.slot" />
-          <el-table-column
-            v-bind="col"
-            v-else
-            :key="index">
-            <template slot-scope="scope">
-              <base-table-cell
-                v-if="col.render"
-                :row="scope.row"
-                :index="scope.$index"
-                :render="col.render"
-              />
-              <component
-                v-else-if="col.component"
-                :is="col.component"
-                :row="scope.row"
-                :index="scope.$index"
-                :col="col"
-              />
-              <span v-else>{{scope.row[col.prop]}}</span>
-            </template>
-          </el-table-column>
-        </template>
-      </el-table>
-      <el-pagination
-        class="bottom-pagination"
-        v-show="total > limit && !sortInstance"
-        layout="prev, pager, next, total, jumper"
-        background
-        :total="total"
-        :page-size="limit"
-        :current-page.sync="currentPage">
-      </el-pagination>
     </div>
+    <el-table
+      v-loading="loading"
+      class="base-table"
+      ref="table"
+      :data="list"
+      :row-key="rowKey"
+      :row-class-name="sortInstance ? 'sortable' : ''"
+    >
+      <template v-for="(col, index) in cols">
+        <slot v-if="col.slot"
+          :name="col.slot" />
+        <el-table-column
+          v-bind="col"
+          v-else
+          :key="index">
+          <template slot-scope="scope">
+            <base-table-cell
+              v-if="col.render"
+              :row="scope.row"
+              :index="scope.$index"
+              :render="col.render"
+            />
+            <component
+              v-else-if="col.component"
+              :is="col.component"
+              :row="scope.row"
+              :index="scope.$index"
+              :col="col"
+            />
+            <span v-else>{{scope.row[col.prop]}}</span>
+          </template>
+        </el-table-column>
+      </template>
+    </el-table>
+    <el-pagination
+      class="bottom-pagination"
+      v-show="total > limit && !sortInstance"
+      layout="prev, pager, next, total, jumper"
+      background
+      :total="total"
+      :page-size="limit"
+      :current-page.sync="currentPage">
+    </el-pagination>
     <slot></slot>
   </main>
 </template>
@@ -249,15 +248,6 @@ export default {
 .base-table {
   position: relative;
   margin: 18px 0;
-  .top-pagination {
-    position: absolute;
-    right: 0;
-    top: -18px;
-    transform: translateY(-100%);
-  }
-  .bottom-pagination {
-    margin-top: 18px;
-  }
   .img-thumbnail {
     padding: 4px;
     background-color: #fff;
@@ -275,8 +265,11 @@ export default {
 }
 .header {
   display: flex;
-  flex-wrap: wrap;
   align-items: flex-end;
+}
+.top-pagination {
+  flex: 1;
+  text-align: right;
 }
 .btn-sort {
   margin-left: 10px;
