@@ -1,5 +1,7 @@
 <template>
-  <nav class="sidebar">
+  <el-scrollbar
+    class="sidebar"
+    wrap-style="overflow-x:hidden;">
     <a class="home" href="/">
       <span class="logo" v-show="!isCollapse"> </span>
       <svg-icon icon="home"></svg-icon>
@@ -40,7 +42,7 @@
         </el-menu-item>
       </template>
     </el-menu>
-  </nav>
+  </el-scrollbar>
 </template>
 
 <script>
