@@ -5,7 +5,7 @@
       @drop="drop"
       class="img-wrapper"
       for="ipt-img-cropper"
-      :style="{width: labelWidth + 'px', height: labelHeight + 'px'}">
+      :style="{width: width + 'px', height: height + 'px'}">
       <img v-if="imgSrc" :src="imgSrc">
       <svg-icon v-else icon="plus"></svg-icon>
     </label>
@@ -40,7 +40,7 @@ export default {
       type: Number,
       default: 3 / 4
     },
-    labelHeight: {
+    height: {
       type: Number,
       default: 148
     },
@@ -53,8 +53,6 @@ export default {
   data () {
     return {
       visible: false,
-      labelWidth: this.labelHeight * this.ratio,
-      dialogWidth: 600 * this.ratio,
       prevUrl: '',
       url: '',
       cropper: null,
@@ -67,6 +65,12 @@ export default {
         return '//image.iqing.com/' + this.src.replace(/^\//, '')
       }
       return this.src
+    },
+    width () {
+      return this.height * this.ratio
+    },
+    dialogWidth () {
+      return 600 * this.ratio
     }
   },
   watch: {

@@ -66,8 +66,19 @@ const navRoutes = [
     children: [
       {
         path: '/yanhui/list',
-        name: '演绘管理',
+        name: '演绘列表',
         component: _import('yanhui/game')
+      },
+      {
+        path: '/yanhui/:gid/chapters',
+        name: '演绘章节',
+        component: _import('yanhui/game/chapter-list'),
+        hidden: true,
+        meta: {
+          breadcrumb: [
+            { name: '演绘列表', to: { name: '演绘列表' } }
+          ]
+        }
       },
       {
         path: '/yanhui/material',
@@ -96,7 +107,7 @@ const navRoutes = [
 
 const handlePath = function (nav) {
   if (nav.path) {
-    nav.path = nav.path.replace(/\/:[^\/]+/g, '')
+    nav.path = nav.path.replace(/\/:[^/]+/g, '')
   }
   return nav
 }

@@ -1,12 +1,12 @@
 
 export default {
   methods: {
-    del (data) {
+    del (data, title = '确认删除么?') {
       if (typeof this.delData !== 'function') {
         console.warn('minix del需要this.delData方法', this)
         return
       }
-      this.$confirm('确认删除么?', {
+      this.$confirm(title, '提示', {
         beforeClose: (action, instance, done) => {
           if (action === 'confirm') {
             instance.confirmButtonLoading = true
@@ -14,7 +14,7 @@ export default {
               instance.confirmButtonLoading = false
             }).then(() => {
               done()
-              this.$message.success('删除成功')
+              this.$message.success('success')
               this.$emit('refresh')
             })
           } else {

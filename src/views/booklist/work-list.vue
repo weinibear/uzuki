@@ -102,7 +102,7 @@ export default {
               instance.confirmButtonLoading = false
             }).then(() => {
               done()
-              this.$message.success('删除成功')
+              this.$message.success('success')
               this.getList()
             })
           } else {

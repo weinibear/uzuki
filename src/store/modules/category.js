@@ -13,6 +13,7 @@ export default {
     }
   },
   actions: {
+    // 刷新缓存
     getCategoryList ({ commit, state }) {
       return getCategoryList({ offset: 0, limit: 999 }).then(res => {
         commit('setCategoryList', res.results)

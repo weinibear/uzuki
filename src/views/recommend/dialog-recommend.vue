@@ -53,7 +53,8 @@
           <el-form-item
             label="封面"
             prop="cover">
-            <img-cropper :src.sync="form.cover"></img-cropper>
+            <img-cropper :src.sync="form.cover"
+              :ratio="ratio"></img-cropper>
           </el-form-item>
         </el-col>
       </el-row>
@@ -103,6 +104,17 @@ export default {
     },
     title () {
       return this.id ? '修改推荐' : '添加推荐'
+    },
+    ratio () {
+      const type = this.form.type | 0
+      if (type >= 100) {
+        return 11 / 6
+      } else if (type === 2) {
+        return 2 / 1
+      } else if (type === 3 || type === 12) {
+        return 1 / 1
+      }
+      return 3 / 4
     }
   },
   watch: {

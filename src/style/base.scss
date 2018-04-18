@@ -48,7 +48,7 @@ dt {
 dd {
   margin: 0;
   font-weight: bold;
-  &::after {
+  & + dt::before {
     content: '\000A';
     white-space: pre;
   }

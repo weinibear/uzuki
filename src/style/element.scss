@@ -27,3 +27,23 @@
     }
   }
 }
+
+// 扩展category
+.v-category-select {
+  width: 400px;
+  padding: 9px 14px;
+  .el-select-dropdown__item {
+    display: inline-flex;
+    align-items: center;
+    font-size: 12px;
+    color: #333;
+    border-radius: 2px;
+    border: 1px solid #999;
+    height: 22px;
+    padding:1px 5px;
+    margin: 2px;
+    &::after {
+      display: none;
+    }
+  }
+}

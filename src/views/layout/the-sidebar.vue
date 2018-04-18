@@ -1,11 +1,9 @@
 <template>
   <nav class="sidebar">
-    <div class="home">
-      <a
-        class="logo"
-        v-show="!isCollapse"
-        href="/"></a>
-    </div>
+    <a class="home" href="/">
+      <span class="logo" v-show="!isCollapse"> </span>
+      <svg-icon icon="home"></svg-icon>
+    </a>
     <el-menu
       :collapse="isCollapse"
       :default-active="actived"
@@ -93,7 +91,8 @@ export default {
   .home {
     display: block;
     height: 56px;
-    padding: 12px 20px;
+    line-height: 56px;
+    padding: 0 20px;
     color: #bfc8d9;
     &:hover {
       background-color: #48546a;
@@ -103,8 +102,10 @@ export default {
     }
   }
   .logo {
-    display: block;
+    display:inline-block;
     height: 32px;
+    width: 100%;
+    margin-top: 12px;
     background: url('~@/assets/logo-v2.png') no-repeat 0 0 content-box
       border-box;
   }
