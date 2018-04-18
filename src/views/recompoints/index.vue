@@ -16,13 +16,12 @@
 
 <script>
 import { getRecommendList, delRecompoints } from '@/api/recompoints'
-import del from '@/mixins/del'
 import { status, areas } from './options'
 import DialogForm from './dialog-recompoints'
+import { confirm } from '@/utils/confirm'
 
 export default {
   name: 'recompoints',
-  mixins: [del],
   components: { DialogForm },
   data () {
     return {
@@ -75,8 +74,14 @@ export default {
       this.current = data
       this.$refs.dialog.visible = true
     },
+    del (data) {
+      confirm({ method: this.delData.bind(this, data) })
+    },
     delData (data) {
-      return delRecompoints(data.id)
+      return delRecompoints(data.id).then(() => {
+        this.$message.success('success')
+        this.getList()
+      })
     }
   }
 }

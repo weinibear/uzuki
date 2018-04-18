@@ -26,14 +26,13 @@
 </template>
 
 <script>
-import delMixin from '@/mixins/del'
 import { getBooklist, delBooklist } from '@/api/booklist'
 import DialogBooklist from './dialog-booklist'
 import { mapMutations } from 'vuex'
+import { confirm } from '@/utils/confirm'
 
 export default {
   name: 'booklist',
-  mixins: [delMixin],
   components: { DialogBooklist },
   data () {
     const orderOptions = [
@@ -177,8 +176,14 @@ export default {
       this.current = data
       this.$refs.dialog.visible = true
     },
+    del (data) {
+      confirm({ method: this.delData.bind(this, data) })
+    },
     delData (data) {
-      return delBooklist(data.id)
+      return delBooklist(data.id).then(() => {
+        this.$message.success('success')
+        this.getList()
+      })
     },
     linkWorks (data) {
       this.pushBreadcrumb({ to: '', name: data.title })

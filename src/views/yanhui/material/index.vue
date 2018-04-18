@@ -27,14 +27,13 @@
 
 <script>
 import { getMaterialList, delMaterial } from '@/api/yanhui/material'
-import del from '@/mixins/del'
 import { useTypes, picTypes } from './options'
 import DialogMaterial from './dialog-material'
 import { mapMutations } from 'vuex'
+import { confirm } from '@/utils/confirm'
 
 export default {
   name: 'material',
-  mixins: [del],
   components: { DialogMaterial },
   data () {
     return {
@@ -153,9 +152,15 @@ export default {
       this.current.sourceType = useTypes[this.current.type].type
       this.$refs.dialog.visible = true
     },
+    del (data) {
+      confirm({ method: this.delData.bind(this, data) })
+    },
     delData (data) {
       const type = useTypes[data.usetype] && useTypes[data.usetype].type
-      return delMaterial(data.id, type)
+      return delMaterial(data.id, type).then(() => {
+        this.$message.success('success')
+        this.getList()
+      })
     },
     linkPart (row) {
       this.pushBreadcrumb({ to: '', name: row.title })

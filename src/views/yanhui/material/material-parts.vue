@@ -14,12 +14,11 @@
 
 <script>
 import { getMaterialPart, delMaterialPart } from '@/api/yanhui/material'
-import del from '@/mixins/del'
 import DialogMaterialPart from './dialog-material-part'
 import DialogMaterialBones from './dialog-material-bones'
+import { confirm } from '@/utils/confirm'
 
 export default {
-  mixins: [del],
   components: { DialogMaterialPart, DialogMaterialBones },
   data () {
     return {
@@ -69,8 +68,14 @@ export default {
         this.$refs.dialog.visible = true
       }
     },
+    del (data) {
+      confirm({ method: this.delData.bind(this, data) })
+    },
     delData (data) {
-      return delMaterialPart(data.id)
+      return delMaterialPart(data.id).then(() => {
+        this.$message.success('success')
+        this.getList()
+      })
     }
   }
 }

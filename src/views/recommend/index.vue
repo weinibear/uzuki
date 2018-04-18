@@ -35,16 +35,15 @@
 </template>
 
 <script>
-import del from '@/mixins/del'
 import { getRecomList, delRecom, editRecom } from '@/api/recommend'
 import { recomType, recomChannel, recomWorkType } from './options'
 import DialogForm from './dialog-recommend.vue'
+import { confirm } from '@/utils/confirm'
 
 const recomWorkTypes = [{ value: undefined, name: '全部' }].concat(recomWorkType)
 
 export default {
   name: 'recommend',
-  mixins: [del],
   components: { DialogForm },
   data () {
     const filters = [
@@ -185,8 +184,14 @@ export default {
       this.current = data
       this.$refs.dialog.visible = true
     },
+    del (data) {
+      confirm({ method: this.delData.bind(this, data) })
+    },
     delData (data) {
-      return delRecom(data.id)
+      return delRecom(data.id).then(() => {
+        this.$message.success('success')
+        this.getList()
+      })
     }
   }
 }

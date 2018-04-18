@@ -16,11 +16,10 @@
 <script>
 import { getWorks, delWork, changeWork } from '@/api/booklist'
 import DialogAddWorks from './dialog-add-works'
-import delMixin from '@/mixins/del'
+import { confirm } from '@/utils/confirm'
 
 export default {
   components: { DialogAddWorks },
-  mixins: [delMixin],
   data () {
     return {
       current: null,
@@ -111,8 +110,14 @@ export default {
         }
       })
     },
+    del (data) {
+      confirm({ method: this.delData.bind(this, data) })
+    },
     delData (data) {
-      return delWork(data.id)
+      return delWork(data.id).then(() => {
+        this.$message.success('success')
+        this.getList()
+      })
     }
   }
 }

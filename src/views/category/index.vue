@@ -19,13 +19,12 @@
 
 <script>
 import { delCategory, changeCategory } from '@/api/category'
-import del from '@/mixins/del'
 import { mapActions } from 'vuex'
 import DialogCategory from './dialog-category'
+import { confirm } from '@/utils/confirm'
 
 export default {
   name: 'category',
-  mixins: [del],
   components: { DialogCategory },
   data () {
     return {
@@ -79,8 +78,14 @@ export default {
       this.current = data
       this.$refs.dialog.visible = true
     },
+    del (data) {
+      confirm({ method: this.delData.bind(this, data) })
+    },
     delData (data) {
-      return delCategory(data.id)
+      return delCategory(data.id).then(() => {
+        this.$message.success('success')
+        this.getList()
+      })
     }
   }
 }
