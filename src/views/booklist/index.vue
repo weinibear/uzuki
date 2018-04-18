@@ -134,7 +134,6 @@ export default {
               <div>
                 <el-button plain type="success" onClick={this.linkWorks.bind(this, row)}>查看作品({row.work_count})</el-button>
                 <el-button plain onClick={this.modify.bind(this, row)}>修改</el-button>
-                <el-button plain type="primary" onClick={this.test}>批量添加</el-button>
                 <el-button plain type="danger" onClick={this.del.bind(this, row)}>删除</el-button>
               </div>
             )
@@ -156,8 +155,6 @@ export default {
     ...mapMutations('app', ['pushBreadcrumb']),
     getList () {
       this.$emit('refresh')
-    },
-    test () {
     },
     getData ({ offset, limit }) {
       const query = this.query

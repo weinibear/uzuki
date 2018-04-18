@@ -1,6 +1,6 @@
 <template>
   <el-dialog
-    width="700px"
+    width="750px"
     :visible.sync="visible"
     :title="title">
     <el-form
