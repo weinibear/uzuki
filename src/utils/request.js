@@ -6,7 +6,7 @@ const debug = process.env.NODE_ENV !== 'production'
 const request = axios.create({
   xsrfCookieName: 'csrftoken',
   xsrfHeaderName: 'x-csrftoken',
-  timeout: 5000,
+  timeout: 15000,
   headers: {
     common: {}
   }

@@ -2,6 +2,7 @@
   <el-dialog
     width="500px"
     :visible.sync="visible"
+    :close-on-click-modal="false"
     title="添加素材">
     <el-form
       :model="form"

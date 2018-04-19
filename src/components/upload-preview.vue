@@ -74,14 +74,19 @@ export default {
           json: /\/json/
         }
         if (typeMap[this.innerType].test(file.type)) {
-          const reader = new FileReader()
-          reader.onload = () => {
-            this.src = reader.result
+          if (this.innerType === 'json') {
+            this.src = file.name
             resolve()
+          } else {
+            const reader = new FileReader()
+            reader.onload = () => {
+              this.src = reader.result
+              resolve()
+            }
+            reader.onerror = reject
+            reader.onabort = reject
+            reader.readAsDataURL(file)
           }
-          reader.onerror = reject
-          reader.onabort = reject
-          reader.readAsDataURL(file)
           this.$emit('upload', file)
         } else {
           const err = new Error()

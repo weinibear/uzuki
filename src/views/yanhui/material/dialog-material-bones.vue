@@ -1,6 +1,7 @@
 <template>
   <el-dialog
     width="500px"
+    :close-on-click-modal="false"
     :visible.sync="visible"
     title="添加素材">
     <el-form
@@ -27,7 +28,7 @@
         :rules="{ required: true, message: 'JSON不能为空' }">
         <upload-preview
           ref="previewJSON"
-          type="image"
+          type="json"
           @upload="form.json = arguments[0]"></upload-preview>
       </el-form-item>
     </el-form>
