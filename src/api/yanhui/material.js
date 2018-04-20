@@ -21,9 +21,11 @@ export function editMaterial (id, fd, type = 'image') {
 }
 
 const getPartUrl = function (type) {
-  let url = '/difference_material/'
+  let url = '/child_file/'
   if (type === 1) {
     url = '/avtoar_material/'
+  } else if (type === 2) {
+    url = '/difference_material/'
   }
   return url
 }
@@ -33,10 +35,7 @@ const getPartUrl = function (type) {
  * @param {*} params { limit, offset, type, parent }
  */
 export function getMaterialPart (params, type) {
-  let url = '/child_file/child/'
-  if (type !== 3) {
-    url = getPartUrl(type)
-  }
+  const url = getPartUrl(type)
   return request.get(url, { params })
 }
 
@@ -46,9 +45,6 @@ export function delMaterialPart (id, type) {
 }
 
 export function uploadMaterialPart (fd, type) {
-  let url = '/child_file/'
-  if (type !== 3) {
-    url = getPartUrl(type)
-  }
+  const url = getPartUrl(type)
   return request.post(`${url}upload/`, fd)
 }

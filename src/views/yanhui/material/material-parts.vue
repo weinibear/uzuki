@@ -21,6 +21,25 @@ import { confirm } from '@/utils/confirm'
 export default {
   components: { DialogMaterialPart, DialogMaterialBones },
   data () {
+    const urlCols1 = [
+      {
+        label: '链接',
+        prop: 'url',
+        component: 'col-cover'
+      }
+    ]
+    const urlCols2 = [
+      {
+        label: '图片',
+        prop: 'picture_url',
+        component: 'col-cover'
+      },
+      {
+        label: 'JSON',
+        render: (h, row) => <a href={row.json_url} target="_blank">{row.json_url}</a>
+      }
+    ]
+    const urlCols = parseInt(this.$route.params.type, 10) === 3 ? urlCols2 : urlCols1
     return {
       current: null,
       cols: [
@@ -28,11 +47,7 @@ export default {
           label: '名称',
           prop: 'name'
         },
-        {
-          label: '链接',
-          prop: 'url',
-          component: 'col-cover'
-        },
+        ...urlCols,
         {
           label: '创建时间',
           component: 'col-time'
@@ -50,6 +65,14 @@ export default {
       ]
     }
   },
+  computed: {
+    type () {
+      return parseInt(this.$route.params.type, 10)
+    },
+    bones () {
+      return this.type === 3
+    }
+  },
   methods: {
     getList () {
       this.$emit('refresh')
@@ -61,8 +84,7 @@ export default {
       return getMaterialPart(params, type)
     },
     add () {
-      const type = +this.$route.params.type
-      if (type === 3) {
+      if (this.bones) {
         this.$refs.dialog3.visible = true
       } else {
         this.$refs.dialog.visible = true
@@ -72,7 +94,7 @@ export default {
       confirm({ method: this.delData.bind(this, data) })
     },
     delData (data) {
-      return delMaterialPart(data.id).then(() => {
+      return delMaterialPart(data.id, this.type).then(() => {
         this.$message.success('success')
         this.getList()
       })
