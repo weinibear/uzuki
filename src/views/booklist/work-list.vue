@@ -111,7 +111,7 @@ export default {
       })
     },
     del (data) {
-      confirm({ method: this.delData.bind(this, data) })
+      confirm(this.delData.bind(this, data))
     },
     delData (data) {
       return delWork(data.id).then(() => {

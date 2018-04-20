@@ -75,7 +75,7 @@ export default {
       this.$refs.dialog.visible = true
     },
     del (data) {
-      confirm({ method: this.delData.bind(this, data) })
+      confirm(this.delData.bind(this, data))
     },
     delData (data) {
       return delRecompoints(data.id).then(() => {

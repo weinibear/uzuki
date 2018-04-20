@@ -1,12 +1,13 @@
 import { MessageBox } from 'element-ui'
 
-export function confirm ({ message = '确认删除吗?', title = '提示', type = 'confirm', method }) {
-  return MessageBox({
-    title,
-    message,
-    $type: type,
+export function confirm (method, options = {}) {
+  const config = {
+    title: '提示',
+    message: '确认删除吗？',
+    $type: 'confirm',
     showCancelButton: true,
     type: 'warning',
+    ...options,
     beforeClose: (action, instance, done) => {
       if (action === 'confirm') {
         instance.confirmButtonLoading = true
@@ -19,5 +20,6 @@ export function confirm ({ message = '确认删除吗?', title = '提示', type 
         done()
       }
     }
-  })
+  }
+  return MessageBox(config)
 }
