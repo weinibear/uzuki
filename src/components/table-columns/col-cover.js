@@ -22,7 +22,7 @@ export default {
           ref={ref}
           placement="right"
           trigger="hover">
-          <img src={bigCover} alt=""/>
+          <img style="max-height: 500px" src={bigCover} alt=""/>
         </el-popover>
         <img class="img-thumbnail" {...{ directives }} src={smallCover} alt=""/>
       </div>
