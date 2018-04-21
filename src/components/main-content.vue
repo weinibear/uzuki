@@ -24,6 +24,7 @@
         small
         layout="prev, pager, next"
         :total="total"
+        :pager-count="5"
         :page-size="limit"
         :current-page.sync="currentPage">
       </el-pagination>
