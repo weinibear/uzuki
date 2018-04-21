@@ -113,7 +113,7 @@ export default {
   display: flex;
   justify-content: center;
   align-items: center;
-  height: 130px;
+  height: 135px;
   border: 1px dashed #d9d9d9;
   border-radius: 6px;
   cursor: pointer;

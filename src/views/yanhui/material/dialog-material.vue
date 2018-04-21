@@ -42,6 +42,7 @@
             </el-select>
           </el-form-item>
           <el-form-item
+            v-show="isImage"
             label="素材属性"
             prop="pic_type">
             <el-select v-model="form.pic_type">
@@ -118,6 +119,9 @@ export default {
     }
   },
   computed: {
+    isImage () {
+      return this.form.type && useTypes[this.form.type] && useTypes[this.form.type].type === 'image'
+    },
     id () {
       return this.data && this.data.id
     },
@@ -193,10 +197,14 @@ export default {
     submit () {
       this.btnLoading = true
       const fd = new window.FormData()
+      const form = { ...this.form }
+      if (!this.isImage) {
+        delete form.pic_type
+      }
       const type = useTypes[this.form.type].type
-      Object.keys(this.form).forEach(v => {
-        if (this.form[v]) {
-          fd.append(v, this.form[v])
+      Object.keys(form).forEach(v => {
+        if (form[v]) {
+          fd.append(v, form[v])
         }
       })
       Promise.resolve(
