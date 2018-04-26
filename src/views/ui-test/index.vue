@@ -65,16 +65,15 @@
 export default {
   data () {
     const ratios = [
-      '360/640 (Galaxy S5)',
-      '320/568 (iPhone5)',
-      '375/667 (iPhone6/7/8)',
-      '414/736 (iPhone6/7/8 Plus)',
-      '375/812 (iPhoneX)'
+      '414/736 (iPhone6/7/8 Plus 16:9)',
+      '400/640 (Nexus10 16:10)',
+      '375/812 (iPhoneX)',
+      '360/480 (iPad 4:3 参考)'
     ]
     return {
       url: '',
       form: {
-        ratio: ratios[2],
+        ratio: ratios[0],
         size: 'cover',
         position: 'center',
         app: true
@@ -140,11 +139,6 @@ export default {
 <style lang="scss" scoped>
 @import '~@/style/var';
 .ui-test {
-  position: fixed;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
   padding: 30px;
   display: flex;
   overflow: auto;

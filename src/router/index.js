@@ -58,11 +58,6 @@ const navRoutes = [
     icon: 'category',
     component: _import('category/index')
   },
-  {
-    path: '/uitest',
-    hidden: true,
-    component: _import('ui-test/index')
-  },
   ...outputRoute(_import),
   ...yanhuiRoute(_import)
 
@@ -91,6 +86,10 @@ const routes = [
     children: navRoutes.reduce((prev, curr) => {
       return prev.concat(curr.static ? curr.children : curr)
     }, [])
+  },
+  {
+    path: '/uitest',
+    component: _import('ui-test/index')
   },
   { path: '*', redirect: '/recompoints' }
 ]
