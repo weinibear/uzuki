@@ -27,7 +27,7 @@ request.interceptors.response.use(function (res) {
   }
   return data
 }, function (err) {
-  const msg = (err.response && (err.response.status + ' ' + err.response.statusText)) || err.message
+  const msg = (err.response && err.response.data && err.response.data.detail) || err.message
   Message({
     message: msg,
     type: 'error'

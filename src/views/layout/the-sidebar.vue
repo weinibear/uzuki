@@ -13,7 +13,7 @@
       <template v-for="item in navs">
         <el-submenu
           v-if="item.static && item.children.length"
-          :index="item.path || item.name"
+          :index="item.path || (item.name + 's')"
           :key="item.path">
           <template slot="title">
             <svg-icon

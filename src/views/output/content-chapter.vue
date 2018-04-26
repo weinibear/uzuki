@@ -1,5 +1,5 @@
 <template>
-  <quill-editor v-model="content" :image-data="options">
+  <quill-editor v-loading="loading" v-model="content" :image-data="options">
     <el-button
       slot="footer"
       type="success"
@@ -16,6 +16,7 @@ export default {
   data () {
     return {
       content: [],
+      loading: false,
       btnLoading: false
     }
   },
@@ -28,14 +29,18 @@ export default {
     },
     options () {
       return {
-        type: 'recommend'
+        type: 'content',
+        chapter_id: this.cid
       }
     }
   },
   methods: {
     getData () {
+      this.loading = true
       return getContent(this.cid).then(res => {
         this.content = content2delta(res.results)
+      }).finally(() => {
+        this.loading = false
       })
     },
     save () {
@@ -57,11 +62,3 @@ export default {
   }
 }
 </script>
-
-<style lang="scss" scoped>
-.btn-save {
-  position: absolute;
-  top: 0;
-  right: 20px;
-}
-</style>

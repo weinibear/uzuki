@@ -4,7 +4,19 @@ import request from '@/utils/request'
  * 获取渠道列表
  */
 export function getChannelList () {
-  return request.get('/distribute/distribute/')
+  return request.get('/distribute/distribute/?offset=0&limit=999')
+}
+
+export function createChannel (data) {
+  return request.post('/distribute/distribute/', data)
+}
+
+export function updateChannel (id, data) {
+  return request.post(`/distribute/distribute/${id}/change/`, data)
+}
+
+export function delChannel (id) {
+  return request.delete(`/distribute/distribute/${id}/`)
 }
 
 /**

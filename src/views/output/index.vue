@@ -31,7 +31,6 @@
             @click="search"
             icon="el-icon-search"></el-button>
         </el-input>
-        <el-button type="success">渠道列表</el-button>
         <el-button type="primary" @click="openDialogImport('online')">导入作品</el-button>
         <el-button type="primary" @click="openDialogImport('text')">导入TXT</el-button>
       </el-form-item>

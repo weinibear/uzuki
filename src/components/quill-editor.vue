@@ -1,6 +1,6 @@
 <template>
   <div class="quill-wrapper">
-    <nav class="ql-toolbar">
+    <nav class="quill-toolbar">
       <button @click="undo">
         <svg-icon icon="undo"></svg-icon>
       </button>
@@ -11,8 +11,8 @@
         <svg-icon icon="image"></svg-icon>
       </button>
     </nav>
-    <div ref="editor"></div>
-    <div class="ql-footer" v-if="$slots.footer">
+    <div class="quill-container" ref="editor"></div>
+    <div class="quill-footer" v-if="$slots.footer">
       <slot name="footer"></slot>
     </div>
     <input type="file"
@@ -47,7 +47,6 @@ export default {
   watch: {
     value (val) {
       if (this.quill) {
-        console.log(this.$slots)
         if (val && val !== this.content) {
           this.content = val
           this.setContents(val)
@@ -156,7 +155,7 @@ export default {
   height: 100%;
   overflow: hidden;
 }
-.ql-toolbar {
+.quill-toolbar {
   border: 1px solid #ccc;
   border-bottom: 0;
   padding: 10px;
@@ -176,13 +175,13 @@ export default {
   }
 }
 
-.ql-footer {
+.quill-footer {
   padding: 10px;
   border: 1px solid #ccc;
   border-top: 0;
 }
 
-.ql-container {
+.quill-container {
   background-color: #fbfaf8;
   border: 1px solid #ccc;
   overflow: hidden;
