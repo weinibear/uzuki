@@ -58,7 +58,7 @@ export default {
   },
   mounted () {
     Promise.all([
-      import(/* webpackChunkName: "quill" */ 'quill/dist/quill.core'),
+      import(/* webpackChunkName: "quill" */ 'quill/dist/quill.core.js'),
       import(/* webpackChunkName: "quill" */ 'quill/dist/quill.core.css')
     ]).then(res => {
       const Quill = res[0].default || res[0]
