@@ -2,9 +2,11 @@
   <el-dialog
     width="700px"
     :visible.sync="visible"
+    :close-on-click-modal="false"
     :title="title">
     <el-form
       :model="form"
+      :rules="rules"
       ref="form"
       label-width="80px">
       <el-row :gutter="20">
@@ -96,6 +98,19 @@ export default {
     data: Object
   },
   data () {
+    const rules = {
+      title: [{ required: true, message: '标题不能为空', trigger: 'blur' }],
+      price: [{
+        validator: (rule, value, cb) => {
+          if (this.form.need_pay) {
+            if (!(value > 0)) {
+              return cb(new Error('价格必须大于0'))
+            }
+          }
+          cb()
+        },
+        trigger: 'blur'}]
+    }
     return {
       visible: false,
       btnLoading: false,
@@ -106,11 +121,12 @@ export default {
         categories: [],
         end: 0,
         need_pay: 0,
-        price: 0,
-        chargeMethod: 1,
-        chapterCharge: 1,
+        price: '0.00',
+        chargeMethod: null,
+        chapterCharge: null,
         payFrom: 0
-      }
+      },
+      rules
     }
   },
   computed: {

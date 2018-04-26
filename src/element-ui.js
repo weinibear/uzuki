@@ -67,7 +67,8 @@ import {
   // Footer
   Loading,
   MessageBox,
-  Message
+  Message,
+  Notification
 } from 'element-ui'
 
 const components = [
@@ -154,6 +155,7 @@ const install = function (Vue, opts = {}) {
   Vue.prototype.$confirm = MessageBox.confirm
   Vue.prototype.$prompt = MessageBox.prompt
   Vue.prototype.$message = Message
+  Vue.prototype.$notify = Notification
 
   Vue.prototype.$ELEMENT = ELEMENT
 }

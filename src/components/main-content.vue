@@ -137,6 +137,9 @@ export default {
         return parseInt(this.$route.query.page, 10) || 1
       },
       set (page) {
+        if (page === this.currentPage) {
+          return
+        }
         this.$router.push({
           query: { ...this.$route.query, page }
         })

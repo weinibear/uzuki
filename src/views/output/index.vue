@@ -15,7 +15,7 @@
           </el-radio-button>
         </el-radio-group>
       </el-form-item>
-      <el-form-item label="搜索">
+      <el-form-item label="搜索" style="margin-bottom: 0">
         <el-input
           @keyup.native.enter="search"
           v-model="inputValue"
@@ -31,25 +31,31 @@
             @click="search"
             icon="el-icon-search"></el-button>
         </el-input>
-        <el-button type="primary">导入作品</el-button>
-        <el-button type="primary">导入TXT</el-button>
         <el-button type="success">渠道列表</el-button>
+        <el-button type="primary" @click="openDialogImport('online')">导入作品</el-button>
+        <el-button type="primary" @click="openDialogImport('text')">导入TXT</el-button>
       </el-form-item>
     </el-form>
     <dialog-book ref="dialog" @success="getList" :data="current"></dialog-book>
+    <dialog-import
+      ref="dialogImport"
+      :channel="currentChannel"
+      @success="getList"></dialog-import>
   </main-content>
 </template>
 
 <script>
-import { getChannelBooklist } from '@/api/output'
+import { getChannelBooklist, delBook } from '@/api/output'
 import { mapMutations, mapState } from 'vuex'
 import _cloneDeep from 'lodash/cloneDeep'
 import DialogBook from './dialog-book'
+import DialogImport from './dialog-import'
+import { confirm } from '@/utils/confirm'
 import store from '@/store'
 
 export default {
   name: 'outputs',
-  components: { DialogBook },
+  components: { DialogBook, DialogImport },
   data () {
     return {
       current: null,
@@ -63,13 +69,8 @@ export default {
       cols: [
         {
           label: 'id',
-          prop: 'id',
-          width: 80,
-          render: (h, row) => <el-button type="text" onClick={this.link.bind(this, row)}>{row.id}</el-button>
-        },
-        {
-          label: 'BookID',
           prop: 'works_id',
+          render: (h, row) => <el-button type="text" onClick={this.link.bind(this, row)}>{row.works_id}</el-button>,
           width: 80
         },
         {
@@ -98,6 +99,14 @@ export default {
           label: '创建/更新时间',
           component: 'col-time',
           width: 160
+        },
+        {
+          label: '导出',
+          width: 80,
+          render: (h, row) => {
+            const href = `${window.location.protocol}//${window.location.hostname}/distribute/book/${row.id}/export_book/?book_to=text`
+            return <a href={href}>导出</a>
+          }
         },
         {
           label: '操作',
@@ -165,16 +174,29 @@ export default {
       }
       return getChannelBooklist(channelId, params)
     },
+    output (data) {
+
+    },
+    openDialogImport (type) {
+      this.$refs.dialogImport.type = type
+      this.$refs.dialogImport.visible = true
+    },
     modify (data) {
       this.current = _cloneDeep(data)
       this.$refs.dialog.visible = true
     },
-    del () {
-
+    del (data) {
+      confirm(this.delData.bind(this, data))
+    },
+    delData (data) {
+      return delBook(data.id).then(() => {
+        this.$message.success('success')
+        this.getList()
+      })
     },
     link (data) {
       this.pushBreadcrumb({ to: '', name: data.title })
-      this.$router.push({ name: '演绘章节', params: { gid: data.id } })
+      this.$router.push({ name: '渠道卷目管理', params: { bid: data.id } })
     }
   }
 }

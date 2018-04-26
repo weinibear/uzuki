@@ -11,6 +11,7 @@ import store from './store'
 
 import * as filters from './filter'
 import Element from './element-ui'
+import localStore from './utils/localStore'
 
 import './icons'
 
@@ -33,7 +34,7 @@ Object.keys(filters).forEach(key => {
 Vue.config.productionTip = false
 
 /* eslint-disable no-new */
-new Vue({
+const app = new Vue({
   el: '#app',
   router,
   store,
@@ -43,3 +44,16 @@ new Vue({
     </div>
   )
 })
+
+const KEY = 'i_knowed_risk'
+if (localStore.get(KEY) !== 1) {
+  app.$notify({
+    title: '警告',
+    message: '这是正在重构的后台,有些功能还没有经过严格测试,修改数据有风险',
+    duration: 0,
+    type: 'warning',
+    onClose: () => {
+      localStore.set(KEY, 1)
+    }
+  })
+}
