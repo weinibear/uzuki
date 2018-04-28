@@ -5,6 +5,8 @@ import Layout from '@/views/layout'
 import outputRoute from './routes/output'
 import yanhuiRoute from './routes/yanhui'
 
+import hook from './hook'
+
 Vue.use(Router)
 
 // const importAsync = function (file) {
@@ -49,6 +51,20 @@ const navRoutes = [
         path: '/recompoints',
         name: '信仰榜推荐',
         component: _import('recompoints/index')
+      },
+      {
+        path: '/activity',
+        name: '活动列表',
+        component: _import('activity/index')
+      },
+      {
+        path: '/activity/:id',
+        name: '活动详情',
+        hidden: true,
+        meta: {
+          breadcrumb: { name: '活动列表', to: '/activity' }
+        },
+        component: _import('activity/form-activity')
       }
     ]
   },
@@ -104,6 +120,8 @@ const router = new Router({
     }
   }
 })
+
+hook(router)
 
 export { navs }
 

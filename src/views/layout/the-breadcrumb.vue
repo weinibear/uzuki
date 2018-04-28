@@ -19,6 +19,7 @@
 
 <script>
 import { mapMutations, mapState } from 'vuex'
+import _cloneDeep from 'lodash/cloneDeep'
 
 export default {
   computed: {
@@ -46,7 +47,7 @@ export default {
               if (typeof to.meta.breadcrumb === 'function') {
                 levelList = [].concat(to.meta.breadcrumb(to))
               } else {
-                levelList = [].concat(to.meta.breadcrumb)
+                levelList = [].concat(_cloneDeep(to.meta.breadcrumb))
               }
             }
             levelList.push({ to: to.fullPath, name: to.meta.title || to.name })

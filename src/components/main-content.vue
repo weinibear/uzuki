@@ -23,8 +23,8 @@
         class="top-pagination"
         small
         layout="prev, pager, next"
-        :total="total"
         :pager-count="5"
+        :total="total"
         :page-size="limit"
         :current-page.sync="currentPage">
       </el-pagination>
@@ -118,7 +118,7 @@ export default {
       loading: false,
       list: [],
       limit: this.pageSize,
-      total: 0,
+      total: null,
       sortInstance: null,
       btnSortLoading: false
     }
@@ -173,7 +173,6 @@ export default {
             this.loading = false
           })
       }
-      console.warn('需要this.getData方法', this)
       return Promise.resolve()
     },
     startSort () {

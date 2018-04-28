@@ -15,7 +15,7 @@
 </template>
 
 <script>
-import { getRecommendList, delRecompoints } from '@/api/recompoints'
+import { getRecompointsList, delRecompoints } from '@/api/recompoints'
 import { status, areas } from './options'
 import DialogForm from './dialog-recompoints'
 import { confirm } from '@/utils/confirm'
@@ -64,7 +64,7 @@ export default {
       this.$emit('refresh')
     },
     getData ({ offset, limit }) {
-      return getRecommendList(offset, limit)
+      return getRecompointsList({offset, limit})
     },
     add () {
       this.current = null

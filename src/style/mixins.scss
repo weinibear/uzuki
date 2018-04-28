@@ -1,0 +1,19 @@
+
+@mixin truncate ($line: 1, $line-height: 1.5) {
+  @if $line == 1 {
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  } @else {
+    display: block;
+    height: $line * $line-height * 1em;
+    line-height: $line-height;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    /* autoprefixer: off */
+    -webkit-box-orient: vertical;
+    /* autoprefixer: on */
+    display: -webkit-box;
+    -webkit-line-clamp: $line;
+  }
+}

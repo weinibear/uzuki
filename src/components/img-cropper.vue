@@ -4,12 +4,11 @@
       @dragover="dragover"
       @drop="drop"
       class="img-wrapper"
-      for="ipt-img-cropper"
       :style="{width: width + 'px', height: height + 'px'}">
       <img v-if="imgSrc" :src="imgSrc">
       <svg-icon v-else icon="plus"></svg-icon>
+      <input @change="change" type="file" class="ipt-img-cropper">
     </label>
-    <input @change="change" type="file" id="ipt-img-cropper">
     <el-dialog :visible.sync="visible"
       :width="dialogWidth + 'px'"
       top="10vh"
@@ -64,13 +63,13 @@ export default {
       if (this.src && !/^(https?:)?\/\//.test(this.src)) {
         return '//image.iqing.com/' + this.src.replace(/^\//, '')
       }
-      return this.src
+      return this.src.replace(/^https?:/, '')
     },
     width () {
       return this.height * this.ratio
     },
     dialogWidth () {
-      return 600 * this.ratio
+      return this.ratio > 1 ? 600 : 600 * this.ratio
     }
   },
   watch: {
@@ -184,7 +183,7 @@ export default {
     color: mix(#fff, $--color-primary, 30%);
   }
 }
-#ipt-img-cropper {
+.ipt-img-cropper {
   position: absolute;
   width: 1px;
   height: 1px;

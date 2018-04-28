@@ -1,7 +1,6 @@
 import request from '@/utils/request'
 
-export function getRecommendList (offset = 0, limit = 100) {
-  const params = { offset, limit }
+export function getRecompointsList (params) {
   return request.get('/pointsrecommend/list_all/', { params })
 }
 
