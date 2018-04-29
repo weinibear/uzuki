@@ -41,6 +41,9 @@ module.exports = {
       '@': resolve('src'),
     }
   },
+  externals: {
+    vue: 'Vue'
+  },
   module: {
     rules: [
       ...(config.dev.useEslint ? [createLintingRule()] : []),
