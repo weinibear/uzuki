@@ -1,31 +1,46 @@
 
-const scriptList = []
-export function getScript (param) {
-  let list = []
-  if (typeof param === 'string') {
-    list.push(param)
-  } else if (Array.isArray(param)) {
-    list = param
-  }
-  const head = document.getElementsByTagName('head')[0]
-  const promiseLoad = list.map(src => {
-    if (scriptList.indexOf(src) !== -1) return Promise.resolve('loaded')
-    return new Promise(function (resolve, reject) {
-      const script = document.createElement('script')
-      script.type = 'text/javascript'
-      script.charset = 'utf-8'
-      script.async = true
-      script.src = src
-      script.onload = () => {
-        scriptList.push(src)
-        resolve('loaded')
-      }
-      script.onerror = err => reject(err)
-      head.appendChild(script)
+function loadResource (getTag) {
+  const resourceList = []
+  return function (urls) {
+    let list = []
+    if (typeof urls === 'string') {
+      list.push(urls)
+    } else if (Array.isArray(urls)) {
+      list = urls
+    }
+    const head = document.getElementsByTagName('head')[0]
+    const promiseLoad = list.map(url => {
+      if (resourceList.indexOf(url) !== -1) return Promise.resolve('loaded')
+      return new Promise(function (resolve, reject) {
+        const tag = getTag(url)
+        tag.onload = () => {
+          resourceList.push(url)
+          resolve('loaded')
+        }
+        tag.onerror = err => reject(err)
+        head.appendChild(tag)
+      })
     })
-  })
-  return Promise.all(promiseLoad)
+    return Promise.all(promiseLoad)
+  }
 }
+
+export const loadScript = loadResource(function (url) {
+  const script = document.createElement('script')
+  script.type = 'text/javascript'
+  script.charset = 'utf-8'
+  script.async = true
+  script.src = url
+  return script
+})
+
+export const loadStyle = loadResource(function (url) {
+  const style = document.createElement('link')
+  style.type = 'text/css'
+  style.rel = 'stylesheet'
+  style.href = url
+  return style
+})
 
 export function combineURLs (baseURL, relativeURL) {
   return relativeURL

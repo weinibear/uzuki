@@ -12,6 +12,7 @@
           <el-input v-model="form.title"></el-input>
         </el-form-item>
         <el-form-item
+          v-if="isActivity"
           label="时间选择">
           <date-picker
             v-model="time"
@@ -44,6 +45,16 @@
             { prop: 'bf_enable', label: '讨论区状态' },
             { prop: 'submit_enable', label: '投稿状态' },
             { prop: 'enabled', label: '活动状态' },
+          ]"
+          :key="item.prop"
+          :prop="item.prop"
+          :label="item.label">
+          <el-switch v-model="form[item.prop]"></el-switch>
+        </el-form-item>
+        <el-form-item
+          v-if="isActivity"
+          class="item-inline"
+          v-for="item in [
             { prop: 'pcenabled', label: 'PC端状态' },
             { prop: 'exenabled', label: '客户端状态' }
           ]"
@@ -120,6 +131,7 @@
 <script>
 import DialogModule from './dialog-module'
 import { getActivity, createActivity, updateActivity } from '@/api/activity'
+import { getSubject, createSubject, updateSubject } from '@/api/subject'
 import VDraggable from 'vuedraggable'
 
 export default {
@@ -135,7 +147,7 @@ export default {
       version: 2, // 1 是旧 2 是新
       form: {
         title: '',
-        eve_url: `/activity/${Date.now()}`,
+        eve_url: 'https://www.iqing.com',
         started_time: tomorrow,
         ended_time: tomorrow + 7 * 24 * 3600 * 1000,
         content: '',
@@ -162,6 +174,9 @@ export default {
     id () {
       return parseInt(this.$route.params.id)
     },
+    isActivity () {
+      return this.$route.name === '活动详情'
+    },
     current () {
       return this.contentIndex >= 0 ? this.content[this.contentIndex] : { cid: this.maxCid }
     },
@@ -186,7 +201,11 @@ export default {
   beforeRouteEnter (to, from, next) {
     const id = parseInt(to.params.id, 10)
     if (id > 0) {
-      getActivity(id).then(res => {
+      Promise.resolve(
+        to.name === '活动详情'
+          ? getActivity(id)
+          : getSubject(id)
+      ).then(res => {
         next(vm => vm.setData(res))
       })
     } else {
@@ -196,7 +215,11 @@ export default {
   beforeRouteUpdate (to, from, next) {
     const id = parseInt(to.params.id, 10)
     if (id > 0) {
-      getActivity(id).then(res => {
+      Promise.resolve(
+        to.name === '活动详情'
+          ? getActivity(id)
+          : getSubject(id)
+      ).then(res => {
         this.setData(res)
         next()
       })
@@ -233,6 +256,7 @@ export default {
         }
       } catch (error) {
         console.error(error.message)
+        this.$message.error('JSON解析出错, 不要修改保存数据!')
         this.content = []
       }
     },
@@ -248,10 +272,20 @@ export default {
       const form = { ...this.form }
       form.content = JSON.stringify({ content: this.content, type: 'common', url: this.url })
       form.cover = form.cover.replace(/https?:\/\/[^/]+/g, '')
+      if (!this.isActivity) {
+        delete form.started_time
+        delete form.ended_time
+        delete form.pcenabled
+        delete form.exenabled
+      }
       Promise.resolve(
-        this.id
-          ? updateActivity(this.id, form)
-          : createActivity(form)
+        this.isActivity
+          ? this.id
+            ? updateActivity(this.id, form)
+            : createActivity(form)
+          : this.id
+            ? updateSubject(this.id, form)
+            : createSubject(form)
       ).finally(() => {
         this.btnLoading = false
       }).then(() => {

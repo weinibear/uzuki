@@ -25,6 +25,7 @@
 
 <script>
 import { uploadImg } from '@/api/upload'
+import { loadScript, loadStyle } from '@/utils/index'
 
 export default {
   props: {
@@ -58,12 +59,12 @@ export default {
   },
   mounted () {
     Promise.all([
-      import(/* webpackChunkName: "quill" */ 'quill/dist/quill.core.js'),
-      import(/* webpackChunkName: "quill" */ 'quill/dist/quill.core.css')
+      loadStyle('//unpkg.com/quill@1.3.6/dist/quill.core.css'),
+      loadScript('//unpkg.com/quill@1.3.6/dist/quill.core.js')
     ]).then(res => {
-      const Quill = res[0].default || res[0]
-      this.imageBlot(Quill)
-      this.init(Quill)
+      console.log(window.Quill)
+      this.imageBlot(window.Quill)
+      this.init(window.Quill)
     })
   },
   methods: {

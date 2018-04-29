@@ -4,6 +4,7 @@ import Router from 'vue-router'
 import Layout from '@/views/layout'
 import outputRoute from './routes/output'
 import yanhuiRoute from './routes/yanhui'
+import recommendRoute from './routes/recommend'
 
 import hook from './hook'
 
@@ -38,44 +39,20 @@ const navRoutes = [
     component: _import('booklist/work-list')
   },
   {
-    name: '推荐管理',
-    icon: 'star',
-    static: true,
-    children: [
-      {
-        path: '/recommend',
-        name: '综合推荐',
-        component: _import('recommend/index')
-      },
-      {
-        path: '/recompoints',
-        name: '信仰榜推荐',
-        component: _import('recompoints/index')
-      },
-      {
-        path: '/activity',
-        name: '活动列表',
-        component: _import('activity/index')
-      },
-      {
-        path: '/activity/:id',
-        name: '活动详情',
-        hidden: true,
-        meta: {
-          breadcrumb: { name: '活动列表', to: '/activity' }
-        },
-        component: _import('activity/form-activity')
-      }
-    ]
-  },
-  {
     path: '/category',
     name: '分类管理',
     icon: 'category',
     component: _import('category/index')
   },
-  ...outputRoute(_import),
-  ...yanhuiRoute(_import)
+  {
+    path: '/blockword',
+    name: '屏蔽词管理',
+    icon: 'ban',
+    component: _import('blockword/index')
+  },
+  recommendRoute(_import),
+  outputRoute(_import),
+  yanhuiRoute(_import)
 
 ]
 

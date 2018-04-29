@@ -30,7 +30,7 @@
 
 <script>
 import { getChapterContent, getChapterDraftContent } from '@/api/yanhui/game'
-import { getScript } from '@/utils'
+import { loadScript } from '@/utils'
 
 const parseRes = (data) => {
   const result = {
@@ -88,8 +88,8 @@ export default {
     },
     loadScript () {
       const time = Date.now() / 18000000 | 0
-      return getScript('https://menma.iqing.com/static/iqa/iqalibs.js').then(() => {
-        return getScript(`https://menma.iqing.com/static/iqa/iqa.min.js?t=${time}`)
+      return loadScript('https://menma.iqing.com/static/iqa/iqalibs.js').then(() => {
+        return loadScript(`https://menma.iqing.com/static/iqa/iqa.min.js?t=${time}`)
       })
     },
     showiqatool () {
