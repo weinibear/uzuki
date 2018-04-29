@@ -9,15 +9,13 @@ import Vue from 'vue'
 import router from './router'
 import store from './store'
 
-// import Element from './element-ui'
+import Element from './element-ui'
 import localStore from './utils/localStore'
 import DatePicker from 'vue2-datepicker'
 
 import './icons'
 
-// Vue.use(Element, { size: 'small' })
-Vue.prototype.$ELEMENT.size = 'small'
-
+Vue.use(Element, { size: 'small' })
 Vue.use(DatePicker)
 
 function importComponents (r) {
