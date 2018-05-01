@@ -5,6 +5,7 @@ import Layout from '@/views/layout'
 import outputRoute from './routes/output'
 import yanhuiRoute from './routes/yanhui'
 import recommendRoute from './routes/recommend'
+import userRoute from './routes/user'
 
 import hook from './hook'
 
@@ -23,6 +24,7 @@ const importSync = function (file) {
 const _import = importSync
 
 const navRoutes = [
+  userRoute(_import),
   {
     path: '/booklist',
     name: '书单管理',
@@ -79,10 +81,6 @@ const routes = [
     children: navRoutes.reduce((prev, curr) => {
       return prev.concat(curr.static ? curr.children : curr)
     }, [])
-  },
-  {
-    path: '/uitest',
-    component: _import('ui-test/index')
   },
   { path: '*', redirect: '/recompoints' }
 ]

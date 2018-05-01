@@ -26,7 +26,16 @@ export default function (_import) {
         meta: {
           breadcrumb: { name: '活动列表', to: '/activity' }
         },
-        component: _import('activity/form-activity')
+        component: _import('activity/activity-edit')
+      },
+      {
+        path: '/activity/:id/:type/worklist',
+        name: '活动作品',
+        hidden: true,
+        meta: {
+          breadcrumb: { name: '活动列表', to: '/activity' }
+        },
+        component: _import('activity/activity-worklist')
       },
       {
         path: '/subject',
@@ -40,7 +49,16 @@ export default function (_import) {
         meta: {
           breadcrumb: { name: '专题列表', to: '/subject' }
         },
-        component: _import('activity/form-activity')
+        component: _import('activity/activity-edit')
+      },
+      {
+        path: '/subject/:id/:type/worklist',
+        name: '专题作品',
+        hidden: true,
+        meta: {
+          breadcrumb: { name: '专题列表', to: '/subject' }
+        },
+        component: _import('activity/activity-worklist')
       }
     ]
   }

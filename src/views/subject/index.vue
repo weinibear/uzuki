@@ -65,6 +65,8 @@ export default {
               <div>
                 <el-button plain onClick={this.modify.bind(this, row)}>修改</el-button>
                 <el-button type="danger" plain onClick={this.del.bind(this, row)}>删除</el-button>
+                <el-button plain type="info" onClick={this.link.bind(this, row, 1)}>书籍</el-button>
+                <el-button plain type="info" onClick={this.link.bind(this, row, 2)}>演绘</el-button>
               </div>
             )
           }
@@ -86,6 +88,17 @@ export default {
     modify (data) {
       this.pushBreadcrumb({ to: '', name: data.title })
       this.$router.push(`/subject/${data.id}`)
+    },
+    link (data, type) {
+      this.pushBreadcrumb({ to: '', name: data.title })
+      const id = data.id
+      this.$router.push({
+        name: '专题作品',
+        params: {
+          id,
+          type
+        }
+      })
     },
     del (data) {
       confirm(this.delData.bind(this, data))

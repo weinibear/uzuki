@@ -65,7 +65,7 @@
     </el-table>
     <el-pagination
       class="bottom-pagination"
-      v-show="total > limit && !sortInstance"
+      v-show="total"
       layout="prev, pager, next, total, jumper"
       background
       :total="total"
@@ -117,7 +117,6 @@ export default {
     return {
       loading: false,
       list: [],
-      limit: this.pageSize,
       total: null,
       sortInstance: null,
       btnSortLoading: false
@@ -144,6 +143,9 @@ export default {
           query: { ...this.$route.query, page }
         })
       }
+    },
+    limit () {
+      return this.pageSize
     },
     offset () {
       return (this.currentPage - 1) * this.limit
