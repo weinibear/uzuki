@@ -6,6 +6,7 @@ import outputRoute from './routes/output'
 import yanhuiRoute from './routes/yanhui'
 import recommendRoute from './routes/recommend'
 import userRoute from './routes/user'
+import walletRoute from './routes/wallet'
 
 import hook from './hook'
 
@@ -25,6 +26,8 @@ const _import = importSync
 
 const navRoutes = [
   userRoute(_import),
+  walletRoute(_import),
+  recommendRoute(_import),
   {
     path: '/booklist',
     name: '书单管理',
@@ -52,7 +55,6 @@ const navRoutes = [
     icon: 'ban',
     component: _import('blockword/index')
   },
-  recommendRoute(_import),
   outputRoute(_import),
   yanhuiRoute(_import)
 

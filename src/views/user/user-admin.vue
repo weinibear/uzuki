@@ -14,7 +14,7 @@
         </el-select>
       </el-form-item>
       <el-form-item>
-        <el-button type="success" icon="el-icon-plus" @click="add">添加管理员</el-button>
+        <el-button type="primary" icon="el-icon-plus" @click="add">添加管理员</el-button>
       </el-form-item>
     </el-form>
     <dialog-user-admin ref="dialog"></dialog-user-admin>
