@@ -1,22 +1,24 @@
 <template>
   <main>
     <div class="header">
-      <slot name="header"></slot>
-      <div class="btn-sort" v-if="sortable">
-        <el-button
-          v-if="!sortInstance"
-          type="success"
-          @click="startSort"
-          icon="el-icon-d-caret">开始排序</el-button>
-        <template v-else>
+      <div class="header-left">
+        <slot name="header"></slot>
+        <div class="btn-sort" v-if="sortable">
           <el-button
-            @click="saveSort"
-            :loading="btnSortLoading"
-            type="primary">更新排序</el-button>
-          <el-button
-            :disabled="btnSortLoading"
-            @click="cancelSort">取消排序</el-button>
-        </template>
+            v-if="!sortInstance"
+            type="success"
+            @click="startSort"
+            icon="el-icon-d-caret">开始排序</el-button>
+          <template v-else>
+            <el-button
+              @click="saveSort"
+              :loading="btnSortLoading"
+              type="primary">更新排序</el-button>
+            <el-button
+              :disabled="btnSortLoading"
+              @click="cancelSort">取消排序</el-button>
+          </template>
+        </div>
       </div>
       <el-pagination
         v-show="total > limit && !sortInstance"
@@ -250,6 +252,7 @@ export default {
 </style>
 
 <style lang="scss" scoped>
+@import '~@/style/mixins';
 .base-table {
   position: relative;
   margin: 18px 0;
@@ -267,13 +270,21 @@ export default {
     display: inline-block;
     border-top: 1px solid #aaa;
   }
+  .intro {
+    @include truncate(7);
+  }
 }
 .header {
   display: flex;
   align-items: flex-end;
+  justify-content: space-between;
+}
+.header-left {
+  flex: 1;
+  display: flex;
 }
 .top-pagination {
-  flex: 1;
+  // flex: 1;
   text-align: right;
 }
 .btn-sort {

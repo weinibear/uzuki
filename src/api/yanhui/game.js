@@ -1,5 +1,9 @@
 import request from '@/utils/request'
 
+/**
+ * 筛选等功能暂时无效
+ * @param {*} params
+ */
 export function getGameList (params) {
   const defaultParams = { offset: 0, limit: 10, type: 'game', raw_q: '', ngame: 1 }
   params = { ...defaultParams, ...params }

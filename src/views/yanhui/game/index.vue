@@ -67,7 +67,7 @@ export default {
         },
         set (val) {
           vm.$router.push({
-            query: { ...vm.$route.query, [this.prop]: val }
+            query: { ...vm.$route.query, [this.prop]: val, page: 1 }
           })
         }
       })

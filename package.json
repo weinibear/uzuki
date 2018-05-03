@@ -42,6 +42,7 @@
     "babel-helper-vue-jsx-merge-props": "^2.0.3",
     "babel-loader": "^8.0.0-beta.2",
     "babel-plugin-component": "^1.1.0",
+    "babel-plugin-jsx-v-model": "^2.0.3",
     "babel-plugin-transform-vue-jsx": "^4.0.1",
     "chalk": "^2.0.1",
     "copy-webpack-plugin": "^4.0.1",

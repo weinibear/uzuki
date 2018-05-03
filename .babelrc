@@ -11,6 +11,7 @@
     "@babel/preset-stage-2"
   ],
   "plugins": [
+    "jsx-v-model",
     "transform-vue-jsx",
     [
       "@babel/plugin-transform-runtime",
