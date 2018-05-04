@@ -1,6 +1,6 @@
 import request from '@/utils/request'
 
-const usetypeMap = ['bgp', 'role', 'bgm', 'bga']
+const usetypeMap = ['bgp', 'role', 'bgm', 'bga', 'item', 'voice']
 
 function parseTags (list) {
   const results = {}
