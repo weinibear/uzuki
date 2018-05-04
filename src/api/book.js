@@ -5,10 +5,6 @@ export function getBookList (data) {
   return request.get('/kensaku/', { params })
 }
 
-export function getCategoryList () {
-  return request.get('/category/?limit=300&offset=0')
-}
-
 export function updateBook (id, data) {
   return request.put(`/book/${id}/`, data)
 }
@@ -39,8 +35,7 @@ export function changeRankStatus (id, blackRank) {
 // export function
 
 /* 获取卷列表 */
-export function getVolumeList (bookId, offset = 0, limit = 10) {
-  const params = { offset, limit }
+export function getVolumeList (bookId, params) {
   return request.get(`submit/book/${bookId}/volume/`, { params })
 }
 
@@ -56,10 +51,12 @@ export function deleteVolume (volumeId) {
 }
 
 /* 获取章节列表 */
-export function getChapterList (volumeId, offset = 0, limit = 10, status = 1) {
-  const params = { offset, limit }
-  const url = status ? `/submit/volume/${volumeId}/chapter/` : `/submit/volume/${volumeId}/chapter_draft/`
-  return request.get(url, { params })
+export function getChapterList (vid, params) {
+  return request.get(`/submit/volume/${vid}/chapter/`, { params })
+}
+
+export function getChapterDraftList (vid, params) {
+  return request.get(`/submit/volume/${vid}/chapter_draft/`, { params })
 }
 
 /* 删除章节 */

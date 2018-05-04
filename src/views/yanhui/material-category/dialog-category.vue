@@ -108,7 +108,7 @@ export default {
     },
     submit () {
       this.btnLoading = true
-      const form = this.forms
+      const form = this.form
       Promise.resolve(
         this.id
           ? modifyTag(this.id, form)

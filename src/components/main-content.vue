@@ -40,11 +40,8 @@
       :row-class-name="sortInstance ? 'sortable' : ''"
     >
       <template v-for="(col, index) in cols">
-        <slot v-if="col.slot"
-          :name="col.slot" />
         <el-table-column
           v-bind="col"
-          v-else
           :key="index">
           <template slot-scope="scope">
             <base-table-cell

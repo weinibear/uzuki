@@ -50,6 +50,7 @@
         </el-input>
       </el-form-item>
     </el-form>
+    <dialog-book ref="dialog" @success="getList" :data="current"></dialog-book>
   </main-content>
 </template>
 
@@ -57,8 +58,11 @@
 import { getBookList } from '@/api/book'
 import { statusOptions, rankOptions, channelOptions, needPayOptions,
   endOptions, blackRankOptions, groupOptions, orderOptions, sortOptions } from './options'
+import { mapMutations } from 'vuex'
+import DialogBook from './dialog-book.js'
 
 export default {
+  components: { DialogBook },
   data () {
     const getAllOptions = function (options, text) {
       return [{ label: '全部' + text, value: undefined }].concat(options)
@@ -83,7 +87,7 @@ export default {
         enumerable: true,
         get () {
           const value = vm.$route.query[this.prop]
-          return this.options.some(v => v.value === value)
+          return this.options.some(v => String(v.value) === String(value))
             ? value
             : this.options[0].value
         },
@@ -105,6 +109,7 @@ export default {
       ],
       inputValue: '',
       inputType: 'default',
+      current: null,
       cols: [
         {
           label: '书籍ID',
@@ -178,7 +183,7 @@ export default {
             ]
             return arr.map(v => {
               const none = { tag: 'danger', label: '未知' }
-              const item = v.options.find(obj => String(row[v.prop]) === obj.value) || none
+              const item = v.options.find(obj => row[v.prop] === obj.value) || none
               return <el-tag type={item.tag}>{item.label}</el-tag>
             })
           }
@@ -193,8 +198,8 @@ export default {
           width: 280,
           render: (h, row) => (
             <div>
-              <el-button>卷目</el-button>
-              <el-button>修改</el-button>
+              <el-button plain onClick={this.link.bind(this, row)}>卷目</el-button>
+              <el-button plain onClick={this.modify.bind(this, row)}>修改</el-button>
               <el-button>下架</el-button>
               <el-button>删除</el-button>
             </div>
@@ -215,6 +220,10 @@ export default {
     }
   },
   methods: {
+    ...mapMutations('app', ['pushBreadcrumb']),
+    getList () {
+      this.$emit('refresh')
+    },
     getData ({offset, limit}) {
       const params = {
         offset,
@@ -236,6 +245,16 @@ export default {
           field: this.inputType
         }
       })
+    },
+    modify (data) {
+      const current = { ...data }
+      current.categories = current.categories.map(v => v.id)
+      this.current = current
+      this.$refs.dialog.visible = true
+    },
+    link (data) {
+      this.pushBreadcrumb({ to: '', name: data.title })
+      this.$router.push(`/book/${data.id}/volumes`)
     }
   }
 }

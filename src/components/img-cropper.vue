@@ -148,6 +148,7 @@ export default {
         }
         uploadImg(file, data).then(url => {
           this.$emit('update:src', url)
+          this.$emit('change', url)
           this.$message.success('上传成功')
           this.visible = false
         }).finally(() => {
