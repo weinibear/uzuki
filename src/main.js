@@ -9,13 +9,11 @@ import Vue from 'vue'
 import router from './router'
 import store from './store'
 
-// import Element from './element-ui'
 import localStore from './utils/localStore'
 import DatePicker from 'vue2-datepicker'
 
 import './icons'
 
-// Vue.use(Element, { size: 'small' })
 Vue.prototype.$ELEMENT.size = 'small'
 Vue.use(DatePicker)
 
@@ -46,8 +44,8 @@ const app = new Vue({
 const KEY = 'i_knowed_risk'
 if (localStore.get(KEY) !== 1) {
   app.$notify({
-    title: '警告',
-    message: '这是正在重构的后台,有些功能还没有经过严格测试,修改数据有风险',
+    title: '提示',
+    message: '这是正在重构的后台,有些功能还没有经过测试,如无必要请使用旧后台,使用中有问题可以向技术反馈.',
     duration: 0,
     type: 'warning',
     onClose: () => {

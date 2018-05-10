@@ -7,7 +7,7 @@ import yanhuiRoute from './routes/yanhui'
 import recommendRoute from './routes/recommend'
 import userRoute from './routes/user'
 import walletRoute from './routes/wallet'
-// import bookRoute from './routes/book'
+import bookRoute from './routes/book'
 
 import hook from './hook'
 
@@ -56,7 +56,7 @@ const navRoutes = [
     icon: 'ban',
     component: _import('blockword/index')
   },
-  // bookRoute(_import),
+  bookRoute(_import),
   outputRoute(_import),
   yanhuiRoute(_import)
 

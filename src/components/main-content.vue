@@ -36,11 +36,15 @@
       class="base-table"
       ref="table"
       :data="list"
+      @selection-change="handleSelectionChange"
       :row-key="rowKey"
       :row-class-name="sortInstance ? 'sortable' : ''"
     >
       <template v-for="(col, index) in cols">
+        <el-table-column v-bind="col" :key="index" v-if="col.type && col.type === 'selection'">
+        </el-table-column>
         <el-table-column
+          v-else
           v-bind="col"
           :key="index">
           <template slot-scope="scope">
@@ -64,7 +68,7 @@
     </el-table>
     <el-pagination
       class="bottom-pagination"
-      v-show="total"
+      v-show="total && !sortInstance"
       layout="prev, pager, next, total, jumper"
       background
       :total="total"
@@ -110,6 +114,9 @@ export default {
     },
     saveOrder: {
       type: Function
+    },
+    selected: {
+      type: Array
     }
   },
   data () {
@@ -228,6 +235,9 @@ export default {
           this.$message.success('更新成功')
           this.cancelSort()
         })
+    },
+    handleSelectionChange (val) {
+      this.$emit('update:selected', val)
     }
   }
 }

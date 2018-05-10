@@ -114,7 +114,10 @@ export default {
         {
           label: '书籍ID',
           prop: 'id',
-          width: 80
+          width: 80,
+          render: (h, row) => <el-button type="text" onClick={this.link.bind(this, row)}>
+            {row.id}
+          </el-button>
         },
         {
           label: '封面',

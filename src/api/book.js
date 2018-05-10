@@ -32,22 +32,28 @@ export function changeRankStatus (id, blackRank) {
   return request.post(url)
 }
 
-// export function
-
 /* 获取卷列表 */
-export function getVolumeList (bookId, params) {
-  return request.get(`submit/book/${bookId}/volume/`, { params })
+export function getVolumeList (bid, params) {
+  return request.get(`submit/book/${bid}/volume/`, { params })
 }
 
 /* 修改卷信息 */
-export function updateVolume (volumeId, data) {
-  return request.post(`/submit/volume/${volumeId}/change/`, data)
+export function updateVolume (vid, data) {
+  return request.post(`/submit/volume/${vid}/change/`, data)
 }
 
 /* 删除卷 */
 
-export function deleteVolume (volumeId) {
-  return request.post(`/submit/volume/${volumeId}/delete/`)
+export function delVolume (vid) {
+  return request.post(`/submit/volume/${vid}/delete/`)
+}
+
+export function createVolume (bid, data) {
+  return request.post('/volume/', {
+    ...data,
+    status: 0,
+    book: `/book/${bid}`
+  })
 }
 
 /* 获取章节列表 */
@@ -61,26 +67,44 @@ export function getChapterDraftList (vid, params) {
 
 /* 删除章节 */
 
-export function deleteChapter (chapterId, status = 1) {
-  const url = status ? `/submit/chapter/${chapterId}/delete/` : `/submit/chapter_draft/${chapterId}/delete/`
-  return request.post(url)
+export function delChapter (cid) {
+  return request.post(`/submit/chapter/${cid}/delete/`)
+}
+
+export function delChapterDraft (cid) {
+  return request.post(`/submit/chapter_draft/${cid}/delete/`)
 }
 
 /* 修改章节信息 */
-export function updateChapter (chapterId, data, status = 1) {
-  const url = status ? `/submit/chapter/${chapterId}/change/` : `/submit/chapter_draft/${chapterId}/change/`
-  return request.post(url, data)
+export function updateChapter (cid, data) {
+  return request.post(`/submit/chapter/${cid}/change/`, data)
+}
+
+export function updateChapterDraft (cid, data) {
+  return request.post(`/submit/chapter_draft/${cid}/change/`, data)
+}
+
+export function createChapter (vid, data) {
+  return request.post('/chapter/', {
+    ...data,
+    volume: `/volume/${vid}/`
+  })
 }
 
 /* 获取章节内容 */
-export function getChapterContent (chapterId, status = 1) {
-  let url = status ? `/submit/chapter/${chapterId}/content/` : `/submit/chapter_draft/${chapterId}/content/`
-  url += '?offset=0&limit=999'
-  return request.get(url)
+export function getContent (cid) {
+  return request.get(`/submit/chapter/${cid}/content/?offset=0&limit=999`)
+}
+
+export function getDraftContent (cid) {
+  return request.get(`/submit/chapter_draft/${cid}/content/?offset=0&limit=999`)
 }
 
 /* 修改章节内容 */
-export function updateContent (chapterId, data, status = 1) {
-  const url = status ? `/submit/chapter/${chapterId}/content/` : `/submit/chapter_draft/${chapterId}/content/`
-  return request.post(url, data)
+export function updateContent (cid, data) {
+  return request.post(`/submit/chapter/${cid}/content/`, data)
+}
+
+export function updateDraftContent (cid, data) {
+  request.post(`/submit/chapter_draft/${cid}/content/`, data)
 }
