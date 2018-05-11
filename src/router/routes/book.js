@@ -49,6 +49,20 @@ export default function (_import) {
           }
         },
         component: _import('book/chapter-content')
+      },
+      {
+        path: '/book/review',
+        name: '书籍审核',
+        component: _import('book-review/index')
+      },
+      {
+        path: '/book/review/:id',
+        hidden: true,
+        meta: {
+          title: '章节审核',
+          breadcrumb: { name: '书籍审核', to: '/book/review' }
+        },
+        component: _import('book-review/list-chapter')
       }
     ]
   }

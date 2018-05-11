@@ -2,37 +2,26 @@
   <main-content :cols="cols" :get-data="getData">
     <el-form
       slot="header"
+      inline
       label-width="60px"
       label-suffix="：">
       <el-form-item label="筛选">
-        <el-row :gutter="10">
-          <el-col v-for="select in filters"
-            :span="Math.floor(24/filters.length)"
-            :key="select.prop">
-            <el-select v-model="select.value">
-              <el-option v-for="option in select.options"
-                :key="option.value"
-                :label="option.label"
-                :value="option.value"></el-option>
-            </el-select>
-          </el-col>
-        </el-row>
+        <el-select v-model="select.value" v-for="select in filters" :key="select.prop">
+          <el-option v-for="option in select.options"
+            :key="option.value"
+            :label="option.label"
+            :value="option.value"></el-option>
+        </el-select>
       </el-form-item>
       <el-form-item label="排序">
-        <el-row :gutter="10">
-          <el-col v-for="select in sorts"
-            :span="Math.floor(24/filters.length)"
-            :key="select.prop">
-            <el-select v-model="select.value">
-              <el-option v-for="option in select.options"
-                :key="option.value"
-                :label="option.label"
-                :value="option.value"></el-option>
-            </el-select>
-          </el-col>
-        </el-row>
+        <el-select v-model="select.value" v-for="select in sorts" :key="select.prop">
+          <el-option v-for="option in select.options"
+            :key="option.value"
+            :label="option.label"
+            :value="option.value"></el-option>
+        </el-select>
       </el-form-item>
-      <el-form-item label="搜索" style="margin-bottom: 0">
+      <el-form-item label="搜索">
         <el-input
           @keyup.native.enter="search"
           v-model="inputValue"
@@ -50,32 +39,26 @@
         </el-input>
       </el-form-item>
     </el-form>
-    <dialog-book ref="dialog" @success="getList" :data="current"></dialog-book>
   </main-content>
 </template>
 
 <script>
-import { getBookList, backBook, deleteBook } from '@/api/book'
-import { statusOptions, rankOptions, channelOptions, needPayOptions,
-  endOptions, blackRankOptions, groupOptions, orderOptions, sortOptions } from './options'
+import { getBookList, approvalBook } from '@/api/book-review'
+import { orderOptions, sortOptions } from '../book/options'
 import { mapMutations } from 'vuex'
-import DialogBook from './dialog-book.js'
 import { confirm } from '@/utils/confirm'
 
 export default {
-  components: { DialogBook },
   data () {
-    const getAllOptions = function (options, text) {
-      return [{ label: '全部' + text, value: undefined }].concat(options)
-    }
     const filters = [
-      { prop: 'status', options: getAllOptions(statusOptions, '状态') },
-      { prop: 'rank', options: getAllOptions(rankOptions, '等级') },
-      { prop: 'channel', options: getAllOptions(channelOptions, '分区') },
-      { prop: 'need_pay', options: getAllOptions(needPayOptions, '付费状态') },
-      { prop: 'end', options: getAllOptions(endOptions, '连载状态') },
-      { prop: 'black_rank', options: getAllOptions(blackRankOptions, '榜单状态') },
-      { prop: 'group', options: getAllOptions(groupOptions, '分组') }
+      {
+        prop: 'status',
+        options: [
+          { label: '全部状态', value: undefined },
+          { label: '部分通过', value: 2 },
+          { label: '审核中', value: 3 }
+        ]
+      }
     ]
     const sorts = [
       { prop: 'order', options: orderOptions },
@@ -164,48 +147,19 @@ export default {
           render: (h, row) => row.categories.map(item => <el-tag>{item.name}</el-tag>)
         },
         {
-          label: '排行',
-          width: 80,
-          render: (h, row) => (
-            <dl>
-              <dt>本日</dt>
-              <dd>{row.day_rank}</dd>
-              <dt>本周</dt>
-              <dd>{row.week_rank}</dd>
-            </dl>
-          )
-        },
-        {
-          label: '状态',
-          render: (h, row) => {
-            const arr = [
-              { prop: 'rank', options: rankOptions },
-              { prop: 'status', options: statusOptions },
-              { prop: 'end', options: endOptions },
-              { prop: 'need_pay', options: needPayOptions },
-              { prop: 'channel', options: channelOptions }
-            ]
-            return arr.map(v => {
-              const none = { tag: 'danger', label: '未知' }
-              const item = v.options.find(obj => row[v.prop] === obj.value) || none
-              return <el-tag type={item.tag}>{item.label}</el-tag>
-            })
-          }
-        },
-        {
           label: '创建/更新时间',
           width: 140,
           component: 'col-time'
         },
         {
           label: '操作',
-          width: 280,
+          width: 400,
           render: (h, row) => (
             <div>
               <el-button plain onClick={this.link.bind(this, row)}>卷目</el-button>
-              <el-button plain type="primary" onClick={this.modify.bind(this, row)}>修改</el-button>
-              <el-button plain type="warning" onClick={this.withdraw.bind(this, row)}>下架</el-button>
-              <el-button plain type="danger" onClick={this.del.bind(this, row)}>删除</el-button>
+              <el-button plain type="danger" onClick={this.reject.bind(this, row)}>全部退回</el-button>
+              <el-button plain type="success" onClick={this.accept.bind(this, row)}>全部通过</el-button>
+              <el-button plain type="primary" onClick={this.help.bind(this, row)}>卡书自救</el-button>
             </div>
           )
         }
@@ -239,6 +193,7 @@ export default {
       if (this.inputValue) {
         params.raw_q = this.inputType + ':' + JSON.stringify(this.inputValue)
       }
+      params.need_approval = 1
       return getBookList(params)
     },
     search () {
@@ -250,21 +205,26 @@ export default {
         }
       })
     },
-    modify (data) {
-      const current = { ...data }
-      current.categories = current.categories.map(v => v.id)
-      this.current = current
-      this.$refs.dialog.visible = true
+    accept (row) {
+      confirm(this.approval.bind(this, 'accept', row.id, '通过'), { message: '确定通过么' })
     },
-    withdraw (data) {
-      this.$prompt('请输入下架信息', '下架', {
+    help (row) {
+      confirm(this.approval.bind(this, 'help', row.id, '自救'), { message: '确定自救么' })
+    },
+    reject (row) {
+      this.$prompt('请输入退回信息', '退回', {
+        inputValidator: (val) => {
+          if (!val || val.trim() === '') {
+            return '给个理由呗...'
+          }
+          return true
+        },
         beforeClose: (action, instance, done) => {
           if (action === 'confirm') {
             instance.confirmButtonLoading = true
-            backBook(data.id, instance.inputValue).finally(() => {
+            this.approval('reject', row.id, instance.inputValue).finally(() => {
               instance.confirmButtonLoading = false
             }).then(() => {
-              this.getList()
               done()
             })
           } else {
@@ -273,18 +233,30 @@ export default {
         }
       })
     },
-    del (data) {
-      confirm(this.delData.bind(this, data))
-    },
-    delData (data) {
-      return deleteBook(data.id).then(() => {
-        this.$message.success('success')
-        this.getList()
+    // 批量审核
+    approval (action, id, value) {
+      return approvalBook(action, id, value).then(() => {
+        let message = ''
+        if (action === 'accept') {
+          message = '审核通过'
+        } else if (action === 'reject') {
+          message = '退回成功'
+        } else if (action === 'help') {
+          message = '自救成功'
+        }
+        // 后台异步, 避免编辑误操作, 延迟2秒返回
+        return new Promise((resolve, reject) => {
+          setTimeout(() => {
+            resolve()
+            this.$message.success(message)
+            this.getList()
+          }, 2000)
+        })
       })
     },
     link (data) {
       this.pushBreadcrumb({ to: '', name: data.title })
-      this.$router.push(`/book/${data.id}/volumes`)
+      this.$router.push(`/book/review/${data.id}`)
     }
   }
 }

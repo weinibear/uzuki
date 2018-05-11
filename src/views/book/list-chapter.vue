@@ -16,7 +16,7 @@
 </template>
 
 <script>
-import { getChapterList, delChapter } from '@/api/book'
+import { getChapterList, delChapter, updateChapter } from '@/api/book'
 import { chapterStatus, chapterType } from './options'
 import DialogChapter from './dialog-chapter.vue'
 import DialogChapterBatch from './dialog-chapter-batch'
@@ -103,7 +103,9 @@ export default {
     getData ({ offset, limit }) {
       return getChapterList(this.vid, { offset, limit })
     },
-    saveOrder () {},
+    saveOrder ({ id, order }) {
+      return updateChapter(id, { order })
+    },
     add () {
       this.current = null
       this.$refs.dialog.visible = true
