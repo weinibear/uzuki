@@ -8,6 +8,7 @@ import recommendRoute from './routes/recommend'
 import userRoute from './routes/user'
 import walletRoute from './routes/wallet'
 import bookRoute from './routes/book'
+import statsRoute from './routes/stats'
 
 import hook from './hook'
 
@@ -58,8 +59,8 @@ const navRoutes = [
   },
   bookRoute(_import),
   outputRoute(_import),
-  yanhuiRoute(_import)
-
+  yanhuiRoute(_import),
+  statsRoute(_import)
 ]
 
 const handlePath = function (nav) {
