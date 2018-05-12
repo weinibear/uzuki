@@ -5,32 +5,20 @@
       label-width="60px"
       label-suffix="：">
       <el-form-item label="筛选">
-        <el-row :gutter="10">
-          <el-col v-for="select in filters"
-            :span="Math.floor(24/filters.length)"
-            :key="select.prop">
-            <el-select v-model="select.value">
-              <el-option v-for="option in select.options"
-                :key="option.value"
-                :label="option.label"
-                :value="option.value"></el-option>
-            </el-select>
-          </el-col>
-        </el-row>
+        <el-select class="inline-select" v-model="select.value" v-for="select in filters" :key="select.prop">
+          <el-option v-for="option in select.options"
+            :key="option.value"
+            :label="option.label"
+            :value="option.value"></el-option>
+        </el-select>
       </el-form-item>
       <el-form-item label="排序">
-        <el-row :gutter="10">
-          <el-col v-for="select in sorts"
-            :span="Math.floor(24/filters.length)"
-            :key="select.prop">
-            <el-select v-model="select.value">
-              <el-option v-for="option in select.options"
-                :key="option.value"
-                :label="option.label"
-                :value="option.value"></el-option>
-            </el-select>
-          </el-col>
-        </el-row>
+        <el-select class="inline-select" v-model="select.value" v-for="select in sorts" :key="select.prop">
+          <el-option v-for="option in select.options"
+            :key="option.value"
+            :label="option.label"
+            :value="option.value"></el-option>
+        </el-select>
       </el-form-item>
       <el-form-item label="搜索" style="margin-bottom: 0">
         <el-input

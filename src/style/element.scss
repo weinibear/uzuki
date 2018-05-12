@@ -13,6 +13,10 @@
 
 .el-select {
   width: 100%;
+  &.inline-select {
+    width: 150px;
+    margin-right: 10px;
+  }
 }
 
 .el-form.el-form--inline {

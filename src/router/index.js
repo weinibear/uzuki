@@ -82,12 +82,12 @@ const routes = [
   {
     path: '/',
     component: Layout,
-    redirect: '/recompoints',
+    redirect: '/recommend',
     children: navRoutes.reduce((prev, curr) => {
       return prev.concat(curr.static ? curr.children : curr)
     }, [])
   },
-  { path: '*', redirect: '/recompoints' }
+  { path: '*', redirect: '/recommend' }
 ]
 
 const router = new Router({

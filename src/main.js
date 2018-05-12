@@ -42,14 +42,29 @@ const app = new Vue({
 })
 
 const KEY = 'i_knowed_risk'
-if (localStore.get(KEY) !== 1) {
-  app.$notify({
-    title: '提示',
-    message: '这是正在重构的后台,有些功能还没有经过测试,如无必要请使用旧后台,使用中有问题可以向技术反馈.',
+if (localStore.get(KEY) !== 2) {
+  const notify = app.$notify({
+    title: '一些废话',
+    message: (function (h) {
+      return (
+        <div>
+          <p>这是正在重构的后台，有些功能还不完善，如无必要请使用
+            <a href="/new.html">旧后台</a>，使用中有问题可以向前端-谢孟雄反馈。</p>
+          <el-button
+            size="mini"
+            type="primary"
+            style="float:right"
+            onClick={
+              () => {
+                notify.close()
+                localStore.set(KEY, 2)
+              }
+            }>知道了</el-button>
+        </div>
+      )
+    })(app.$createElement),
     duration: 0,
-    type: 'warning',
-    onClose: () => {
-      localStore.set(KEY, 1)
-    }
+    showClose: false,
+    type: 'warning'
   })
 }
