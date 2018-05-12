@@ -5,6 +5,20 @@ export default function (_import) {
     icon: 'wallet',
     children: [
       {
+        path: '/wallet/payment',
+        name: '钱包管理',
+        component: _import('stats/list-payment')
+      },
+      {
+        path: '/wallet/payment/:id',
+        hidden: true,
+        component: _import('stats/list-payment-detail'),
+        meta: {
+          title: '作品明细',
+          breadcrumb: { name: '钱包管理', to: '/wallet/payment' }
+        }
+      },
+      {
         path: '/wallet/cash',
         name: '收入管理',
         component: _import('wallet/list-amount')

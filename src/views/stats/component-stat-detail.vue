@@ -19,11 +19,11 @@
 </template>
 
 <script>
-import export2excel from '@/utils/export2excel'
-import { mapLimit } from '@/utils/mapLimit'
+import download from './download'
 
 export default {
   props: ['cols', 'getList'],
+  mixins: [download],
   data () {
     return {
       downloading: false
@@ -57,32 +57,6 @@ export default {
           results: res.result,
           count: res.all_count
         }
-      })
-    },
-    download () {
-      const table = this.$refs.table
-      this.downloading = true
-      let getList
-      if (table.total > table.limit) {
-        const list = []
-        const len = Math.ceil(table.total / table.limit)
-        const limit = 50
-        for (let i = 0; i < len; i++) {
-          list.push({
-            offset: (i - 1) * limit,
-            limit
-          })
-        }
-        getList = mapLimit(list, this.getData, 10).then(res => {
-          return res.reduce((prev, curr) => prev.concat(curr.results), [])
-        })
-      } else {
-        getList = Promise.resolve(table.list)
-      }
-      getList.then(list => {
-        return export2excel(this.cols, list, this.filename)
-      }).finally(() => {
-        this.downloading = false
       })
     }
   }

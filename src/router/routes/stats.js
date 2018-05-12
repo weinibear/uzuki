@@ -51,10 +51,10 @@ export default function (_import) {
       },
       {
         path: '/stats/works/:id',
-        name: '作品明细',
         component: _import('stats/list-work-stat'),
         hidden: true,
         meta: {
+          title: '作品明细',
           breadcrumb: { name: '作品统计', to: '/stats/works' }
         }
       },

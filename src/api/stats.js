@@ -59,3 +59,15 @@ export function getWorksStats (params) {
     ...params
   })
 }
+
+/**
+ * 获取稿费管理
+ * @param {*} params
+ */
+export function getPaymentStats (params) {
+  return getStats({
+    target: 'remuneration_data',
+    page: 1,
+    ...params
+  })
+}
