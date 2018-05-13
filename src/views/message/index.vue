@@ -42,7 +42,7 @@
 import { getMessageList, delMessage } from '@/api/message'
 import { messageTypes } from './options'
 import DialogMessage from './dialog-message'
-// import { confirm } from '@/utils/confirm'
+import { confirm } from '@/utils/confirm'
 
 export default {
   components: { DialogMessage },
