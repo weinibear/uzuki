@@ -9,6 +9,7 @@ import userRoute from './routes/user'
 import walletRoute from './routes/wallet'
 import bookRoute from './routes/book'
 import statsRoute from './routes/stats'
+import othersRoute from './routes/others'
 
 import hook from './hook'
 
@@ -60,6 +61,7 @@ const navRoutes = [
   bookRoute(_import),
   outputRoute(_import),
   yanhuiRoute(_import),
+  othersRoute(_import),
   statsRoute(_import)
 ]
 
