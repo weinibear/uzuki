@@ -3,6 +3,7 @@
     :cols="cols"
     :get-data="getData"
     row-key="id"
+    :page-size="20"
     sortable
     :save-order="saveOrder">
     <el-form

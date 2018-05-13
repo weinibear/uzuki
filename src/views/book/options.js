@@ -167,7 +167,7 @@ export const sortOptions = [
   },
   {
     label: '升序',
-    value: ''
+    value: '+'
   }
 ]
 
