@@ -6,7 +6,7 @@ export default function (_import) {
     children: [
       {
         path: '/wallet/payment',
-        name: '钱包管理',
+        name: '稿费管理',
         component: _import('stats/list-payment')
       },
       {
@@ -15,7 +15,7 @@ export default function (_import) {
         component: _import('stats/list-payment-detail'),
         meta: {
           title: '作品明细',
-          breadcrumb: { name: '钱包管理', to: '/wallet/payment' }
+          breadcrumb: { name: '稿费管理', to: '/wallet/payment' }
         }
       },
       {

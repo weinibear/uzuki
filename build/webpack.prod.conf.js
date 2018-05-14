@@ -51,6 +51,9 @@ const webpackConfig = merge(baseWebpackConfig, {
     }
   },
   plugins: [
+    new webpack.DefinePlugin({
+      IMPORT_ASYNC: JSON.stringify(!!config.build.importAsync)
+    }),
 
     // extract css into its own file
     new MiniCssExtractPlugin({

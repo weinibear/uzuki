@@ -21,11 +21,26 @@ Vue.use(Router)
 //   }
 // }
 
-const importSync = function (file) {
-  return require('@/views/' + file).default
+// const importSync = function (file) {
+//   return require('@/views/' + file).default
+// }
+
+let _import
+/* eslint-disable-next-line */
+if (IMPORT_ASYNC) {
+  _import = function (file) {
+    return function () {
+      return import('@/views/' + file)
+    }
+  }
+} else {
+  _import = function (file) {
+    return require('@/views/' + file).default
+  }
 }
 
-const _import = importSync
+// /* eslint-disable-next-line */
+// const _import = IMPORT_ASYNC ? importAsync : importSync
 
 const navRoutes = [
   userRoute(_import),
