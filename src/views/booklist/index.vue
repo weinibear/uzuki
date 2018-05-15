@@ -55,7 +55,7 @@ export default {
         enumerable: true,
         get () {
           const value = vm.$route.query[this.prop]
-          return this.options.some(v => v.value === value)
+          return this.options.some(v => String(v.value) === String(value))
             ? value
             : this.options[0].value
         },

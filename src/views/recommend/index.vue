@@ -58,8 +58,8 @@ export default {
         configurable: true,
         enumerable: true,
         get () {
-          const value = parseInt(vm.$route.query[this.prop], 10)
-          return this.options.some(v => v.value === value)
+          const value = vm.$route.query[this.prop]
+          return this.options.some(v => String(v.value) === String(value))
             ? value
             : this.options[0].value
         },

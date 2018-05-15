@@ -165,10 +165,11 @@ export default {
         },
         {
           label: '状态',
+          width: 120,
           render: (h, row) => {
             const arr = [
-              { prop: 'rank', options: rankOptions },
               { prop: 'status', options: statusOptions },
+              { prop: 'rank', options: rankOptions },
               { prop: 'end', options: endOptions },
               { prop: 'need_pay', options: needPayOptions },
               { prop: 'channel', options: channelOptions }

@@ -120,7 +120,7 @@ export const blackRankOptions = [
   }
 ]
 
-export const groupOptions = Array.from({ length: 8 }).map((v, i) => ({ label: i + 1 + '', value: i + 1 + '' }))
+export const groupOptions = Array.from({ length: 8 }).map((v, i) => ({ label: i + '', value: i + '' }))
 
 export const buyTypes = [
   {
