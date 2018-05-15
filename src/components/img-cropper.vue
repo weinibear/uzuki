@@ -65,11 +65,14 @@ export default {
       }
       return this.src.replace(/^https?:/, '')
     },
+    innerRatio () {
+      return this.ratio || 3 / 4
+    },
     width () {
-      return this.height * this.ratio
+      return this.height * this.innerRatio
     },
     dialogWidth () {
-      return this.ratio > 1 ? 600 : 600 * this.ratio
+      return this.innerRatio > 1 ? 500 : 500 * this.innerRatio
     }
   },
   watch: {

@@ -4,17 +4,14 @@ export default {
   functional: true,
   render (h, ctx) {
     const row = ctx.props.row
-    const createdTime = formatDate(row.created_time)
-    let update = ''
-    if (row.updated_time) {
-      const updatedTime = formatDate(row.updated_time)
-      update = <div class="updated-time">{updatedTime}</div>
+    if (row.created_time && row.updated_time) {
+      return (
+        <div>
+          <div>{formatDate(row.created_time)}</div>
+          <div class="updated-time">{formatDate(row.updated_time)}</div>
+        </div>
+      )
     }
-    return (
-      <div>
-        <div>{createdTime}</div>
-        {update}
-      </div>
-    )
+    return <div>{formatDate(row.created_time || row.updated_time)}</div>
   }
 }
