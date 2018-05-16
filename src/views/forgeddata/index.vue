@@ -97,7 +97,7 @@ export default {
       this.$refs.dialogForged.visible = true
     },
     addUser () {
-      this.$refs.DialogUser.visible = true
+      this.$refs.dialogUser.visible = true
     },
     modify (data) {
       this.current = data

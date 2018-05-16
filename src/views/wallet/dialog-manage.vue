@@ -9,7 +9,7 @@
       ref="form"
       label-width="80px">
       <el-form-item label="UID" prop="uid">
-        <el-input v-model="form.uid"></el-input>
+        <el-input v-model="form.uid" placeholder="多个UID用逗号隔开"></el-input>
       </el-form-item>
       <el-form-item label="货币" prop="currency">
         <el-select v-model="form.currency">
@@ -56,7 +56,7 @@ export default {
         { value: 'reduce', label: '减少' }
       ],
       form: {
-        uid: 0,
+        uid: '',
         currency: 'coin',
         action: 'add',
         value: 10
@@ -88,8 +88,11 @@ export default {
     },
     submit () {
       this.btnLoading = true
-      const form = { ...this.form }
-      postWallet(form).finally(() => {
+      const uid = String(this.form.uid).split(/[,，]/g)
+      Promise.all(uid.map(id => {
+        const form = { ...this.form, uid: id }
+        return postWallet(form)
+      })).finally(() => {
         this.btnLoading = false
       }).then(() => {
         this.$message.success('success')

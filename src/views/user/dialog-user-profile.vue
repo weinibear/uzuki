@@ -34,7 +34,7 @@
         </el-col>
         <el-col :span="12">
           <el-form-item
-            label="封面"
+            label="头像"
             prop="avatar">
             <img-cropper
               :src.sync="form.avatar"

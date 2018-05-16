@@ -59,6 +59,20 @@ export default function (_import) {
           breadcrumb: { name: '专题列表', to: '/subject' }
         },
         component: _import('activity/activity-worklist')
+      },
+      {
+        path: '/topic',
+        name: '旧专题列表',
+        component: _import('topic/index')
+      },
+      {
+        path: '/topic/:id',
+        hidden: true,
+        meta: {
+          title: '专题详情',
+          breadcrumb: { name: '旧专题列表', to: '/topic' }
+        },
+        component: _import('topic/topic-edit')
       }
     ]
   }
