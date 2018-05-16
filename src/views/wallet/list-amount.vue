@@ -24,6 +24,9 @@
             icon="el-icon-search"></el-button>
         </el-input>
       </el-form-item>
+      <el-form-item v-if="!isCashList">
+        <el-button @click="batchHandler">批量增减</el-button>
+      </el-form-item>
     </el-form>
     <dialog-manage :uid="uid" ref="dialog" @success="getList"></dialog-manage>
   </main-content>
@@ -162,6 +165,10 @@ export default {
           uid: data.uid
         }
       })
+    },
+    batchHandler () {
+      this.uid = ''
+      this.$refs.dialog.visible = true
     },
     postWallet (data) {
       this.uid = data.uid

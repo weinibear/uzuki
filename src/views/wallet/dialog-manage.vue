@@ -88,7 +88,7 @@ export default {
     },
     submit () {
       this.btnLoading = true
-      const uid = String(this.form.uid).split(/[,，]/g)
+      const uid = String(this.form.uid).split(/[,，]/g).map(id => id.trim()).filter(id => id)
       Promise.all(uid.map(id => {
         const form = { ...this.form, uid: id }
         return postWallet(form)
