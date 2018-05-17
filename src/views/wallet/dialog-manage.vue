@@ -1,7 +1,6 @@
 <template>
   <el-dialog :visible.sync="visible"
     width="500px"
-
     title="钱包管理">
     <el-form
       :model="form"
@@ -28,7 +27,7 @@
         </el-select>
       </el-form-item>
       <el-form-item label="数值" prop="value">
-        <el-input-number :min="1" v-model="form.value" controls-position="right"></el-input-number>
+        <el-input-number :min="1" v-model="form.value"></el-input-number>
       </el-form-item>
     </el-form>
     <div slot="footer" class="dialog-footer">

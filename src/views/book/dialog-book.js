@@ -145,8 +145,7 @@ export default {
         com = <el-input-number
           min={0}
           value={this.form[item.prop]}
-          onInput={this.sync.bind(this, item.prop)}
-          controls-position="right"></el-input-number>
+          onInput={this.sync.bind(this, item.prop)}></el-input-number>
       } else {
         com = <el-select value={this.form[item.prop]}
           onInput={this.sync.bind(this, item.prop)}>
