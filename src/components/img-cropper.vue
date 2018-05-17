@@ -13,7 +13,7 @@
       :width="dialogWidth + 'px'"
       top="10vh"
       :modal="false"
-      :close-on-click-modal="false">
+    >
       <div>
         <img ref="image" :src="url" alt="" @load="start">
       </div>

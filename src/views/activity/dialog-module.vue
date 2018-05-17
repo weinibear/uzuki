@@ -3,7 +3,7 @@
     title="模板编辑"
     width="550px"
     top="5vh"
-    :close-on-click-modal="false"
+
     :visible.sync="visible">
     <el-form
       label-width="80px"

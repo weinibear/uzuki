@@ -2,7 +2,7 @@
   <el-dialog
     width="700px"
     :visible.sync="visible"
-    :close-on-click-modal="false"
+
     :title="title">
     <el-form
       :model="form"

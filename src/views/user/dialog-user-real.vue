@@ -1,7 +1,7 @@
 <template>
   <el-dialog :visible.sync="visible"
     width="500px"
-    :close-on-click-modal="false"
+
     title="修改实名信息">
     <el-form
       v-loading="loading"

@@ -5,6 +5,7 @@ import 'normalize.css'
 import '@/style/index.scss'
 
 import Vue from 'vue'
+import './element-ui'
 
 import router from './router'
 import store from './store'
@@ -14,7 +15,6 @@ import DatePicker from 'vue2-datepicker'
 
 import './icons'
 
-Vue.prototype.$ELEMENT.size = 'small'
 Vue.use(DatePicker)
 
 function importComponents (r) {

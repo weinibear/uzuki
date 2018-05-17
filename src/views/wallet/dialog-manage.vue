@@ -1,7 +1,7 @@
 <template>
   <el-dialog :visible.sync="visible"
     width="500px"
-    :close-on-click-modal="false"
+
     title="钱包管理">
     <el-form
       :model="form"

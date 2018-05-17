@@ -2,7 +2,7 @@
   <el-dialog
     width="500px"
     :visible.sync="visible"
-    :close-on-click-modal="false"
+
     title="导入作品">
     <el-form
       :model="form"

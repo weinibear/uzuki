@@ -76,6 +76,10 @@ export default {
 }
 .el-breadcrumb__item {
   transition: all 0.3s;
+  max-width: 15em;
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
 }
 .breadcrumb-enter, .breadcrumb-leave-to {
   opacity: 0;

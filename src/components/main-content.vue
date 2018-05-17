@@ -32,6 +32,7 @@
       </el-pagination>
     </div>
     <el-table
+      size="normal"
       v-loading="loading"
       class="base-table"
       ref="table"
