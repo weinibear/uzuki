@@ -11,75 +11,35 @@ import bookRoute from './routes/book'
 import statsRoute from './routes/stats'
 import othersRoute from './routes/others'
 import commentRoute from './routes/comment'
+import booklistRoute from './routes/booklist'
 
 import hook from './hook'
 
 Vue.use(Router)
 
-// const importAsync = function (file) {
-//   return function () {
-//     return import('@/views/' + file)
-//   }
-// }
-
-// const importSync = function (file) {
-//   return require('@/views/' + file).default
-// }
-
-let _import
-/* eslint-disable-next-line */
-if (IMPORT_ASYNC) {
-  _import = function (file) {
-    return function () {
-      return import('@/views/' + file)
-    }
-  }
-} else {
-  _import = function (file) {
-    return require('@/views/' + file).default
-  }
-}
-
-// /* eslint-disable-next-line */
-// const _import = IMPORT_ASYNC ? importAsync : importSync
-
 const navRoutes = [
-  userRoute(_import),
-  walletRoute(_import),
-  recommendRoute(_import),
-  {
-    path: '/booklist',
-    name: '书单管理',
-    icon: 'booklist',
-    component: _import('booklist/index')
-  },
-  {
-    path: '/booklist/:id',
-    name: '书单作品',
-    hidden: true,
-    meta: {
-      breadcrumb: { name: '书单管理', to: '/booklist' }
-    },
-    component: _import('booklist/work-list')
-  },
+  userRoute,
+  walletRoute,
+  recommendRoute,
+  ...booklistRoute,
   {
     path: '/category',
     name: '分类管理',
     icon: 'category',
-    component: _import('category/index')
+    component: () => import(/* webpackChunkName: "page-category" */'@/views/category/index')
   },
   {
     path: '/blockword',
     name: '屏蔽词管理',
     icon: 'ban',
-    component: _import('blockword/index')
+    component: () => import(/* webpackChunkName: "page-blockword" */'@/views/blockword/index')
   },
-  bookRoute(_import),
-  outputRoute(_import),
-  yanhuiRoute(_import),
-  commentRoute(_import),
-  othersRoute(_import),
-  statsRoute(_import)
+  bookRoute,
+  outputRoute,
+  yanhuiRoute,
+  commentRoute,
+  othersRoute,
+  statsRoute
 ]
 
 const handlePath = function (nav) {

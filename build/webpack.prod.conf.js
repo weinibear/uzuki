@@ -38,15 +38,16 @@ const webpackConfig = merge(baseWebpackConfig, {
       maxInitialRequests: 3,
       name: true,
       cacheGroups: {
-        default: {
-          minChunks: 2,
-          priority: -20,
-          reuseExistingChunk: true,
-        },
         vendors: {
           chunks: "initial",
           test: /[\\/]node_modules[\\/]/,
           name: 'vendor'
+        },
+        styles: {
+          chunks: 'all',
+          name: 'styles',
+          test: (m) => m.constructor.name === 'CssModule',
+          enforce: true
         }
       }
     }
@@ -86,7 +87,7 @@ const webpackConfig = merge(baseWebpackConfig, {
       chunksSortMode: 'dependency'
     }),
     new ScriptExtHtmlWebpackPlugin({
-      inline: /manifest\..*\.js$/
+      inline: /(manifest|styles)\..*\.js$/
     }),
 
     // copy custom static assets

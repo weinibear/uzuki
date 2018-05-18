@@ -59,8 +59,8 @@ export default {
   },
   mounted () {
     Promise.all([
-      loadStyle('//unpkg.com/quill@1.3.6/dist/quill.core.css'),
-      loadScript('//unpkg.com/quill@1.3.6/dist/quill.core.js')
+      loadStyle('https://cdn.bootcss.com/quill/1.3.6/quill.core.min.css'),
+      loadScript('https://cdn.bootcss.com/quill/1.3.6/quill.core.min.js')
     ]).then(res => {
       this.imageBlot(window.Quill)
       this.init(window.Quill)
