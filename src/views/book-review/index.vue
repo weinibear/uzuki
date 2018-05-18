@@ -148,7 +148,7 @@ export default {
         },
         {
           label: '创建/更新时间',
-          width: 140,
+          width: 150,
           component: 'col-time'
         },
         {
