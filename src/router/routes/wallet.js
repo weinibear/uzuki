@@ -4,20 +4,20 @@ export default function (_import) {
     static: true,
     icon: 'wallet',
     children: [
-      {
-        path: '/wallet/payment',
-        name: '稿费管理',
-        component: _import('stats/list-payment')
-      },
-      {
-        path: '/wallet/payment/:id',
-        hidden: true,
-        component: _import('stats/list-payment-detail'),
-        meta: {
-          title: '作品明细',
-          breadcrumb: { name: '稿费管理', to: '/wallet/payment' }
-        }
-      },
+      // {
+      //   path: '/wallet/payment',
+      //   name: '稿费管理',
+      //   component: _import('stats/list-payment')
+      // },
+      // {
+      //   path: '/wallet/payment/:id',
+      //   hidden: true,
+      //   component: _import('stats/list-payment-detail'),
+      //   meta: {
+      //     title: '作品明细',
+      //     breadcrumb: { name: '稿费管理', to: '/wallet/payment' }
+      //   }
+      // },
       {
         path: '/wallet/cash',
         name: '收入管理',

@@ -182,7 +182,9 @@ export default {
       this.$refs.dialog.visible = true
     },
     modify (data) {
-      this.current = data
+      const current = { ...data }
+      current.work_id = current.work.id
+      this.current = current
       this.$refs.dialog.visible = true
     },
     del (data) {

@@ -68,11 +68,11 @@ export default function (_import) {
         name: '订阅统计',
         component: _import('stats/list-subscription')
       },
-      {
-        path: '/stats/withdraw',
-        name: '提现统计',
-        component: _import('stats/list-withdraw')
-      },
+      // {
+      //   path: '/stats/withdraw',
+      //   name: '提现统计',
+      //   component: _import('stats/list-withdraw')
+      // },
       {
         path: '/stats/overview',
         name: '月度总览',

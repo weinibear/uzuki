@@ -11,8 +11,8 @@
         <el-col :span="12">
           <el-form-item
             v-for="item in [
-              { label: '标题', prop: 'title'},
-              { label: 'ID', prop: 'work_id'},
+              { label: '标题', prop: 'title' },
+              { label: 'ID', prop: 'work_id', placeholder: `请输入关联的${workTypeName}ID`},
               { label: '链接', prop: 'href'},
               { label: '推荐词', prop: 'recommend_words'},
               { label: '序号', prop: 'order' }
@@ -20,7 +20,7 @@
             :key="item.prop"
             :label="item.label"
             :prop="item.prop">
-            <el-input v-model="form[item.prop]" />
+            <el-input v-model="form[item.prop]" :placeholder="item.placeholder"/>
           </el-form-item>
           <el-form-item
             label="启用"
@@ -93,7 +93,7 @@ export default {
         title: '',
         type: '',
         work_id: '',
-        work_type: '',
+        work_type: 1,
         href: ''
       }
     }
@@ -104,6 +104,9 @@ export default {
     },
     title () {
       return this.id ? '修改推荐' : '添加推荐'
+    },
+    workTypeName () {
+      return this.recomWorkType.find(v => v.value === this.form.work_type).name
     },
     ratio () {
       const type = this.form.type | 0
@@ -123,7 +126,7 @@ export default {
         if (this.data) {
           this.$nextTick().then(() => {
             Object.keys(this.form).forEach(key => {
-              if (this.data.hasOwnProperty(key)) {
+              if (this.data.hasOwnProperty(key) && this.data[key] != null) {
                 this.form[key] = this.data[key]
               }
             })
