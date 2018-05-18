@@ -31,7 +31,7 @@ const webpackConfig = merge(baseWebpackConfig, {
       name: 'manifest'
     },
     splitChunks: {
-      chunks: "initial",
+      chunks: "async",
       minSize: 30000,
       minChunks: 1,
       maxAsyncRequests: 5,
@@ -44,6 +44,7 @@ const webpackConfig = merge(baseWebpackConfig, {
           reuseExistingChunk: true,
         },
         vendors: {
+          chunks: "initial",
           test: /[\\/]node_modules[\\/]/,
           name: 'vendor'
         }
@@ -51,9 +52,9 @@ const webpackConfig = merge(baseWebpackConfig, {
     }
   },
   plugins: [
-    new webpack.DefinePlugin({
-      IMPORT_ASYNC: JSON.stringify(!!config.build.importAsync)
-    }),
+
+    // keep module.id stable when vendor modules does not change
+    new webpack.HashedModuleIdsPlugin(),
 
     // extract css into its own file
     new MiniCssExtractPlugin({
@@ -87,8 +88,6 @@ const webpackConfig = merge(baseWebpackConfig, {
     new ScriptExtHtmlWebpackPlugin({
       inline: /manifest\..*\.js$/
     }),
-    // keep module.id stable when vendor modules does not change
-    new webpack.HashedModuleIdsPlugin(),
 
     // copy custom static assets
     new CopyWebpackPlugin([

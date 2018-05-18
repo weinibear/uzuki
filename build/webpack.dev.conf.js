@@ -47,9 +47,6 @@ const devWebpackConfig = merge(baseWebpackConfig, {
     }
   },
   plugins: [
-    new webpack.DefinePlugin({
-      IMPORT_ASYNC: JSON.stringify(!!config.dev.importAsync)
-    }),
     new webpack.HotModuleReplacementPlugin(),
 
     // https://github.com/ampedandwired/html-webpack-plugin
