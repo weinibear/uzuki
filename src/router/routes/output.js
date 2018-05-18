@@ -5,7 +5,7 @@ export default function (_import) {
     icon: 'chrome',
     children: [
       {
-        path: '/output/books',
+        path: '/output/book',
         name: '渠道书籍',
         component: _import('output/index')
       },

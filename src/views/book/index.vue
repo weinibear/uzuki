@@ -43,12 +43,13 @@
 </template>
 
 <script>
-import { getBookList, backBook, deleteBook } from '@/api/book'
+import { getBookList, backBook, deleteBook, changeRankStatus } from '@/api/book'
 import { statusOptions, rankOptions, channelOptions, needPayOptions,
   endOptions, blackRankOptions, groupOptions, orderOptions, sortOptions } from './options'
 import { mapMutations } from 'vuex'
 import DialogBook from './dialog-book.js'
 import { confirm } from '@/utils/confirm'
+import { parseCount } from '@/utils/index'
 
 export default {
   components: { DialogBook },
@@ -134,15 +135,15 @@ export default {
           render: (h, row) => (
             <dl>
               <dt>字数</dt>
-              <dd>{row.count}</dd>
+              <dd title={row.count}>{parseCount(row.count)}</dd>
               <dt>点击</dt>
-              <dd>{row.views}</dd>
+              <dd title={row.views}>{parseCount(row.views)}</dd>
               <dt>收藏</dt>
-              <dd>{row.follow_count}</dd>
+              <dd title={row.follow_count}>{parseCount(row.follow_count)}</dd>
               <dt>轻石</dt>
-              <dd>{row.coin}</dd>
+              <dd title={row.coin}>{parseCount(row.coin)}</dd>
               <dt>重石</dt>
-              <dd>{row.gold}</dd>
+              <dd title={row.gold}>{parseCount(row.gold)}</dd>
             </dl>
           )
         },
@@ -160,12 +161,14 @@ export default {
               <dd>{row.day_rank}</dd>
               <dt>本周</dt>
               <dd>{row.week_rank}</dd>
+              <a onClick={this.handleRank.bind(this, row)}>{row.black_rank ? '回榜' : '下榜'}</a>
             </dl>
           )
         },
         {
           label: '状态',
-          width: 120,
+          width: 100,
+          align: 'center',
           render: (h, row) => {
             const arr = [
               { prop: 'status', options: statusOptions },
@@ -187,13 +190,26 @@ export default {
           component: 'col-time'
         },
         {
+          label: '查看',
+          width: 50,
+          render: (h, row) => {
+            return (
+              <div>
+                <router-link to={`/brand/${row.bf}/post`}>帖子</router-link>
+                <router-link to={`/brand?field=brandId&q=${row.bf}`}>板块</router-link>
+                <router-link to={`/danmu?field=book&q=${row.id}`}>弹幕</router-link>
+              </div>
+            )
+          }
+        },
+        {
           label: '操作',
           width: 280,
           render: (h, row) => (
             <div>
               <el-button plain onClick={this.link.bind(this, row)}>卷目</el-button>
               <el-button plain type="primary" onClick={this.modify.bind(this, row)}>修改</el-button>
-              <el-button plain type="warning" onClick={this.withdraw.bind(this, row)}>下架</el-button>
+              <el-button plain type="warning" disabled={row.status !== 6} onClick={this.withdraw.bind(this, row)}>下架</el-button>
               <el-button plain type="danger" onClick={this.del.bind(this, row)}>删除</el-button>
             </div>
           )
@@ -260,6 +276,13 @@ export default {
             done()
           }
         }
+      })
+    },
+    handleRank (data) {
+      const blackRank = !data.black_rank
+      return changeRankStatus(data.id, blackRank).then(() => {
+        this.$message.success('success')
+        this.getList()
       })
     },
     del (data) {

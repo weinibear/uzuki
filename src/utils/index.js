@@ -91,3 +91,13 @@ export function formatJSON (content, space = '\t') {
     return content
   }
 }
+
+export function parseCount (num = 0) {
+  const value = parseFloat(num)
+  if (value >= 1e8) {
+    return (value / 1e8).toFixed(1) + '亿'
+  } else if (value >= 1e4) {
+    return (value / 1e4).toFixed(1) + '万'
+  }
+  return value
+}

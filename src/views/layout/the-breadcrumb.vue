@@ -76,6 +76,10 @@ export default {
 }
 .el-breadcrumb__item {
   transition: all 0.3s;
+}
+.el-breadcrumb__inner {
+  display: inline-block;
+  vertical-align: middle;
   max-width: 15em;
   overflow: hidden;
   white-space: nowrap;

@@ -47,6 +47,7 @@ import { getBookList, approvalBook } from '@/api/book-review'
 import { orderOptions, sortOptions } from '../book/options'
 import { mapMutations } from 'vuex'
 import { confirm } from '@/utils/confirm'
+import { parseCount } from '@/utils/index'
 
 export default {
   data () {
@@ -129,15 +130,15 @@ export default {
           render: (h, row) => (
             <dl>
               <dt>字数</dt>
-              <dd>{row.count}</dd>
+              <dd title={row.count}>{parseCount(row.count)}</dd>
               <dt>点击</dt>
-              <dd>{row.views}</dd>
+              <dd title={row.views}>{parseCount(row.views)}</dd>
               <dt>收藏</dt>
-              <dd>{row.follow_count}</dd>
+              <dd title={row.follow_count}>{parseCount(row.follow_count)}</dd>
               <dt>轻石</dt>
-              <dd>{row.coin}</dd>
+              <dd title={row.coin}>{parseCount(row.coin)}</dd>
               <dt>重石</dt>
-              <dd>{row.gold}</dd>
+              <dd title={row.gold}>{parseCount(row.gold)}</dd>
             </dl>
           )
         },
