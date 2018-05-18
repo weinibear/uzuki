@@ -367,7 +367,7 @@ export default {
     @include truncate;
   }
   .content {
-    @include truncate(3);
+    @include truncate(4);
     white-space: pre-line;
   }
 }

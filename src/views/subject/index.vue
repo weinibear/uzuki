@@ -32,7 +32,7 @@ export default {
         },
         {
           label: '标题',
-          type: 'actopic',
+          type: 'subject',
           component: 'col-title'
         },
         {

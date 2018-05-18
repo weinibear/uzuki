@@ -30,6 +30,7 @@ import { getBooklist, delBooklist } from '@/api/booklist'
 import DialogBooklist from './dialog-booklist'
 import { mapMutations } from 'vuex'
 import { confirm } from '@/utils/confirm'
+import { parseCount } from '@/utils/index'
 
 export default {
   name: 'booklist',
@@ -94,37 +95,24 @@ export default {
           width: 160
         },
         {
-          label: '信息',
-          width: 60,
-          render: (h, row) => {
-            const directives = [
-              { name: 'popover', arg: 'popover-info' }
-            ]
-            return (
-              <div>
-                <el-popover
-                  ref="popover-info"
-                  placement="left"
-                  trigger="hover">
-                  <dl>
-                    <dt>点击</dt>
-                    <dd>{row.views}</dd>
-                    <dt>收藏</dt>
-                    <dd>{row.follow_count}</dd>
-                    <dt>轻石</dt>
-                    <dd>{row.coin}</dd>
-                    <dt>重石</dt>
-                    <dd>{row.gold}</dd>
-                    <dt>信仰</dt>
-                    <dd>{row.belief}</dd>
-                    <dt>战力</dt>
-                    <dd>{row.combat}</dd>
-                  </dl>
-                </el-popover>
-                <el-button type="text" {...{directives}}>数据</el-button>
-              </div>
-            )
-          }
+          label: '数据',
+          width: 120,
+          render: (h, row) => (
+            <dl>
+              <dt>点击</dt>
+              <dd title={row.views}>{parseCount(row.views)}</dd>
+              <dt>收藏</dt>
+              <dd title={row.follow_count}>{parseCount(row.follow_count)}</dd>
+              <dt>轻石</dt>
+              <dd title={row.coin}>{parseCount(row.coin)}</dd>
+              <dt>重石</dt>
+              <dd title={row.gold}>{parseCount(row.gold)}</dd>
+              <dt>信仰</dt>
+              <dd title={row.belief}>{parseCount(row.belief)}</dd>
+              <dt>战力</dt>
+              <dd title={row.combat}>{parseCount(row.combat)}</dd>
+            </dl>
+          )
         },
         {
           label: '操作',

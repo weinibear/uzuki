@@ -11,8 +11,8 @@
       <el-form-item label="UID" prop="uid">
         <el-input v-model="form.uid"></el-input>
       </el-form-item>
-      <el-form-item label="操作" prop="action">
-        <el-select v-model="form.action">
+      <el-form-item label="操作" prop="keyword">
+        <el-select v-model="form.keyword">
           <el-option v-for="item in userStatus"
             :key="item.value"
             :value="item.value"
@@ -53,7 +53,7 @@ export default {
         { value: 'degag', label: '解除禁言' }
       ],
       form: {
-        action: 'gag',
+        keyword: 'gag',
         uid: '',
         description: '',
         time: 0

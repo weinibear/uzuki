@@ -89,12 +89,18 @@ export default {
           label: '作品',
           render: (h, row) => {
             const href = <a href={row.href} target="_blank">{row.href}</a>
+            let type = 'book'
+            if (row.work_type === 2) {
+              type = 'play'
+            } else if (row.work_type === 6) {
+              type = 'favorite'
+            }
             return (
               <dl>
                 <dt>ID</dt>
                 <dd>{row.work.id}</dd>
                 <dt>作品</dt>
-                <dd><col-title row={row}/></dd>
+                <dd><a href={`https://www.iqing.com/${type}/${row.work.id}`} target="_blank">{row.title}</a></dd>
                 <dt>链接</dt>
                 <dd>{row.href ? href : '无'}</dd>
               </dl>
@@ -109,7 +115,7 @@ export default {
                 <dt>标题</dt>
                 <dd>{row.title}</dd>
                 <dt>推荐语</dt>
-                <dd>{row.recommend_words}</dd>
+                <dd>{row.recommend_words || '无'}</dd>
               </dl>
             )
           }

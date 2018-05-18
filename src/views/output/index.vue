@@ -173,9 +173,6 @@ export default {
       }
       return getChannelBooklist(channelId, params)
     },
-    output (data) {
-
-    },
     openDialogImport (type) {
       this.$refs.dialogImport.type = type
       this.$refs.dialogImport.visible = true

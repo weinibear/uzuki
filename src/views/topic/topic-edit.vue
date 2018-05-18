@@ -61,7 +61,7 @@ export default {
   methods: {
     getDetail () {
       return getTopicDetail(this.id).then(res => {
-        this.content = formatJSON(res.content)
+        this.content = formatJSON(res.content, 2)
       })
     },
     getUrls (file, fileList) {
@@ -76,7 +76,7 @@ export default {
         return this.$message.warning('无效的格式')
       }
       this.btnLoading = true
-      const content = formatJSON(this.content, 0)
+      const content = formatJSON(this.content, 2)
       updateTopic(this.id, { content }).then(() => {
         this.$message.success('更新成功')
       }).finally(() => {

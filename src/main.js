@@ -14,8 +14,11 @@ import DatePicker from 'vue2-datepicker'
 
 import './icons'
 
-Vue.config.productionTip = true
 Vue.config.devtools = true
+Vue.config.productionTip = false
+Vue.prototype.$ELEMENT = {
+  size: 'small'
+}
 
 Vue.use(DatePicker)
 

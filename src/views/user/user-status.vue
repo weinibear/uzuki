@@ -18,7 +18,7 @@
         <el-button type="danger" icon="el-icon-info" @click="editAll">大哥你说要砍谁</el-button>
       </el-form-item>
     </el-form>
-    <dialog-user-status ref="dialog" :uid="currentId"></dialog-user-status>
+    <dialog-user-status ref="dialog" :uid="currentId" @success="getList"></dialog-user-status>
   </main-content>
 </template>
 

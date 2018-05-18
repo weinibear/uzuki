@@ -2,7 +2,6 @@
   <el-dialog
     width="500px"
     :visible.sync="visible"
-
     title="导入作品">
     <el-form
       :model="form"
@@ -90,7 +89,6 @@ export default {
   },
   methods: {
     changeFile (e) {
-      console.log(e.target.files)
       const files = e.target.files
       if (files && files.length) {
         this.form.content = files[0]
@@ -107,6 +105,7 @@ export default {
       this.btnLoading = true
       const channelId = this.form.channel
       const fd = new window.FormData()
+      fd.append('book_from', this.type)
       if (this.type === 'online') {
         fd.append('book_id', this.form.content)
       } else {

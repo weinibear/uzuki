@@ -17,7 +17,7 @@
         <el-button type="primary" icon="el-icon-plus" @click="add">添加管理员</el-button>
       </el-form-item>
     </el-form>
-    <dialog-user-admin ref="dialog"></dialog-user-admin>
+    <dialog-user-admin ref="dialog" @success="getList"></dialog-user-admin>
   </main-content>
 </template>
 

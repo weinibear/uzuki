@@ -62,7 +62,6 @@ export default {
       loadStyle('//unpkg.com/quill@1.3.6/dist/quill.core.css'),
       loadScript('//unpkg.com/quill@1.3.6/dist/quill.core.js')
     ]).then(res => {
-      console.log(window.Quill)
       this.imageBlot(window.Quill)
       this.init(window.Quill)
     })

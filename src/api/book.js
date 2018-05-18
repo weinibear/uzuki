@@ -52,7 +52,7 @@ export function createVolume (bid, data) {
   return request.post('/volume/', {
     ...data,
     status: 0,
-    book: `/book/${bid}`
+    book: `/book/${bid}/`
   })
 }
 

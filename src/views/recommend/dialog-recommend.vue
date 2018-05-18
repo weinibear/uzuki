@@ -85,13 +85,13 @@ export default {
       visible: false,
       btnLoading: false,
       form: {
-        channel: '',
+        channel: 1,
         cover: '',
         order: 0,
         recommend_words: '',
         status: 0,
         title: '',
-        type: '',
+        type: 9,
         work_id: '',
         work_type: 1,
         href: ''
