@@ -60,6 +60,10 @@ export function unlockPost (id) {
   return request.post(`/post/${id}/unlock/`)
 }
 
+export function updatePostTag (id, tags) {
+  return request.post(`/post/${id}/tag/`, { tags })
+}
+
 /**
  * 获取回复列表
  * @param {*} id

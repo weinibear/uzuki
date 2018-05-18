@@ -42,6 +42,7 @@
         <el-button icon="el-icon-search" type="primary" @click="search">搜索</el-button>
       </el-form-item>
     </el-form>
+    <dialog-post-tag ref="dialog" :data="current" @success="getList"></dialog-post-tag>
   </main-content>
 </template>
 
@@ -60,10 +61,13 @@ import {
 } from '@/api/comment'
 import { mapMutations } from 'vuex'
 import { confirm } from '@/utils/confirm'
+import DialogPostTag from './dialog-post-tag'
 
 export default {
+  components: { DialogPostTag },
   data () {
     return {
+      current: null,
       input: {
         post_id: '',
         title: '',
@@ -105,6 +109,25 @@ export default {
           label: '创建/更新日期',
           align: 'center',
           component: 'col-time'
+        },
+        {
+          label: '标签',
+          width: 100,
+          align: 'center',
+          render: (h, row) => {
+            const tags = row.tags.map(tag => {
+              return tag.type
+                ? <img src={tag.value} style="max-height:24px;vertical-align: middle;"/>
+                : <el-tag>{tag.value}</el-tag>
+            })
+            const btn = <el-button
+              onClick={this.handleTag.bind(this, row)}
+              plain
+              size="mini"
+              icon="el-icon-edit">{tags.length ? '修改' : '添加'}</el-button>
+            tags.push(btn)
+            return tags
+          }
         },
         {
           label: '状态',
@@ -222,6 +245,10 @@ export default {
         this.getList()
       })
     },
+    handleTag (row) {
+      this.current = row
+      this.$refs.dialog.visible = true
+    },
     del (data) {
       confirm(this.delData.bind(this, data))
     },
@@ -237,17 +264,6 @@ export default {
         name: '回复管理',
         params: {
           pid: row.id
-        }
-      })
-    },
-    link (row) {
-      this.pushBreadcrumb({ to: '', name: row.chapter_title || row.scene_title })
-      this.$router.push({
-        name: '章节弹幕',
-        params: {
-          type: this.inputType,
-          bid: this.inputValue,
-          cid: row.chapter_id || row.scene_id
         }
       })
     }
