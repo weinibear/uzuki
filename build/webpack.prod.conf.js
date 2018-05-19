@@ -57,6 +57,14 @@ const webpackConfig = merge(baseWebpackConfig, {
     // keep module.id stable when vendor modules does not change
     new webpack.HashedModuleIdsPlugin(),
 
+    // 稳定chunkId, 每个异步的chunk 带上命名
+    new webpack.NamedChunksPlugin(chunk => {
+      if (chunk.name) {
+        return chunk.name
+      }
+      return Array.from(chunk.modulesIterable, m => path.relative(m.context, m.request).join("_")
+    }),
+
     // extract css into its own file
     new MiniCssExtractPlugin({
       filename: utils.assetsPath('css/[name].[contenthash].css')
