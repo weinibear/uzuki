@@ -42,20 +42,32 @@ const navRoutes = [
   statsRoute
 ]
 
-const handlePath = function (nav) {
-  if (nav.path) {
-    nav.path = nav.path.replace(/\/:[^/]+/g, '')
-  }
-  return nav
+/* 获取侧边栏导航 */
+function filterNavs (items) {
+  const results = []
+  items.forEach(nav => {
+    if (!nav.hidden) {
+      const value = {
+        name: nav.name || (nav.meta && nav.meta.title),
+        icon: nav.icon,
+        static: nav.static
+      }
+      if (nav.path) {
+        value.path = nav.path.replace(/\/:[^/]+/g, '')
+      } else {
+        value.path = value.name + 's'
+      }
+      if (Array.isArray(nav.children)) {
+        value.children = filterNavs(nav.children)
+      }
+      results.push(value)
+    }
+  })
+  return results
 }
 
-let navs = JSON.parse(JSON.stringify(navRoutes))
-navs = navs.filter(v => !v.hidden).map(handlePath).map(value => {
-  if (value.children) {
-    value.children = value.children.filter(v => !v.hidden).map(handlePath)
-  }
-  return value
-})
+export const navs = filterNavs(navRoutes)
+console.log(navs)
 
 const routes = [
   {
@@ -81,7 +93,5 @@ const router = new Router({
 })
 
 hook(router)
-
-export { navs }
 
 export default router

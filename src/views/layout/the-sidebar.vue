@@ -13,7 +13,7 @@
       <template v-for="item in navs">
         <el-submenu
           v-if="item.static && item.children.length"
-          :index="item.path || (item.name + 's')"
+          :index="item.path"
           :key="item.path">
           <template slot="title">
             <svg-icon
@@ -46,38 +46,37 @@
 </template>
 
 <script>
-import difference from 'lodash/difference'
 import { navs } from '@/router'
+import { mapState } from 'vuex'
 
 export default {
   data () {
     return {
-      navs
+      navs,
+      lastActived: ''
     }
   },
   computed: {
+    ...mapState('app', ['breadcrumb']),
     actived () {
-      const urlPart = this.$route.path.split('/')
-      let maxDifference = 999
-      let path = ''
-      this.navs.forEach(item => {
-        if (item.children) {
-          item.children.forEach(subItem => {
-            const d = difference(urlPart, subItem.path.split('/')).length
-            if (d < maxDifference) {
-              path = subItem.path
-              maxDifference = d
+      const name = this.breadcrumb[0] && this.breadcrumb[0].name
+      const navs = this.navs
+      for (let i = 0, len = navs.length; i < len; i++) {
+        const nav = navs[i]
+        if (nav.static && nav.children.length) {
+          for (let j = 0, length = nav.children.length; j < length; j++) {
+            const child = nav.children[j]
+            if (child.name === name) {
+              return child.path
             }
-          })
+          }
         } else {
-          const d = difference(urlPart, item.path.split('/')).length
-          if (d < maxDifference) {
-            path = item.path
-            maxDifference = d
+          if (nav.name === name) {
+            return nav.path
           }
         }
-      })
-      return path
+      }
+      return ''
     },
     isCollapse () {
       return this.$store.state.app.sidebarFolded

@@ -14,19 +14,14 @@
         <el-form-item
           v-if="isActivity"
           label="时间选择">
-          <date-picker
+          <el-date-picker
             v-model="time"
-            format="yyyy-MM-dd HH:mm:ss"
-            width="100%"
-            :shortcuts="false"
-            range
-            confirm
-            type="datetime"
-            :time-picker-options="{
-              start: '00:00',
-              step: '00:30',
-              end: '23:30'
-          }"></date-picker>
+            type="datetimerange"
+            range-separator="至"
+            start-placeholder="开始日期"
+            end-placeholder="结束日期"
+            align="right">
+          </el-date-picker>
         </el-form-item>
         <el-form-item
           label="序号"

@@ -10,8 +10,6 @@ import './element-ui'
 import router from './router'
 import store from './store'
 
-import DatePicker from 'vue2-datepicker'
-
 import './icons'
 
 Vue.config.devtools = true
@@ -19,8 +17,6 @@ Vue.config.productionTip = false
 Vue.prototype.$ELEMENT = {
   size: 'small'
 }
-
-Vue.use(DatePicker)
 
 function importComponents (r) {
   r.keys().forEach(path => {
