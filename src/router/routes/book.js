@@ -70,7 +70,10 @@ export default {
     },
     {
       path: '/book/input',
-      name: '渠道书籍',
+      name: 'book-input',
+      meta: {
+        title: '渠道书籍'
+      },
       component: () => import(/* webpackChunkName: "page-book" */'@/views/book/index')
     }
   ]

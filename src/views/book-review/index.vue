@@ -87,7 +87,7 @@ export default {
           width: 400,
           render: (h, row) => (
             <div>
-              <el-button plain onClick={this.link.bind(this, row)}>卷目</el-button>
+              <el-button plain onClick={this.link.bind(this, row)}>章节</el-button>
               <el-button plain type="danger" onClick={this.reject.bind(this, row)}>全部退回</el-button>
               <el-button plain type="success" onClick={this.accept.bind(this, row)}>全部通过</el-button>
               <el-button plain type="primary" onClick={this.help.bind(this, row)}>卡书自救</el-button>

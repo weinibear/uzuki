@@ -48,7 +48,7 @@ function filterNavs (items) {
   items.forEach(nav => {
     if (!nav.hidden) {
       const value = {
-        name: nav.name || (nav.meta && nav.meta.title),
+        name: (nav.meta && nav.meta.title) || nav.name,
         icon: nav.icon,
         static: nav.static
       }

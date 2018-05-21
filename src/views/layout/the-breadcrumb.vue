@@ -50,7 +50,7 @@ export default {
                 levelList = [].concat(_cloneDeep(to.meta.breadcrumb))
               }
             }
-            levelList.push({ to: to.fullPath, name: to.name || to.meta.title })
+            levelList.push({ to: to.fullPath, name: to.meta.title || to.name })
             this.setBreadcrumb(levelList)
           }
           this.changeBreadcrumbCustom(false)

@@ -65,7 +65,7 @@ export default {
     const getAllOptions = function (options, text) {
       return [{ label: '全部' + text, value: undefined }].concat(options)
     }
-    const status = this.$route.name === '渠道书籍' ? sourceStatusOptions : statusOptions
+    const status = this.$route.name === 'book-input' ? sourceStatusOptions : statusOptions
     const filters = [
       { prop: 'status', options: getAllOptions(status, '状态') },
       { prop: 'rank', options: getAllOptions(rankOptions, '等级') },
@@ -170,7 +170,7 @@ export default {
       }
     },
     isSource () {
-      return this.$route.name === '渠道书籍'
+      return this.$route.name === 'book-input'
     },
     query () {
       const result = {
@@ -184,7 +184,7 @@ export default {
     }
   },
   beforeRouteEnter (to, from, next) {
-    if (to.name === '渠道书籍') {
+    if (to.name === 'book-input') {
       store.dispatch('book/getSourceCache').then(data => {
         if (!to.query.source) {
           next({name: to.name, query: {...to.query, source: data[0].source_id}})
