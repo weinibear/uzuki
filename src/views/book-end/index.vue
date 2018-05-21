@@ -37,10 +37,13 @@ export default {
         offset,
         limit
       }
-      return getApplyEndList(params)
+      return getApplyEndList(params).then(res => {
+        res.results = res.results.map(v => v.book)
+        return res
+      })
     },
     accept (row) {
-      confirm(this.handleApply.bind(this, row.id, 'accept', { message: '确认通过请求么?' }))
+      confirm(this.handleApply.bind(this, row.id, 'accept'), { message: '确认通过请求么?' })
     },
     reject (row) {
       confirm(this.handleApply.bind(this, row.id, 'reject'), { message: '确认拒绝请求么?' })

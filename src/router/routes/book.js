@@ -72,7 +72,7 @@ export default {
       path: '/book/input',
       name: 'book-input',
       meta: {
-        title: '渠道书籍'
+        title: '渠道书籍 ' // 区别渠道管理的渠道书籍
       },
       component: () => import(/* webpackChunkName: "page-book" */'@/views/book/index')
     }

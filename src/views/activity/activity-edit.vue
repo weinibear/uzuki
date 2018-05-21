@@ -72,8 +72,9 @@
             <el-input v-model.trim="url" placeholder="可选"></el-input>
           </el-form-item>
           <el-form-item label="活动内容">
-            <el-button icon="el-icon-plus" type="primary" @click="addModule">添加模板</el-button>
-            <v-draggable v-model="content" element="ul">
+            <el-button class="btn-add" icon="el-icon-plus" type="primary" @click="addModule">添加模板</el-button>
+            <span v-if="!customContent" @dblclick="handleCustom" class="btn-hide">看不见我</span>
+            <v-draggable v-if="!customContent" v-model="content" element="ul">
               <li v-for="(item, index) in content"
                 class="module-item"
                 :key="item.cid">
@@ -107,6 +108,7 @@
                 </div>
               </li>
             </v-draggable>
+            <json-editor v-else class="ipt" ref="editor" v-model="form.content"></json-editor>
           </el-form-item>
         </template>
         <el-form-item label="活动内容" v-else>
@@ -138,6 +140,8 @@ export default {
       maxCid: 1,
       contentIndex: -1,
       content: [],
+      customContent: false,
+      content2: '',
       url: '', // 外链url
       version: 2, // 1 是旧 2 是新
       form: {
@@ -265,7 +269,10 @@ export default {
     submit () {
       this.btnLoading = true
       const form = { ...this.form }
-      form.content = JSON.stringify({ content: this.content, type: 'common', url: this.url })
+      if (!this.customContent) {
+        const data = JSON.parse(form.content)
+        form.content = JSON.stringify({ ...data, content: this.content, type: 'common', url: this.url })
+      }
       form.cover = form.cover.replace(/https?:\/\/[^/]+/g, '')
       if (!this.isActivity) {
         delete form.started_time
@@ -287,6 +294,12 @@ export default {
         this.$message.success('保存成功')
         this.visible = false
         this.$emit('success')
+      })
+    },
+    handleCustom () {
+      this.$confirm('确定转到自定义模式么,不能回到传统模式').then(() => {
+        this.form.content = JSON.stringify({ content: this.content, type: 'common', url: this.url }, null, 2)
+        this.customContent = true
       })
     },
     addModule () {
@@ -365,5 +378,13 @@ export default {
     @include truncate(4);
     white-space: pre-line;
   }
+}
+.btn-add {
+  margin-bottom: 10px;
+}
+.btn-hide {
+  display: inline-block;
+  opacity: 0;
+  color: #fff;
 }
 </style>

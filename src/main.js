@@ -11,6 +11,7 @@ import router from './router'
 import store from './store'
 
 import './icons'
+import showUpgradeInfo from './upgrade'
 
 Vue.config.devtools = true
 Vue.config.productionTip = false
@@ -39,3 +40,5 @@ new Vue({
     </div>
   )
 })
+
+showUpgradeInfo()

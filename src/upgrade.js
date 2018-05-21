@@ -1,9 +1,9 @@
 import { Notification } from 'element-ui'
 import localStore from './utils/localStore'
 
-function showUpgradeInfo (value = 1) {
+function showUpgradeInfo (value) {
   const KEY = 'uzuki_updated_info'
-  if (localStore.get(KEY) !== value) {
+  if (value && localStore.get(KEY) !== value) {
     Notification({
       title: '更新~\\(≧▽≦)/~',
       message: '更新了...',
