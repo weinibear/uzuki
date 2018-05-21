@@ -31,6 +31,7 @@ import DialogBooklist from './dialog-booklist'
 import { mapMutations } from 'vuex'
 import { confirm } from '@/utils/confirm'
 import { parseCount } from '@/utils/index'
+import defQuery from '@/utils/defQuery'
 
 export default {
   name: 'booklist',
@@ -49,24 +50,7 @@ export default {
       { prop: 'order', options: orderOptions },
       { prop: 'sort', options: sortOptions }
     ]
-    const vm = this
-    filters.forEach(obj => {
-      Object.defineProperty(obj, 'value', {
-        configurable: true,
-        enumerable: true,
-        get () {
-          const value = vm.$route.query[this.prop]
-          return this.options.some(v => String(v.value) === String(value))
-            ? value
-            : this.options[0].value
-        },
-        set (val) {
-          vm.$router.push({
-            query: { ...vm.$route.query, [this.prop]: val }
-          })
-        }
-      })
-    })
+    filters.forEach(obj => defQuery(this, obj))
     return {
       filters,
       current: null,

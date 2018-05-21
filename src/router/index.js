@@ -67,7 +67,6 @@ function filterNavs (items) {
 }
 
 export const navs = filterNavs(navRoutes)
-console.log(navs)
 
 const routes = [
   {

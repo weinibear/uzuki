@@ -106,5 +106,12 @@ export function updateContent (cid, data) {
 }
 
 export function updateDraftContent (cid, data) {
-  request.post(`/submit/chapter_draft/${cid}/content/`, data)
+  return request.post(`/submit/chapter_draft/${cid}/content/`, data)
+}
+
+/**
+ * 获取书籍来源渠道
+ */
+export function getSourceList () {
+  return request.get('/distribute/aquarius/')
 }

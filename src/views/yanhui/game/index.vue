@@ -42,6 +42,7 @@ import { getGameList, editNeedPay, editDiscount, withdrawGame } from '@/api/yanh
 import { mapMutations } from 'vuex'
 import { gameStatusOptions } from './options'
 import DialogGame from './dialog-game'
+import defQuery from '@/utils/defQuery'
 
 export default {
   name: 'yanhui',
@@ -54,24 +55,7 @@ export default {
     const filters = [
       { prop: 'status', options: filterStatusOptions }
     ]
-    const vm = this
-    filters.forEach(obj => {
-      Object.defineProperty(obj, 'value', {
-        configurable: true,
-        enumerable: true,
-        get () {
-          const value = vm.$route.query[this.prop]
-          return this.options.some(v => String(v.value) === String(value))
-            ? value
-            : this.options[0].value
-        },
-        set (val) {
-          vm.$router.push({
-            query: { ...vm.$route.query, [this.prop]: val, page: 1 }
-          })
-        }
-      })
-    })
+    filters.forEach(obj => defQuery(this, obj, 'number'))
     return {
       filters,
       current: null,

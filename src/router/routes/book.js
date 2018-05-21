@@ -62,6 +62,16 @@ export default {
         breadcrumb: { name: '书籍审核', to: '/book/review' }
       },
       component: () => import(/* webpackChunkName: "page-book" */'@/views/book-review/list-chapter')
+    },
+    {
+      path: '/book/end',
+      name: '完结审核',
+      component: () => import(/* webpackChunkName: "page-book" */'@/views/book-end/index')
+    },
+    {
+      path: '/book/input',
+      name: '渠道书籍',
+      component: () => import(/* webpackChunkName: "page-book" */'@/views/book/index')
     }
   ]
 }

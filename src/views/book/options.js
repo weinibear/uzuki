@@ -32,6 +32,24 @@ export const statusOptions = [
   }
 ]
 
+export const sourceStatusOptions = [
+  {
+    label: '审核中',
+    value: 3,
+    type: 'warning'
+  },
+  {
+    label: '全部通过',
+    value: 6,
+    type: 'success'
+  },
+  {
+    label: '已退回',
+    value: 7,
+    type: 'danger'
+  }
+]
+
 export const rankOptions = [
   {
     label: '初始',
@@ -120,7 +138,7 @@ export const blackRankOptions = [
   }
 ]
 
-export const groupOptions = Array.from({ length: 8 }).map((v, i) => ({ label: i + '', value: i + '' }))
+export const groupOptions = Array.from({ length: 8 }).map((v, i) => ({ label: i, value: i }))
 
 export const buyTypes = [
   {

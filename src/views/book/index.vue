@@ -5,6 +5,12 @@
       label-width="60px"
       label-suffix="：">
       <el-form-item label="筛选">
+        <el-select class="inline-select" v-model="currentSource" v-if="isSource">
+          <el-option v-for="option in sourceList"
+            :key="option.source_id"
+            :label="option.name"
+            :value="option.source_id"></el-option>
+        </el-select>
         <el-select class="inline-select" v-model="select.value" v-for="select in filters" :key="select.prop">
           <el-option v-for="option in select.options"
             :key="option.value"
@@ -43,13 +49,15 @@
 </template>
 
 <script>
-import { getBookList, backBook, deleteBook, changeRankStatus } from '@/api/book'
+import { getBookList, backBook, deleteBook, changeRankStatus, unbackBook } from '@/api/book'
 import { statusOptions, rankOptions, channelOptions, needPayOptions,
-  endOptions, blackRankOptions, groupOptions, orderOptions, sortOptions } from './options'
-import { mapMutations } from 'vuex'
+  endOptions, blackRankOptions, groupOptions, orderOptions, sortOptions, sourceStatusOptions } from './options'
+import { mapMutations, mapState } from 'vuex'
 import DialogBook from './dialog-book.js'
 import { confirm } from '@/utils/confirm'
-import { parseCount } from '@/utils/index'
+import bookCols from './book-cols'
+import defQuery from '@/utils/defQuery'
+import store from '@/store'
 
 export default {
   components: { DialogBook },
@@ -57,8 +65,9 @@ export default {
     const getAllOptions = function (options, text) {
       return [{ label: '全部' + text, value: undefined }].concat(options)
     }
+    const status = this.$route.name === '渠道书籍' ? sourceStatusOptions : statusOptions
     const filters = [
-      { prop: 'status', options: getAllOptions(statusOptions, '状态') },
+      { prop: 'status', options: getAllOptions(status, '状态') },
       { prop: 'rank', options: getAllOptions(rankOptions, '等级') },
       { prop: 'channel', options: getAllOptions(channelOptions, '分区') },
       { prop: 'need_pay', options: getAllOptions(needPayOptions, '付费状态') },
@@ -70,24 +79,8 @@ export default {
       { prop: 'order', options: orderOptions },
       { prop: 'sort', options: sortOptions }
     ]
-    const vm = this
-    filters.concat(sorts).forEach(obj => {
-      Object.defineProperty(obj, 'value', {
-        configurable: true,
-        enumerable: true,
-        get () {
-          const value = vm.$route.query[this.prop]
-          return this.options.some(v => String(v.value) === String(value))
-            ? value
-            : this.options[0].value
-        },
-        set (val) {
-          vm.$router.push({
-            query: { ...vm.$route.query, [this.prop]: val, page: 1 }
-          })
-        }
-      })
-    })
+    filters.forEach(obj => defQuery(this, obj, 'number'))
+    sorts.forEach(obj => defQuery(this, obj))
     return {
       filters,
       sorts,
@@ -101,57 +94,7 @@ export default {
       inputType: 'default',
       current: null,
       cols: [
-        {
-          label: '书籍ID',
-          prop: 'id',
-          width: 80,
-          render: (h, row) => <el-button type="text" onClick={this.link.bind(this, row)}>
-            {row.id}
-          </el-button>
-        },
-        {
-          label: '封面',
-          width: 120,
-          component: 'col-cover'
-        },
-        {
-          label: '标题/作者',
-          render: (h, row) => (
-            <dl>
-              <dt>标题</dt>
-              <dd><col-title row={row} type="book"></col-title></dd>
-              <dt>作者</dt>
-              <dd>{row.author_name}</dd>
-            </dl>
-          )
-        },
-        {
-          label: '简介',
-          render: (h, row) => <div class="intro">{row.intro}</div>
-        },
-        {
-          label: '数据',
-          width: 120,
-          render: (h, row) => (
-            <dl>
-              <dt>字数</dt>
-              <dd title={row.count}>{parseCount(row.count)}</dd>
-              <dt>点击</dt>
-              <dd title={row.views}>{parseCount(row.views)}</dd>
-              <dt>收藏</dt>
-              <dd title={row.follow_count}>{parseCount(row.follow_count)}</dd>
-              <dt>轻石</dt>
-              <dd title={row.coin}>{parseCount(row.coin)}</dd>
-              <dt>重石</dt>
-              <dd title={row.gold}>{parseCount(row.gold)}</dd>
-            </dl>
-          )
-        },
-        {
-          label: '分类',
-          width: 80,
-          render: (h, row) => row.categories.map(item => <el-tag>{item.name}</el-tag>)
-        },
+        ...bookCols(this),
         {
           label: '排行',
           width: 80,
@@ -185,11 +128,6 @@ export default {
           }
         },
         {
-          label: '创建/更新时间',
-          width: 150,
-          component: 'col-time'
-        },
-        {
           label: '查看',
           width: 50,
           render: (h, row) => {
@@ -205,27 +143,57 @@ export default {
         {
           label: '操作',
           width: 280,
-          render: (h, row) => (
-            <div>
-              <el-button plain onClick={this.link.bind(this, row)}>卷目</el-button>
-              <el-button plain type="primary" onClick={this.modify.bind(this, row)}>修改</el-button>
-              <el-button plain type="warning" disabled={row.status !== 6} onClick={this.withdraw.bind(this, row)}>下架</el-button>
-              <el-button plain type="danger" onClick={this.del.bind(this, row)}>删除</el-button>
-            </div>
-          )
+          render: (h, row) => {
+            const unback = <el-button plain disabled={row.status === 6} onClick={this.unback.bind(this, row)}>上架</el-button>
+            const del = <el-button plain type="danger" onClick={this.del.bind(this, row)}>删除</el-button>
+            return (
+              <div>
+                <el-button plain onClick={this.link.bind(this, row)}>卷目</el-button>
+                <el-button plain type="primary" onClick={this.modify.bind(this, row)}>修改</el-button>
+                <el-button plain type="warning" disabled={row.status !== 6} onClick={this.withdraw.bind(this, row)}>下架</el-button>
+                { this.isSource ? unback : del }
+              </div>
+            )
+          }
         }
       ]
     }
   },
   computed: {
+    ...mapState('book', ['sourceList']),
+    currentSource: {
+      get () {
+        return +this.$route.query.source || 1
+      },
+      set (val) {
+        this.$router.push({ query: { ...this.$route.query, source: val, page: 1 } })
+      }
+    },
+    isSource () {
+      return this.$route.name === '渠道书籍'
+    },
     query () {
       const result = {
-        order: this.sorts[1].value + this.sorts[0].value
+        order: this.sorts[1].value + this.sorts[0].value,
+        source: this.currentSource
       }
       this.filters.forEach(obj => {
         result[obj.prop] = obj.value
       })
       return result
+    }
+  },
+  beforeRouteEnter (to, from, next) {
+    if (to.name === '渠道书籍') {
+      store.dispatch('book/getSourceCache').then(data => {
+        if (!to.query.source) {
+          next({name: to.name, query: {...to.query, source: data[0].source_id}})
+        } else {
+          next()
+        }
+      })
+    } else {
+      next()
     }
   },
   methods: {
@@ -276,6 +244,15 @@ export default {
             done()
           }
         }
+      })
+    },
+    unback (data) {
+      confirm(this.handleUnback.bind(this, data), { message: `是否确定上架<${data.title}>` })
+    },
+    handleUnback (data) {
+      return unbackBook(data.id).then(() => {
+        this.$message.success('success')
+        this.getList()
       })
     },
     handleRank (data) {

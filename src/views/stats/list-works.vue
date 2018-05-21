@@ -31,6 +31,7 @@ import { getWorksStats } from '@/api/stats'
 import ComponentStat from './component-stat'
 import { rankOptions, channelOptions, needPayOptions, endOptions, groupOptions } from '../book/options'
 import { mapMutations } from 'vuex'
+import defQuery from '@/utils/defQuery'
 
 export default {
   components: { ComponentStat },
@@ -50,24 +51,7 @@ export default {
       { prop: 'end', options: getAllOptions(endOptions), label: '完结' },
       { prop: 'group', options: getAllOptions(groupOptions), label: '分组' }
     ]
-    const vm = this
-    filters.forEach(obj => {
-      Object.defineProperty(obj, 'value', {
-        configurable: true,
-        enumerable: true,
-        get () {
-          const value = vm.$route.query[this.prop]
-          return this.options.some(v => String(v.value) === String(value))
-            ? value
-            : this.options[0].value
-        },
-        set (val) {
-          vm.$router.push({
-            query: { ...vm.$route.query, [this.prop]: val, page: 1 }
-          })
-        }
-      })
-    })
+    filters.forEach(obj => defQuery(this, obj, 'number'))
     return {
       filters,
       inputValue: '',

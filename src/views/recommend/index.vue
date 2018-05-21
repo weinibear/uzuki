@@ -40,6 +40,7 @@ import { getRecomList, delRecom, editRecom } from '@/api/recommend'
 import { recomType, recomChannel, recomWorkType } from './options'
 import DialogForm from './dialog-recommend.vue'
 import { confirm } from '@/utils/confirm'
+import defQuery from '@/utils/defQuery'
 
 const recomWorkTypes = [{ value: undefined, name: '全部' }].concat(recomWorkType)
 
@@ -52,24 +53,7 @@ export default {
       { label: '分区', prop: 'ch', options: recomChannel },
       { label: '分类', prop: 'wt', options: recomWorkTypes }
     ]
-    const vm = this
-    filters.forEach(obj => {
-      Object.defineProperty(obj, 'value', {
-        configurable: true,
-        enumerable: true,
-        get () {
-          const value = vm.$route.query[this.prop]
-          return this.options.some(v => String(v.value) === String(value))
-            ? value
-            : this.options[0].value
-        },
-        set (val) {
-          vm.$router.push({
-            query: { ...vm.$route.query, [this.prop]: val }
-          })
-        }
-      })
-    })
+    filters.forEach(obj => defQuery(this, obj, 'number'))
     return {
       filters,
       current: null,
