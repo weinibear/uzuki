@@ -23,10 +23,10 @@ import _cloneDeep from 'lodash/cloneDeep'
 
 export default {
   computed: {
-    ...mapState('app', ['breadcrumb', 'breadcrumbCustom'])
+    ...mapState('app', ['breadcrumb', 'breadcrumbLoaded'])
   },
   methods: {
-    ...mapMutations('app', ['setBreadcrumb', 'changeBreadcrumbCustom', 'setCurrentPath']),
+    ...mapMutations('app', ['setBreadcrumb', 'changebreadcrumbStatus', 'setCurrentPath']),
     link (index) {
       const breadcrumb = this.breadcrumb.slice(0, index + 1)
       this.setBreadcrumb(breadcrumb)
@@ -41,7 +41,7 @@ export default {
           return
         }
         this.$nextTick().then(() => {
-          if (!this.breadcrumbCustom) {
+          if (!this.breadcrumbLoaded) {
             let levelList = []
             if (to.meta.breadcrumb) {
               if (typeof to.meta.breadcrumb === 'function') {
@@ -53,7 +53,7 @@ export default {
             levelList.push({ to: to.fullPath, name: to.meta.title || to.name })
             this.setBreadcrumb(levelList)
           }
-          this.changeBreadcrumbCustom(false)
+          this.changebreadcrumbStatus(false)
         })
       }
     }

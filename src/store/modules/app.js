@@ -5,7 +5,7 @@ export default {
   state: {
     sidebarFolded: !!localStore.get('sidebarFolded'),
     breadcrumb: [],
-    breadcrumbCustom: false
+    breadcrumbLoaded: false
   },
   mutations: {
     toggleSidebar (state) {
@@ -21,19 +21,19 @@ export default {
     // 设置面包屑
     setBreadcrumb (state, list) {
       state.breadcrumb = list
-      state.breadcrumbCustom = true
+      state.breadcrumbLoaded = true
     },
     pushBreadcrumb (state, obj) {
       state.breadcrumb.push(obj)
-      state.breadcrumbCustom = true
+      state.breadcrumbLoaded = true
     },
     popBreadcrumb (state, obj) {
       state.breadcrumb.pop()
-      state.breadcrumbCustom = true
+      state.breadcrumbLoaded = true
     },
     // 默认面包屑 layout/the-breadcrumb:watch
-    changeBreadcrumbCustom (state, custom = false) {
-      state.breadcrumbCustom = custom
+    changebreadcrumbStatus (state, loaded = false) {
+      state.breadcrumbLoaded = loaded
     }
   }
 }
