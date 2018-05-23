@@ -298,7 +298,8 @@ export default {
     },
     handleCustom () {
       this.$confirm('确定转到自定义模式么,不能回到传统模式').then(() => {
-        this.form.content = JSON.stringify({ content: this.content, type: 'common', url: this.url }, null, 2)
+        const data = JSON.parse(this.form.content)
+        this.form.content = JSON.stringify({ ...data, content: this.content, type: 'common', url: this.url }, null, 2)
         this.customContent = true
       })
     },
