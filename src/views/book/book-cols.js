@@ -36,15 +36,35 @@ export default function (vm) {
       render: (h, row) => (
         <dl>
           <dt>字数</dt>
-          <dd title={row.count}>{parseCount(row.count)}</dd>
+          <dd>
+            <el-tooltip content={String(row.count)} placement="top-start">
+              <span>{parseCount(row.count)}</span>
+            </el-tooltip>
+          </dd>
           <dt>点击</dt>
-          <dd title={row.views}>{parseCount(row.views)}</dd>
+          <dd>
+            <el-tooltip content={String(row.views)} placement="top-start">
+              <span>{parseCount(row.views)}</span>
+            </el-tooltip>
+          </dd>
           <dt>收藏</dt>
-          <dd title={row.follow_count}>{parseCount(row.follow_count)}</dd>
+          <dd>
+            <el-tooltip content={String(row.follow_count)} placement="top-start">
+              <span>{parseCount(row.follow_count)}</span>
+            </el-tooltip>
+          </dd>
           <dt>轻石</dt>
-          <dd title={row.coin}>{parseCount(row.coin)}</dd>
+          <dd>
+            <el-tooltip content={String(row.coin)} placement="top-start">
+              <span>{parseCount(row.coin)}</span>
+            </el-tooltip>
+          </dd>
           <dt>重石</dt>
-          <dd title={row.gold}>{parseCount(row.gold)}</dd>
+          <dd>
+            <el-tooltip content={String(row.gold)} placement="top-start">
+              <span>{parseCount(row.gold)}</span>
+            </el-tooltip>
+          </dd>
         </dl>
       )
     },
