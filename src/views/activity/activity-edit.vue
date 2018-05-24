@@ -149,7 +149,7 @@ export default {
         eve_url: 'https://www.iqing.com',
         started_time: tomorrow,
         ended_time: tomorrow + 7 * 24 * 3600 * 1000,
-        content: '',
+        content: JSON.stringify([]),
         cover: '',
         order: 0,
         works_display: true,
