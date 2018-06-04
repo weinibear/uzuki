@@ -272,7 +272,7 @@ export default {
     transition: all .2s ease-in-out;
     display: inline-block;
     max-width: 100%;
-    height: 130px;
+    max-height: 130px;
   }
   .updated-time {
     display: inline-block;

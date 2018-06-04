@@ -90,6 +90,13 @@ export default {
           }
         },
         {
+          label: '板块名',
+          prop: 'work_title',
+          render: (h, row) => {
+            return <a target="_blank" href={row.work_url}>{row.work_title}</a>
+          }
+        },
+        {
           label: '用户',
           render: (h, row) => {
             return <span>{`${row.user.username}(${row.user.id})`}</span>
@@ -100,9 +107,10 @@ export default {
           prop: 'content',
           'min-width': 200,
           render: (h, row) => {
-            return row.count > 0
-              ? <a type="text" onClick={this.linkReply.bind(this, row)}>{row.content}({row.count}条回复)</a>
-              : <span>{row.content}({row.count}条回复)</span>
+            const reply = row.count > 0
+              ? <a type="text" onClick={this.linkReply.bind(this, row)}>({row.count}条回复)</a>
+              : `(${row.count}条回复)`
+            return <span>{row.content} {reply}</span>
           }
         },
         {

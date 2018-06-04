@@ -1,6 +1,3 @@
-import _unescape from 'lodash/unescape'
-import _escape from 'lodash/escape'
-
 export function content2delta (results = []) {
   const content = []
   let temp = ''
@@ -14,11 +11,11 @@ export function content2delta (results = []) {
       temp = ''
       content.push({
         insert: {
-          image: _escape(item.value) + '-illustration'
+          image: item.value + '-illustration'
         }
       })
     } else {
-      temp += (temp.length ? '\n' : '') + _escape(item.value)
+      temp += (temp.length ? '\n' : '') + item.value
     }
   })
   if (temp) {
@@ -34,7 +31,7 @@ export function delta2content (ops = []) {
   const MAX_COUNT = 2000
   ops.forEach(v => {
     if (typeof v.insert === 'string') {
-      let text = _unescape(v.insert.trim().replace(/\s*\n\s*/g, '\n'))
+      let text = v.insert.trim().replace(/\s*\n\s*/g, '\n')
       while (text.length > MAX_COUNT) {
         const index = text.lastIndexOf('\n', MAX_COUNT)
         result.push({

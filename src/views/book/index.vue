@@ -28,6 +28,7 @@
       </el-form-item>
       <el-form-item label="搜索" style="margin-bottom: 0">
         <el-input
+          clearable
           @keyup.native.enter="search"
           v-model="inputValue"
           style="width:280px;margin-right: 10px">
@@ -85,7 +86,7 @@ export default {
       filters,
       sorts,
       fields: [
-        { label: '标题', value: 'default' },
+        { label: '标题', value: 'title' },
         { label: 'ID', value: 'id' },
         { label: '作者', value: 'author_name' },
         { label: '出品', value: 'press' }
@@ -97,14 +98,16 @@ export default {
         ...bookCols(this),
         {
           label: '排行',
-          width: 80,
+          width: 120,
           render: (h, row) => (
             <dl>
               <dt>本日</dt>
               <dd>{row.day_rank}</dd>
               <dt>本周</dt>
               <dd>{row.week_rank}</dd>
-              <a onClick={this.handleRank.bind(this, row)}>{row.black_rank ? '回榜' : '下榜'}</a>
+              <div>
+                <a onClick={this.handleRank.bind(this, row)}>{row.black_rank ? '回榜' : '下榜'}</a>
+              </div>
             </dl>
           )
         },
@@ -174,7 +177,7 @@ export default {
     },
     query () {
       const result = {
-        order: this.sorts[1].value + this.sorts[0].value,
+        ordering: this.sorts[1].value + this.sorts[0].value,
         source: this.currentSource
       }
       this.filters.forEach(obj => {
@@ -210,7 +213,7 @@ export default {
       this.inputValue = this.$route.query.q || ''
       this.inputType = this.$route.query.field || this.fields[0].value
       if (this.inputValue) {
-        params.raw_q = this.inputType + ':' + JSON.stringify(this.inputValue)
+        params[this.inputType] = this.inputValue
       }
       return getBookList(params)
     },

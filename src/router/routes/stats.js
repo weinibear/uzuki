@@ -67,11 +67,11 @@ export default {
       name: '订阅统计',
       component: () => import(/* webpackChunkName: "page-stats" */'@/views/stats/list-subscription')
     },
-    // {
-    //   path: '/stats/withdraw',
-    //   name: '提现统计',
-    //   component: () => import(/* webpackChunkName: "page-stats" */'@/views/stats/list-withdraw')
-    // },
+    {
+      path: '/stats/withdraw',
+      name: '提现统计',
+      component: () => import(/* webpackChunkName: "page-stats" */'@/views/stats/list-withdraw')
+    },
     {
       path: '/stats/overview',
       name: '月度总览',

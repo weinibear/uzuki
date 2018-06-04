@@ -72,7 +72,7 @@ export default {
       filters,
       sorts,
       fields: [
-        { label: '标题', value: 'default' },
+        { label: '标题', value: 'title' },
         { label: 'ID', value: 'id' },
         { label: '作者', value: 'author_name' },
         { label: '出品', value: 'press' }
@@ -100,7 +100,7 @@ export default {
   computed: {
     query () {
       const result = {
-        order: this.sorts[1].value + this.sorts[0].value
+        ordering: this.sorts[1].value + this.sorts[0].value
       }
       this.filters.forEach(obj => {
         result[obj.prop] = obj.value
@@ -122,7 +122,7 @@ export default {
       this.inputValue = this.$route.query.q || ''
       this.inputType = this.$route.query.field || this.fields[0].value
       if (this.inputValue) {
-        params.raw_q = this.inputType + ':' + JSON.stringify(this.inputValue)
+        params[this.inputType] = this.inputValue
       }
       params.need_approval = 1
       return getBookList(params)
@@ -175,14 +175,8 @@ export default {
         } else if (action === 'help') {
           message = '自救成功'
         }
-        // 后台异步, 避免编辑误操作, 延迟2秒返回
-        return new Promise((resolve, reject) => {
-          setTimeout(() => {
-            resolve()
-            this.$message.success(message)
-            this.getList()
-          }, 2000)
-        })
+        this.$message.success(message)
+        this.getList()
       })
     },
     link (data) {

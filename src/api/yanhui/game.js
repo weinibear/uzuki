@@ -5,7 +5,7 @@ import request from '@/utils/request'
  * @param {*} params
  */
 export function getGameList (params) {
-  const defaultParams = { offset: 0, limit: 10, type: 'game', raw_q: '', ngame: 1 }
+  const defaultParams = { offset: 0, limit: 10, ngame: 1 }
   params = { ...defaultParams, ...params }
   return request.get('/ngame/', { params })
 }

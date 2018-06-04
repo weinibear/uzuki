@@ -62,18 +62,23 @@ export const rankOptions = [
     tag: 'primary'
   },
   {
-    label: 'B签',
+    label: '白银',
     value: 3,
     tag: 'primary'
   },
   {
-    label: 'A签',
+    label: '黄金',
     value: 4,
     tag: 'primary'
   },
   {
-    label: 'C签',
+    label: '青铜',
     value: 5,
+    tag: 'primary'
+  },
+  {
+    label: '白金',
+    value: 6,
     tag: 'primary'
   }
 ]
@@ -151,32 +156,55 @@ export const buyTypes = [
   }
 ]
 
+export const contractTypes = [
+  {
+    label: '未签约',
+    value: 0
+  },
+  {
+    label: '未付费签约',
+    value: 1
+  },
+  {
+    label: '分成签约',
+    value: 2
+  },
+  {
+    label: '买断签约',
+    value: 3
+  }
+]
+
 export const orderOptions = [
   {
     label: '更新日期',
-    value: '0'
+    value: 'updated_time'
   },
   {
-    label: '字数',
-    value: '5'
+    label: 'ID',
+    value: 'id'
   },
   {
     label: '战力',
-    value: '1'
+    value: 'combat'
   },
   {
     label: '信仰',
-    value: '2'
+    value: 'belief'
   },
   {
     label: '收藏',
-    value: '3'
+    value: 'follow_count'
   },
   {
-    label: '评论数',
-    value: '4'
+    label: '字数',
+    value: 'count'
   }
 ]
+
+const orderGameOptions = [...orderOptions]
+orderGameOptions.pop()
+export { orderGameOptions }
 
 export const sortOptions = [
   {
@@ -185,7 +213,7 @@ export const sortOptions = [
   },
   {
     label: '升序',
-    value: '+'
+    value: ''
   }
 ]
 

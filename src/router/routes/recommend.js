@@ -72,6 +72,11 @@ export default {
         breadcrumb: { name: '旧专题列表', to: '/topic' }
       },
       component: () => import(/* webpackChunkName: "page-topic" */'@/views/topic/topic-edit')
+    },
+    {
+      path: '/recomsquare',
+      name: '广场推荐',
+      component: () => import(/* webpackChunkName: "page-recomsquare" */'@/views/recom-square/index')
     }
   ]
 }

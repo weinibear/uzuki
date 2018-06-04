@@ -29,6 +29,9 @@
       <el-form-item label="数值" prop="value">
         <el-input-number :min="1" v-model="form.value"></el-input-number>
       </el-form-item>
+      <el-form-item label="理由" prop="commit" v-show="form.currency === 'withdraw_balance'">
+        <el-input v-model="form.commit"></el-input>
+      </el-form-item>
     </el-form>
     <div slot="footer" class="dialog-footer">
       <el-button @click="visible = false">取 消</el-button>
@@ -48,7 +51,8 @@ export default {
       btnLoading: false,
       currencies: [
         { value: 'coin', label: '轻石' },
-        { value: 'gold', label: '重石' }
+        { value: 'gold', label: '重石' },
+        { value: 'withdraw_balance', label: '提现额度' }
       ],
       actions: [
         { value: 'add', label: '增加' },
@@ -58,11 +62,24 @@ export default {
         uid: '',
         currency: 'coin',
         action: 'add',
-        value: 10
+        value: 10,
+        commit: ''
       },
       rules: {
         uid: [
           { required: true, message: 'UID不能为空', trigger: 'blur' }
+        ],
+        commit: [
+          {
+            trigger: 'blur',
+            validator: (rule, value, callback) => {
+              if (this.form.currency === 'withdraw_balance' && value === '') {
+                callback(new Error('理由不能为空'))
+              } else {
+                callback()
+              }
+            }
+          }
         ]
       }
     }
@@ -71,9 +88,14 @@ export default {
     visible (val) {
       if (val) {
         this.form.uid = this.uid
-        this.form.currency = this.$route.name === '轻石管理' ? 'coin' : 'gold'
-      } else {
-        this.$refs.form.resetFields()
+        const name = this.$route.name
+        if (name === '轻石管理') {
+          this.form.currency = 'coin'
+        } else if (name === '重石管理') {
+          this.form.currency = 'gold'
+        } else {
+          this.form.currency = 'withdraw_balance'
+        }
       }
     }
   },

@@ -84,6 +84,7 @@ export default {
         const type = this.form.type
         this.$refs.form.resetFields()
         this.form.type = type
+        this.form.imageUrl = ''
       }
     }
   },

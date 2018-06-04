@@ -17,6 +17,7 @@ export default function (vm) {
     },
     {
       label: '标题/作者',
+      width: 200,
       render: (h, row) => (
         <dl>
           <dt>标题</dt>

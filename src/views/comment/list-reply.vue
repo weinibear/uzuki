@@ -65,6 +65,13 @@ export default {
           }
         },
         {
+          label: '板块名',
+          prop: 'work_title',
+          render: (h, row) => {
+            return <a target="_blank" href={row.work_url}>{row.work_title}</a>
+          }
+        },
+        {
           label: '用户',
           render: (h, row) => {
             return <span>{`${row.user.username}(${row.user.id})`}</span>

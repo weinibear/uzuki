@@ -23,16 +23,24 @@ export default {
           }
         },
         {
-          label: '微信+QQ钱包(PingPP)(元)',
-          prop: 'pingpp_income'
+          label: 'QQ钱包(PingPP)(元)',
+          prop: 'pingxx_qpay'
+        },
+        {
+          label: '微信APP',
+          prop: 'pingxx_wx'
+        },
+        {
+          label: '微信扫码付',
+          prop: 'pingxx_wx_pub_qr'
         },
         {
           label: '支付宝(元)',
-          prop: 'alipay_income'
+          prop: 'alipay'
         },
         {
           label: '苹果内购(元)',
-          prop: 'applepay_income'
+          prop: 'apple'
         },
         {
           label: 'PayPal(美元)',
@@ -49,8 +57,18 @@ export default {
     getList (params) {
       return getRechargeStats(params).then(res => {
         res.result.forEach(val => {
-          val.paypal = '收入：' + val.paypal[0] + ' / 手续费：' + val.paypal[1]
-          val.all_income = val.all_income[0] + '元 / ' + val.all_income[1] + '美元'
+          let totalCNY = 0
+          let totalUSD = 0
+          const arr = ['paypal', 'alipay', 'pingxx_qpay', 'pingxx_wx', 'pingxx_wx_pub_qr', 'apple']
+          arr.forEach(item => {
+            if (item === 'paypal') {
+              totalUSD += (val[item][0] - val[item][1])
+            } else {
+              totalCNY += (val[item][0] - val[item][1])
+            }
+            val[item] = '收入：' + val[item][0] + ' / 手续费：' + val[item][1]
+          })
+          val.all_income = totalCNY.toFixed(2) + '元 / ' + totalUSD.toFixed(2) + '美元'
         })
         return res
       })

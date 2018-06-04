@@ -1,6 +1,6 @@
 import { mapState, mapActions } from 'vuex'
 import { updateBook } from '@/api/book'
-import { rankOptions, channelOptions, needPayOptions, endOptions, groupOptions, buyTypes } from './options'
+import { rankOptions, channelOptions, needPayOptions, endOptions, groupOptions, buyTypes, contractTypes } from './options'
 
 export default {
   props: {
@@ -32,7 +32,8 @@ export default {
         follow_combo: 1,
         intro: '',
         cover: '',
-        buy_type: 0
+        buy_type: 0,
+        contract_type: 0
       },
       rules
     }
@@ -138,7 +139,8 @@ export default {
       { prop: 'follow_add', label: '收藏偏移', type: 'number' },
       { prop: 'follow_combo', label: '收藏倍率', type: 'number' },
       { prop: 'discount', label: '折扣', type: 'number' },
-      { prop: 'buy_type', label: '购买方式', options: buyTypes }
+      { prop: 'buy_type', label: '购买方式', options: buyTypes },
+      { prop: 'contract_type', label: '签约类型', options: contractTypes }
     ].map(item => {
       let com
       if (item.type === 'number') {

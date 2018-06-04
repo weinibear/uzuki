@@ -16,19 +16,27 @@
       </el-form-item>
       <el-form-item label="搜索">
         <el-input
+          clearable
           @keyup.native.enter="search"
           v-model="inputValue"
           style="width:280px">
           <el-select v-model="inputType" slot="prepend" style="width:80px">
-            <el-option label="标题" value="default"></el-option>
+            <el-option label="标题" value="title"></el-option>
             <el-option label="作者" value="author_name"></el-option>
-            <el-option label="出品" value="press"></el-option>
             <el-option label="ID" value="id"></el-option>
           </el-select>
           <el-button slot="append"
             @click="search"
             icon="el-icon-search"></el-button>
         </el-input>
+      </el-form-item>
+      <el-form-item label="排序">
+        <el-select v-model="select.value" v-for="select in sorts" :key="select.prop">
+          <el-option v-for="option in select.options"
+            :key="option.value"
+            :label="option.label"
+            :value="option.value"></el-option>
+        </el-select>
       </el-form-item>
     </el-form>
     <dialog-game ref="dialog"
@@ -43,6 +51,7 @@ import { mapMutations } from 'vuex'
 import { gameStatusOptions } from './options'
 import DialogGame from './dialog-game'
 import defQuery from '@/utils/defQuery'
+import { orderGameOptions, sortOptions } from '../../book/options'
 
 export default {
   name: 'yanhui',
@@ -55,9 +64,15 @@ export default {
     const filters = [
       { prop: 'status', options: filterStatusOptions }
     ]
+    const sorts = [
+      { prop: 'order', options: orderGameOptions },
+      { prop: 'sort', options: sortOptions }
+    ]
     filters.forEach(obj => defQuery(this, obj, 'number'))
+    sorts.forEach(obj => defQuery(this, obj))
     return {
       filters,
+      sorts,
       current: null,
       inputType: '',
       inputValue: '',
@@ -114,7 +129,7 @@ export default {
         },
         {
           label: '状态',
-          width: '90px',
+          width: '100px',
           render: (h, row) => {
             const option = gameStatusOptions.find(obj => obj.value === row.status) || { tag: '', name: '未知' }
             return <el-tag type={option.tag}>{option.name}</el-tag>
@@ -142,7 +157,9 @@ export default {
   },
   computed: {
     query () {
-      const result = {}
+      const result = {
+        ordering: this.sorts[1].value + this.sorts[0].value
+      }
       this.filters.forEach(obj => {
         result[obj.prop] = obj.value
       })
@@ -153,7 +170,7 @@ export default {
     $route: {
       handler (val) {
         this.inputValue = val.query.q || ''
-        this.inputType = val.query.field || 'default'
+        this.inputType = val.query.field || 'title'
       },
       immediate: true
     }
@@ -180,7 +197,7 @@ export default {
         ...query
       }
       if (this.inputValue) {
-        params.raw_q = this.inputType + ':' + JSON.stringify(this.inputValue)
+        params[this.inputType] = this.inputValue
       }
       return getGameList(params)
     },

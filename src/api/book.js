@@ -1,8 +1,9 @@
 import request from '@/utils/request'
 
-export function getBookList (data) {
-  const params = { type: 'book', raw_q: '', source: 1, ...data }
-  return request.get('/kensaku/', { params })
+export function getBookList (params) {
+  // const params = { type: 'book', raw_q: '', source: 1, ...data }
+  // return request.get('/kensaku/', { params })
+  return request.get('/submit/book/', { params })
 }
 
 export function updateBook (id, data) {

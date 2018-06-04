@@ -73,16 +73,25 @@ export default {
           label: '作品',
           render: (h, row) => {
             const href = <a href={row.href} target="_blank">{row.href}</a>
-            let type = 'book'
-            if (row.work_type === 2) {
+            let idx = <span>{row.work.id}</span>
+            let type
+            if (row.work_type === 1) {
+              type = 'book'
+              idx = <router-link to={{name: '书籍列表', query: {field: 'id', q: row.work.id}}}>
+                {row.work.id}
+              </router-link>
+            } else if (row.work_type === 2) {
               type = 'play'
+              idx = <router-link to={{name: '演绘列表', query: {field: 'id', q: row.work.id}}}>
+                {row.work.id}
+              </router-link>
             } else if (row.work_type === 6) {
               type = 'favorite'
             }
             return (
               <dl>
                 <dt>ID</dt>
-                <dd>{row.work.id}</dd>
+                <dd>{idx}</dd>
                 <dt>作品</dt>
                 <dd><a href={`https://www.iqing.com/${type}/${row.work.id}`} target="_blank">{row.title}</a></dd>
                 <dt>链接</dt>

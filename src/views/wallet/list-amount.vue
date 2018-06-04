@@ -51,7 +51,8 @@ export default {
       cols: [
         {
           label: 'UID',
-          prop: 'uid'
+          prop: 'uid',
+          width: 100
         },
         {
           label: '昵称',
@@ -65,12 +66,13 @@ export default {
           label: '数量',
           render: (h, row) => {
             const stone = <span>{row.amount}</span>
-            const cash = <span>余额: {row.amount} / 总额: {row.sum_amount}</span>
+            const cash = <span>余额：{row.amount} / 提现额度：{row.withdraw_balance} / 总额：{row.sum_amount}</span>
             return this.isCashList ? cash : stone
           }
         },
         {
           label: '操作',
+          width: 400,
           render: (h, row) => {
             const stone = <div>
               <el-button
@@ -91,6 +93,10 @@ export default {
                 plain
                 icon="el-icon-tickets"
                 onClick={this.linkWithdraw.bind(this, row)}>提现记录</el-button>
+              <el-button
+                plain
+                icon="el-icon-edit"
+                onClick={this.postWallet.bind(this, row)}>提现额度</el-button>
             </div>
             return this.isCashList ? cash : stone
           }
@@ -143,6 +149,9 @@ export default {
           field: this.inputType
         }
       })
+    },
+    editWithdraw () {
+
     },
     linkRecord (data) {
       this.pushBreadcrumb({ to: '', name: data.username })
